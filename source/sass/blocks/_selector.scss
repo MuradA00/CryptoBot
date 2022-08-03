@@ -1,0 +1,28 @@
+.selector-row {
+  @include al-flex;
+  grid-gap: 10px;
+  background: var(--clr-black);
+  border-radius: 14px;
+  padding: 4px 5px;
+  &__item {
+    cursor: pointer;
+    font-size: var(--13-fsize);
+    color: var(--clr-light);
+    width: clamp(2.5rem, 3.5vw, 3.5rem);
+    height: clamp(2.3125rem, 2.5625vw, 2.5625rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--10-spc);
+    transition: background 300ms ease-in-out;
+    @include max-width($tablet-media) {
+      width: 2.5rem;
+      height: 2.3125rem;
+    }
+  }
+  ._selector-active {
+    background: var(--clr-dark);
+  }
+}
+
+

@@ -1,0 +1,29 @@
+._btn-primary {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: var(--13-fsize);
+  line-height: 146%;
+  background-color: var(--clr-main);
+  color: var(--clr-black);
+  border-radius: 6px;
+  outline: none;
+  span {
+    flex: 0 1 5.375rem;
+  }
+}
+
+._btn-trans {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--10-spc) var(--19-spc);
+  grid-gap: var(--10-spc);
+  border-radius: 6px;
+  outline: 1px solid var(--clr-main);
+  font-size: var(--13-fsize);
+  background-color: transparent;
+  color: var(--clr-main);
+  border: none;
+}

@@ -1,0 +1,122 @@
+.modal {
+  background-color:rgba(0, 0, 0, 0.5);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms ease-in-out,visibility 300ms ease-in-out;
+  &__wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  &__inner {
+    max-width: calc(100% - 15px);
+    max-height: calc(100% - 15px);
+    min-width: 51.25rem;
+    max-height: 42.825rem;
+    background-color: var(--clr-black);
+    border-radius: 2.1875rem;
+    overflow-y: auto;
+  }
+  &__heading {
+    background-color: var(--clr-dark);
+    box-shadow: var(--modal-shadow);
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr auto;
+    padding: 30px;
+  }
+  &__name {
+    text-align: center;
+    color: var(--clr-light);
+    font-size: 1.375rem;
+    font-weight: 700;
+  }
+  &__body {
+    padding: 2rem 3.75rem;
+  }
+  &__item-number {
+    flex: 0 0 2rem;
+    font-size: var(--13-fsize);
+  }
+  &__item {
+    padding: 5px 23px;
+    min-height: 5.125rem;
+    @include al-flex;
+    grid-gap: var(--10-spc);
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--clr-dark);
+    }
+  }
+  &__item-info {
+    flex: 0 0 27.125rem;
+    p {
+      font-size: var(--13-fsize);
+    }
+  }
+  &__btn {
+    flex: 0 0 10.5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    outline: 1px solid var(--clr-main);
+    font-size: var(--13-fsize);
+  }
+  ._active-optim-btn {
+    background-color: var(--clr-main);
+    color: var(--clr-black);
+    outline: 0;
+  }
+  &__close-icon {
+    cursor: pointer;
+  }
+}
+
+@include max-width($tablet-media) {
+  .modal {
+    &__inner {
+      max-width: 35rem;
+    }
+    &__item-info {
+      flex: 0 0 13.875rem;
+      // overflow: hidden;
+      p {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .--3-line {
+        -webkit-line-clamp: 3;
+      }
+      .--2-line {
+        -webkit-line-clamp: 2;
+      }
+      .--8-line {
+        -webkit-line-clamp: 8;
+      }
+    }
+    &__btn {
+      flex: 0 0 7.5rem;
+    }
+  }
+}
+
+.--show-modal {
+  opacity: 1;
+  visibility: visible;
+}
+
+.optim-inner {
+  max-width: 51.25rem;
+}
