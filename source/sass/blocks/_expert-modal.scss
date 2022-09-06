@@ -56,4 +56,22 @@
   &__button {
     flex: 0 0 406px;
   }
+  &__total {
+    margin-top: 2rem;
+    padding: 0 1.4375rem;
+    display: grid;
+    justify-content: flex-end;
+  }
+  &__button-total {
+    min-width: 10.5rem;
+    background-color: var(--clr-main);
+    color: var(--clr-black);
+    font-size: var(--13-fsize);
+    min-height: 35px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+  }
 }

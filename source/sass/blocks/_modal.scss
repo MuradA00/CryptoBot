@@ -14,7 +14,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
   }
   &__inner {
     max-width: calc(100% - 15px);
@@ -119,4 +118,42 @@
 
 .optim-inner {
   max-width: 51.25rem;
+}
+
+@media only screen and (max-width: 86.9375em) {
+  .modal {
+    &__inner {
+      max-width: 35rem !important;
+      min-width: 35rem !important;
+
+    }
+    .optim-inner {
+      max-width: 35rem;
+    }
+  }
+  .expert {
+    --tablet-width: 6rem;
+    &__value-row {
+      display: flex;
+      justify-content: space-between;
+    }
+    &__settings {
+      flex: 0 0 var(--tablet-width) !important;
+    }
+    &__button {
+      flex: 0 0 9.125rem !important;
+    }
+    &__row-item {
+      flex: 0 0 3.25rem !important;
+    }
+    &__values {
+      flex: 0 0 15.2rem !important;
+    }
+    &__label {
+      flex: 0 0 var(--tablet-width) !important;
+    }
+    #toggle-btn {
+
+    }
+  }
 }

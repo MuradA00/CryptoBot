@@ -47,13 +47,10 @@ $tablet-media: 86.9375em;
 }
 
 ._spacing-top {
-  margin-top: 16.125rem;
-  @include min-width(56.25em) {
-    margin-top: 31.25vh;
+  margin-top: 31.25vh;
+  @media only screen and (max-height: 56.25em) {
+    margin-top: 258px;
   }
 }
-
-
-
 
 
