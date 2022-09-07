@@ -1,0 +1,36 @@
+.journal-list {
+  display: grid;
+  grid-gap: 1rem;
+  &__item-inner {
+    display: flex;
+    align-items: center;
+  }
+  &__info {
+    font-size: 13px;
+  }
+  &__link {
+    background-color: var(--clr-main);
+    color: var(--clr-black);
+    outline: 0;
+    flex: 0 0 8.5rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+  }
+  &__item {
+    position: relative;
+    border-bottom: 0;
+    &:not(:last-child) {
+      &::after {
+        @include psevdo;
+        width: 93%;
+        top: 3.8rem;
+        height: 1px;
+        background-color: var(--clr-dark);
+      }
+    }
+  }
+}

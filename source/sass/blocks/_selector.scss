@@ -1,7 +1,6 @@
 .selector-row {
   @include al-flex;
-  grid-gap: 10px;
-  background: var(--clr-black);
+  background: var(--clr-black) !important;
   border-radius: 14px;
   padding: 4px 5px;
   &__item {

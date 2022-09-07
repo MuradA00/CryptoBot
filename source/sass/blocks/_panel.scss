@@ -11,10 +11,12 @@
   }
   &__button {
     margin-inline: auto;
+    white-space: nowrap;
   }
   .panel-selector {
     display: flex;
     &__item {
+      white-space: nowrap;
       width: auto;
       padding: 11px 1.375rem;
       cursor: pointer;

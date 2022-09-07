@@ -27,6 +27,9 @@
     @include al-flex;
     grid-gap: var(--34-spc);
   }
+  &__btn {
+    min-width: 7.4375rem;
+  }
 }
 
 .header {

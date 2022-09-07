@@ -7,8 +7,28 @@ const selectorBtns = document.querySelectorAll('.selector-row__item'),
       closeExpertModal = document.getElementById('expert-close'),
       filterModal = document.getElementById('filter-modal'),
       filterTrigger = document.getElementById('filterTrigger'),
-      filterCloseIcon = document.getElementById('filterClose')
+      filterCloseIcon = document.getElementById('filterClose'),
+      stepsTrigger = document.querySelector('._stepsTrigger'),
+      wtfTrigger = document.querySelector('._wtfTrigger'),
+      testingTrigger = document.getElementById('testingTrigger'),
+      wtfModal = document.getElementById('wtfModal'),
+      stepsModal = document.getElementById('stepsModal'),
+      closeStepsIcon = document.getElementById('stepsClose'),
+      closeWtfIcon = document.getElementById('wtfClose'),
+      journalModal = document.getElementById('journalModal'),
+      journalCloseIcon = document.getElementById('journalClose'),
+      journalTrigger = document.getElementById('journalTrigger'),
+      hiddenCells = document.querySelector('.hidden-cells'),
+      hiddenTrigger = document.querySelector('._hiddenTrigger');
 
+hiddenTrigger.addEventListener('click', () => {
+  hiddenCells.classList.toggle('_active-cells');
+  hiddenTrigger.classList.toggle('_noTouch');
+})
+
+journalTrigger.addEventListener('click', () => {
+  openModal(journalModal, journalCloseIcon);
+})
 
 selectorBtns.forEach(selectorBtn => {
   selectorBtn.addEventListener('click', () => {
@@ -38,6 +58,9 @@ filterTrigger.addEventListener('click', function() {
 gsap.fromTo('.main', { opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 1, ease: Power4.ease})
 gsap.fromTo('.header', { opacity: 0, y: -75}, {opacity: 1, y: 0, duration: .8, ease: Power4.ease, delay: .3})
 
+gsap.fromTo('.panel', {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 1, ease: Power4.ease, delay: 0});
+gsap.fromTo('.progress', {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: .8, ease: Power4.ease, delay: .3})
+
 const progressButton = document.querySelector('.progress__button'),
       progressCounter = document.querySelector('.progress__counter'),
       initialButton = progressButton,
@@ -49,15 +72,6 @@ const progressButton = document.querySelector('.progress__button'),
 
 initialButton.addEventListener('click', () => {
   progressActive();
-  // if (progressBar.classList.contains('--startBar')) {
-  //   progressButton.addEventListener('click', () => {
-  //     progressBar.classList.remove('--startBar');
-  //     progressNumber.innerHTML = '0%';
-  //     initialButton.innerHTML = 'Start';
-  //   })
-  // } else {
-  //   progressActive();
-  // }
 });
 
 function progressActive() {
@@ -75,51 +89,27 @@ panel.addEventListener('click', function(e) {
   	item.classList.remove('_active-selector')
   })
   target.classList.add('_active-selector');
-  if (wtfTrigger.classList.contains('_active-selector')) {
-    openWtfModal();
-  } else {
-    if (stepsTrigger.classList.contains('_active-selector')) {
-      testingTrigger.removeEventListener;
-      testingTrigger.addEventListener('click', () => {
-        stepsModal.classList.add('--show-modal');
-        closeStepsIcon.addEventListener('click', () => {
-          stepsModal.classList.remove('--show-modal')
-        })
-      })
-    }
-  }
-
 })
 
 
+closeWtfIcon.addEventListener('click', () => {
+  wtfModal.classList.remove('--show-modal')
+})
+
+stepsClose.addEventListener('click', () => {
+  stepsModal.classList.remove('--show-modal')
+})
 
 function openWtfModal() {
-  testingTrigger.addEventListener('click', () => {
     wtfModal.classList.add('--show-modal');
-    closeWtfIcon.addEventListener('click', () => {
-      wtfModal.classList.remove('--show-modal')
-    })
-  })
 }
 
-const stepsTrigger = document.querySelector('._stepsTrigger'),
-      wtfTrigger = document.querySelector('._wtfTrigger'),
-      testingTrigger = document.getElementById('testingTrigger'),
-      wtfModal = document.getElementById('wtfModal'),
-      stepsModal = document.getElementById('stepsModal'),
-      closeStepsIcon = document.getElementById('stepsClose'),
-      closeWtfIcon = document.getElementById('wtfClose')
+const openStepModal = () => stepsModal.classList.add('--show-modal');
 
-// function openHiddenModal(currentTrigger, currentModal, testingTrigger, currentCloseIcon) {
-//   if (currentTrigger == true) {
-//     testingTrigger.addEventListener('click', () => {
-//       currentModal.classList.add('--show-modal');
-//     }, {once: true});
-//     currentCloseIcon.addEventListener('click', () => {
-//       currentModal.classList.remove('--show-modal')
-//     });
-//   }
-// }
-
-
-// openHiddenModal();
+testingTrigger.addEventListener('click', () => {
+  if (wtfTrigger.classList.contains('_active-selector')) {
+    openWtfModal()
+  } else {
+    openStepModal()
+  }
+  })

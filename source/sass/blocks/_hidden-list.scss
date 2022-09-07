@@ -1,0 +1,66 @@
+
+.hidden-cells {
+  background-color: hsla(210, 21%, 11%, 1);
+  border-radius: 6px;
+  pointer-events: all !important;
+  padding-top: 35px;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  border: 1px solid var(--clr-main);
+  width: 100%;
+  transition: all 500ms ease;
+  z-index: -1;
+  &__inner {
+    display: flex;
+    align-items: center;
+    min-height: 35px;
+  }
+  &__item {
+    display: grid;
+    justify-content: center;
+    padding: 0 12px;
+  }
+  &__info {
+    font-size: 13px;
+    color: hsla(210, 11%, 78%, 1);
+  }
+  &__input {
+    height: 14px;
+  }
+  #toggle-btn {
+    width: 24px;
+    height: 14px;
+    &::before {
+      width: 19.2px;
+      height: 9.3px;
+      // background: hsla(208, 22%, 14%, 1) !important;
+    }
+    &::after {
+      width: 9px;
+      height: 9px;
+      left: calc(100% - 1.3rem);
+    }
+    &:checked {
+      &::after {
+        left: calc(100% - .7rem) !important;
+      }
+    }
+  }
+
+}
+
+._active-cells {
+  opacity: 1;
+  visibility: visible;
+}
+
+.header__wrapper {
+  position: relative;
+  z-index: 100000000;
+}
+
