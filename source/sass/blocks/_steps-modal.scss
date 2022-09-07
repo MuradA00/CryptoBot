@@ -1,0 +1,26 @@
+.steps-list {
+  display: grid;
+  grid-gap: 5px;
+  &__item {
+    min-height: 3.125rem;
+    border-bottom: 1px solid var(--clr-dark);
+    padding: 5px 23px;
+  }
+  &__label {
+    flex: 0 0 29.75rem;
+    font-size: 13px;
+  }
+  &__item-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@include max-width(86.9375em) {
+  .steps-list {
+    &__label {
+      flex: 0 0 13.5rem;
+    }
+  }
+}

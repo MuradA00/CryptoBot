@@ -16,6 +16,7 @@
     align-items: center;
   }
   &__inner {
+    transition: transform 500ms ease;
     max-width: calc(100% - 15px);
     max-height: calc(100% - 15px);
     min-width: 51.25rem;
@@ -114,6 +115,9 @@
 .--show-modal {
   opacity: 1;
   visibility: visible;
+  .modal__inner {
+    transform: translateY(-5%);
+  }
 }
 
 .optim-inner {
