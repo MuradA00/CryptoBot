@@ -113,3 +113,80 @@ testingTrigger.addEventListener('click', () => {
     openStepModal()
   }
   })
+
+  fetch('http://52.58.115.17:3000/api/last')
+  .then(async (response) => {
+    const res = await response.json()
+
+    // document.querySelectorAll('.table__inner').forEach(item => item.remove())
+
+    res.forEach((item, index) => {
+      const elem = document.createElement('div')
+      elem.classList.add('table__inner')
+      elem.innerHTML = `
+        <div class="table__inner-item _table-item-short">
+          ${index + 1}
+        </div>
+        <div class="table__inner-item">
+          ${item.data.totalBalance.toFixed(1)}$
+        </div>
+        <div class="table__inner-item">
+        ${item.data.profit.toFixed(1)}$
+        </div>
+        <div class="table__inner-item">
+          --%
+        </div>
+        <div class="table__inner-item">
+          ${item.data.expectationProfit.toFixed(1)}$
+        </div>
+        <div class="table__inner-item">
+          ${item.data.subsidence.toFixed()}%
+        </div>
+        <div class="table__inner-item">
+          ${item.data.dealQty.toFixed()}
+        </div>
+        <div class="table__inner-item">
+          ${item.data.longDealPercent.toFixed()}%
+        </div>
+        <div class="table__inner-item">
+          ${item.data.shortDealPercent.toFixed()}%
+        </div>
+        <div class="table__inner-item">
+          ${item.data.lossDealPercent.toFixed()}%
+        </div>
+        <div class="table__inner-item">
+          ${item.data.recoveryFactor.toFixed()}
+        </div>
+        <button class="table__button _table-active-btn">
+          Link
+        </button>
+      `
+      document.querySelector('.table').append(elem)
+    });
+  })
+  .then((data) => {
+    console.log(data);
+  });
+
+  fetch('http://52.58.115.17:3000/api/results')
+  .then((res) => {
+    return res.json()
+  })
+  .then((data) => {
+    data.forEach((item, index) => {
+      const elem = document.createElement('li')
+      elem.classList.add('journal-list__item')
+      elem.classList.add('steps-list__item')
+      elem.innerHTML = `
+        <div class="journal-list__item-inner steps-list__item-inner">
+          <div class="journal-list__info">
+            ${item}
+          </div>
+          <a href="#" class="journal-list__link _active-optim-btn modal-btn _optim-btn">
+            Link
+          </a>
+        </div>
+      `
+      document.querySelector('.journal-list').append(elem)
+    });
+  });
