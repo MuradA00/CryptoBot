@@ -17,3 +17,19 @@
 @import "general/typography";
 @import "general/blocks";
 
+
+.expert__button {
+  flex: 0 0 466px;
+}
+.expert__settings {
+  flex: 0 0 26rem;
+}
+.expert__value-item {
+  padding: 0;
+}
+.expert__value-item input {
+  padding: 12px;
+  text-align: center;
+  background-color: transparent;
+  color: white;
+}

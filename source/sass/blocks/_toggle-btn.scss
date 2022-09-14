@@ -1,4 +1,5 @@
-#toggle-btn {
+#toggle-btn,
+input[type="checkbox"] {
   -webkit-appearance: none;
   outline: 0;
   border: 0;
@@ -39,5 +40,51 @@
     &::after {
       left: calc(100% - 1.25rem);
     }
+  }
+}
+.header__btn {
+  transition: 0.3s ease all;
+}
+.header__btn._noTouch {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.indicator {
+  position: relative;
+  z-index: 10000000000;
+
+  &__list {
+    position: absolute;
+    visibility: hidden;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+    background-color: hsl(210deg,21%,11%);
+    opacity: 0;
+    transition: 0.5s all ease;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid var(--clr-main);
+  }
+  &.active &__list {
+    visibility: visible;
+    opacity: 1;
+  }
+  &__item {
+    min-height: 35px;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+  &__name {
+    font-size: 13px;
+    color: hsl(210deg,11%,78%);
+  }
+  & ._btn-primary {
+    transition: 0.3s all ease;
+  }
+  &.active ._btn-primary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
