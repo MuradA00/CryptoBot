@@ -72,7 +72,7 @@ gulp.task("refresh", (done) => {
 });
 
 gulp.task("favicon", () => {
-  return gulp.src("source/Favicon.svg")
+  return gulp.src("source/favicon.svg")
     .pipe(gulp.dest("build"))
 });
 

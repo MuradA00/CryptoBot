@@ -90,15 +90,15 @@ const progressButton = document.querySelector(".progress__button"),
   progressBar = document.querySelector(".progress__percent"),
   progressNumber = document.querySelector(".progress__counter");
 
-initialButton.addEventListener("click", () => {
-  progressActive();
-});
+// initialButton.addEventListener("click", () => {
+//   progressActive();
+// });
 
-function progressActive() {
-  progressBar.classList.toggle("--startBar");
-  progressNumber.innerHTML = "23%";
-  initialButton.innerHTML = "Stop";
-}
+// function progressActive() {
+//   progressBar.classList.toggle("--startBar");
+//   progressNumber.innerHTML = "23%";
+//   initialButton.innerHTML = "Stop";
+// }
 
 const panel = document.querySelector(".panel-selector");
 
@@ -510,7 +510,9 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     // },
     indicators: {
       name: indicator,
-      hmaFilter: helperItem('hmaFilter')
+      hmaFilter: {
+        period: helperItem('hmaFilter')
+      }
     },
     symbol: currency,
     timeFrame: period,
@@ -565,8 +567,9 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   if(error) {
     console.error(error)
   }
-  console.log(formData);
+  console.log(JSON.stringify(formData));
   if(panelTab === 'wft') {
+    document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/wft`, {
       method: "POST",
       body: JSON.stringify(formData)
@@ -577,10 +580,13 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   }
 });
 
-setTimeout(() => {
-  console.log(1);
+setInterval(() => {
   fetch(`${pathAPI}/progress`)
     .then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => {
+      document.querySelector('.progress__counter').textContent = data + '%'
+      document.querySelector('.progress__percent').classList.add('--startBar')
+      document.querySelector('.progress__percent').style.width = data + '%'
+    })
     .catch(err => console.log(err))
-}, 2000);
+}, 1000);
