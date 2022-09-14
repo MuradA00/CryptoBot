@@ -71,6 +71,11 @@ gulp.task("refresh", (done) => {
   done();
 });
 
+gulp.task("favicon", () => {
+  return gulp.src("source/Favicon.svg")
+    .pipe(gulp.dest("build"))
+});
+
 
 gulp.task("raster images", () => {
   return gulp.src("build/img/*.{png,jpg,jpeg}")
@@ -147,7 +152,8 @@ gulp.task("build", gulp.series(
   "sprite",
   "webp",
   "html",
-  "raster images"
+  "raster images",
+  "favicon"
 ));
 
 gulp.task("start", gulp.series("server"));

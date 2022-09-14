@@ -36,7 +36,7 @@
           <div class="header__wrapper _hiddenTrigger">
             <button class="header__btn _btn-primary">
               <span>
-                ETCUSDT
+                SYMBOL
               </span>
               <svg width='12' height='8'>
                 <use href='img/sprite/sprite.svg#arrow'></use>
@@ -49,7 +49,7 @@
                     BTCUSDT1
                   </div>
                   <div class="hidden-cells__input">
-                    <input type="checkbox" id="BTCUSDT1">
+                    <input type="checkbox" id="BTCUSDT1" checked>
                   </div>
                 </div>
               </li>
@@ -59,7 +59,7 @@
                     BTCUSDT2
                   </div>
                   <div class="hidden-cells__input">
-                    <input type="checkbox" id="BTCUSDT2">
+                    <input type="checkbox" id="BTCUSDT2" checked>
                   </div>
                 </div>
               </li>
@@ -138,19 +138,19 @@
         </div>
         <div class="header__selector">
           <ul class="selector-row _gap-row">
-            <li class="selector-row__item _selector-active">
+            <li class="selector-row__item _selector-active" data-value="5m">
               M5
             </li>
-            <li class="selector-row__item">
+            <li class="selector-row__item" data-value="15m">
               M15
             </li>
-            <li class="selector-row__item _selector-active">
+            <li class="selector-row__item _selector-active" data-value="30m">
               M30
             </li>
-            <li class="selector-row__item">
+            <li class="selector-row__item" data-value="1h">
               H1
             </li>
-            <li class="selector-row__item">
+            <li class="selector-row__item" data-value="4h">
               H4
             </li>
           </ul>
