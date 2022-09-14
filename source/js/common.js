@@ -144,7 +144,7 @@ testingTrigger.addEventListener("click", () => {
 //   })
 // })
 
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "/api";
 // const
 let indicator = null;
 if(!localStorage.getItem("indicator")) {
@@ -482,8 +482,8 @@ const helperItem = (elem) => {
   // console.log(document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]').checked, document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]'));
   return [
     +document.querySelector(`input[name="${elem}Start"]`).value,
-    +document.querySelector(`input[name="${elem}Step"]`).value,
     +document.querySelector(`input[name="${elem}Stop"]`).value,
+    +document.querySelector(`input[name="${elem}Step"]`).value,
   ];
 };
 
