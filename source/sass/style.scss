@@ -100,3 +100,15 @@ input[type="number"]:disabled {
     margin-right: auto;
   }
 }
+.hidden-cells__item {
+  justify-content: stretch;
+  padding: 0 8px;
+}
+.hidden-cells__inner {
+  justify-content: space-between;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: white;
+  // background: red;
+  fill: black;
+}

@@ -1,3 +1,10 @@
+const versionProduct = '0.52'
+if(localStorage.getItem('versionProduct') !== versionProduct) {
+  localStorage.clear();
+  console.log('clear st');
+}
+localStorage.setItem('versionProduct', versionProduct)
+
 const selectorBtns = document.querySelectorAll(".selector-row__item"),
   optimModal = document.getElementById("optimization"),
   optimTrigger = document.getElementById("optim-trigger"),
@@ -103,7 +110,7 @@ const progressButton = document.querySelector(".progress__button"),
 const panel = document.querySelector(".panel-selector");
 
 
-let panelTab = 'stage'
+let panelTab = 'step'
 panel.addEventListener("click", function (e) {
   const selectorItems = document.querySelectorAll(".panel-selector__item");
   const target = e.target;
@@ -192,8 +199,11 @@ window.addEventListener("click", (e) => {
   }
 });
 document.querySelectorAll('.expert__value-row').forEach(item => {
-  item.querySelector('.expert__button input').addEventListener('change', e => {
-    if(e.target.checked) {
+  if(!item.querySelector('.expert__button input[type="checkbox"]').checked) {
+    item.querySelectorAll('input[type="number"]').forEach(i => i.disabled = true)
+  }
+  item.querySelector('.expert__button input[type="checkbox"]').addEventListener('change', e => {
+    if(!e.target.checked) {
       item.querySelectorAll('input[type="number"]').forEach(i => i.disabled = true)
     } else {
       item.querySelectorAll('input[type="number"]').forEach(i => i.disabled = false)
@@ -429,29 +439,84 @@ for (item in filters) {
   document.querySelector(`#filter-modal input[type="text"][name="${item}"]`).value = filters[item]
 }
 document.querySelectorAll('#filter-modal input[type="text"]').forEach(item => {
-  filters[item.name] = item.value
+  filters[item.name] = +item.value
   localStorage.setItem('filters', JSON.stringify(filters))
 })
 document.querySelectorAll('#filter-modal input[type="text"]').forEach(item => {
   item.addEventListener('change', e => {
-    filters[e.target.name] = e.target.value
+    filters[e.target.name] = +e.target.value
     localStorage.setItem('filters', JSON.stringify(filters))
   })
 })
 
 
-const wft = JSON.parse(localStorage.getItem('wft')) || {}
-for (item in wft) {
-  document.querySelector(`#wtfModal input[name="${item}"]`).value = wft[item]
+let wft = {}
+if(localStorage.getItem('wft')) {
+  wft = JSON.parse(localStorage.getItem('wft'))
+  for (item in wft) {
+    document.querySelector(`#wtfModal input[name="${item}"]`).value = wft[item]
+  }
+} else {
+  document.querySelectorAll('#wtfModal input').forEach(item => {
+    if(item.name === 'timeFrom' || item.name === 'timeTo') {
+      wft[item.name] = item.value
+    } else {
+      wft[item.name] = +item.value
+    }
+  })
+  JSON.stringify(localStorage.setItem('wft', wft))
 }
 document.querySelectorAll('#wtfModal input').forEach(item => {
-  wft[item.name] = item.value
+  if(item.name === 'timeFrom' || item.name === 'timeTo') {
+    wft[item.name] = item.value
+  } else {
+    wft[item.name] = +item.value
+  }
   localStorage.setItem('wft', JSON.stringify(wft))
 })
 document.querySelectorAll('#wtfModal input').forEach(item => {
   item.addEventListener('change', e => {
-    wft[e.target.name] = e.target.value
+    if(e.target.name === 'timeFrom' || e.target.name === 'timeTo') {
+      wft[e.target.name] = e.target.value
+    } else {
+      wft[e.target.name] = +e.target.value
+    }
     localStorage.setItem('wft', JSON.stringify(wft))
+  })
+})
+
+let stepModal = {}
+if(localStorage.getItem('stepModal')) {
+  stepModal = JSON.parse(localStorage.getItem('stepModal'))
+  for (item in stepModal) {
+    document.querySelector(`#stepsModal input[name="${item}"]`).value = stepModal[item]
+  }
+} else {
+  document.querySelectorAll('#stepsModal input').forEach(item => {
+    if(item.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+      stepModal[item.name] = item.value
+    } else {
+      stepModal[item.name] = +item.value
+    }
+  })
+  JSON.stringify(localStorage.setItem('stepModal', stepModal))
+}
+document.querySelectorAll('#stepsModal input').forEach(item => {
+  if(item.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+    stepModal[item.name] = item.value
+  } else {
+    stepModal[item.name] = +item.value
+  }
+  localStorage.setItem('stepModal', JSON.stringify(stepModal))
+})
+document.querySelectorAll('#stepsModal input').forEach(item => {
+  item.addEventListener('change', e => {
+    if(e.target.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+      stepModal[e.target.name] = e.target.value
+    } else {
+      stepModal[e.target.name] = +e.target.value
+    }
+    localStorage.setItem('stepModal', JSON.stringify(stepModal))
   })
 })
 
@@ -461,12 +526,12 @@ for (item in config) {
   document.querySelector(`#optimization input[type="text"][name="${item}"]`).value = config[item]
 }
 document.querySelectorAll('#optimization input[type="text"]').forEach(item => {
-  config[item.name] = item.value
+  config[item.name] = +item.value
   localStorage.setItem('config', JSON.stringify(config))
 })
 document.querySelectorAll('#optimization input[type="text"]').forEach(item => {
   item.addEventListener('change', e => {
-    config[e.target.name] = e.target.value
+    config[e.target.name] = +e.target.value
     localStorage.setItem('config', JSON.stringify(config))
   })
 })
@@ -504,10 +569,6 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     }, 2000);
   }
   const formData = {
-    // wft: {
-    //   timeFrom: moment(timeFrom).valueOf(),
-    //   timeTo: moment(timeTo).valueOf(),
-    // },
     indicators: {
       name: indicator,
       hmaFilter: {
@@ -518,7 +579,7 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     timeFrame: period,
     params: {
       stopLoss: helperItem('stopLoss'),
-      stopLtakeProfitoss: helperItem('takeProfit'),
+      takeProfit: helperItem('takeProfit'),
       breakevenLevel: helperItem('breakevenLevel'),
       indentBreakevenLevel: helperItem('indentBreakevenLevel'),
     },
@@ -555,7 +616,12 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     };
   }
   if (panelTab === 'step') {
-
+    formData.tbp = {
+      timeFrom: moment(wft.timeFrom).valueOf(),
+      timeTo: moment(wft.timeTo).valueOf(),
+      testFrom: moment(wft.testFrom).valueOf(),
+      testTo: moment(wft.testTo).valueOf()
+    }
   }
   if (panelTab === 'wft') {
     formData.wft = {
@@ -567,10 +633,14 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   if(error) {
     console.error(error)
   }
-  console.log(JSON.stringify(formData));
+  // console.log(JSON.stringify(formData));
+  console.log(formData);
   if(panelTab === 'wft') {
     document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/wft`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
       method: "POST",
       body: JSON.stringify(formData)
     })
@@ -578,6 +648,19 @@ document.querySelector(".progress__button").addEventListener("click", () => {
       .then(data => console.log(data))
       .catch(err => console.log(err))
   }
+  // if(panelTab === 'step') {
+  //   document.querySelector('.progress__btn').textContent = 'Stop'
+  //   fetch(`${pathAPI}/testbyperiod`, {
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     method: "POST",
+  //     body: JSON.stringify(formData)
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => console.log(data))
+  //     .catch(err => console.log(err))
+  // }
 });
 
 setInterval(() => {

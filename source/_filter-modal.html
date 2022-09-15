@@ -27,6 +27,18 @@
           </li>
           <li class="filter-row__item">
             <div class="filter-row__btn">
+              <input type="checkbox" id="toggle-btn" >
+              <label class="expert__label">
+                Прибыль в % за месяц по одному торговому инструменту
+              </label>
+            </div>
+            <div class="filter-row__total modal__btn">
+              <!-- 4345$ -->
+              <input type="text" name="monthProfit" value="-100">
+            </div>
+          </li>
+          <li class="filter-row__item">
+            <div class="filter-row__btn">
               <input type="checkbox" id="toggle-btn" checked>
               <label class="expert__label">
                 Количество Шорт сделок (не менее Х% от общего количества сделок)
@@ -53,36 +65,24 @@
             <div class="filter-row__btn">
               <input type="checkbox" id="toggle-btn" >
               <label class="expert__label">
-                Прибыль в % за месяц по одному торговому инструменту
+                Процент убыточных сделок
               </label>
             </div>
             <div class="filter-row__total modal__btn">
-              <!-- 4345$ -->
-              <input type="text" name="monthProfit" value="-100">
+              <!-- 46% -->
+              <input type="text" name="lossDealPercent" value="0">
             </div>
           </li>
           <li class="filter-row__item">
             <div class="filter-row__btn">
-              <input type="checkbox" id="toggle-btn" checked>
+              <input type="checkbox" id="toggle-btn" >
               <label class="expert__label">
-                Просадка (не более, %)
+                Фактор восстановления
               </label>
             </div>
             <div class="filter-row__total modal__btn">
-              <!-- 12% -->
-              <input type="text" name="subsidence" value="0">
-            </div>
-          </li>
-          <li class="filter-row__item">
-            <div class="filter-row__btn">
-              <input type="checkbox" id="toggle-btn" checked>
-              <label class="expert__label">
-                Матожидание прибыли (не менее, указывается простое число (5-10-12-25 и т.д.)
-              </label>
-            </div>
-            <div class="filter-row__total modal__btn">
-              <!-- 25 -->
-              <input type="text" name="expectationProfit" value="-100">
+              <!-- 46% -->
+              <input type="text" name="recoveryFactor" value="-100">
             </div>
           </li>
           <li class="filter-row__item">
@@ -95,6 +95,18 @@
             <div class="filter-row__total modal__btn">
               <!-- 12,5 -->
               <input type="text" name="profitFactor" value="-100">
+            </div>
+          </li>
+          <li class="filter-row__item">
+            <div class="filter-row__btn">
+              <input type="checkbox" id="toggle-btn" checked>
+              <label class="expert__label">
+                Просадка (не более, %)
+              </label>
+            </div>
+            <div class="filter-row__total modal__btn">
+              <!-- 12% -->
+              <input type="text" name="subsidence" value="0">
             </div>
           </li>
           <li class="filter-row__item">
@@ -119,6 +131,18 @@
             <div class="filter-row__total modal__btn">
               <!-- 4 -->
               <input type="text" name="maxlossDealSeries" value="0">
+            </div>
+          </li>
+          <li class="filter-row__item">
+            <div class="filter-row__btn">
+              <input type="checkbox" id="toggle-btn" checked>
+              <label class="expert__label">
+                Матожидание прибыли (не менее, указывается простое число (5-10-12-25 и т.д.)
+              </label>
+            </div>
+            <div class="filter-row__total modal__btn">
+              <!-- 25 -->
+              <input type="text" name="expectationProfit" value="-100">
             </div>
           </li>
         </ul>
