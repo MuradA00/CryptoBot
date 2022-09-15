@@ -422,6 +422,10 @@ document.querySelector('.steps-list__total input[name="timeTo"]').addEventListen
 })
 
 
+// const calcExpert = () => {
+
+// }
+
 let expert = {}
 if(localStorage.getItem('expert')) {
   expert = JSON.parse(localStorage.getItem('expert'))
@@ -439,8 +443,38 @@ document.querySelectorAll('#expert input[type="number"]').forEach(item => {
     expert[e.target.name] = e.target.value
     localStorage.setItem('expert', JSON.stringify(expert))
   })
+  item.addEventListener('input', e => {
+    item.closest('.expert__values').querySelectorAll('input[type="number"]').forEach(i => i.closest('.expert__value-item').style.borderColor = '')
+    if(+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value <= 0) {
+      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').closest('.expert__value-item').style.borderColor = 'red'
+    } else if(+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').value < +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value) {
+      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').closest('.expert__value-item').style.borderColor = 'red'
+    } else if((+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').value - +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value < +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').value)) {
+      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').closest('.expert__value-item').style.borderColor = 'red'
+    }
+    let summaVariant = 1
+    document.querySelectorAll('#expert .expert__value-row .expert__values').forEach(i => {
+      // console.log(ddd);
+      if(+i.querySelector('input[type="number"][name$=Stop]').value < +i.querySelector('input[type="number"][name$=Start]').value) {
+        return
+      }
+      if((+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) < +i.querySelector('input[type="number"][name$=Step]').value) {
+        return
+      }
+      if((+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) < +i.querySelector('input[type="number"][name$=Step]').value) {
+        return
+      }
+      const ddd = (+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) / +i.querySelector('input[type="number"][name$=Step]').value
+      console.log(typeof ddd);
+      if(typeof ddd === 'number') {
+        summaVariant = summaVariant * ddd
+      }
+    })
+    document.querySelector('.expert__button-total').textContent = summaVariant
+  })
 })
 
+console.log(typeof document.querySelectorAll('input'))
 
 const filters = JSON.parse(localStorage.getItem('filters')) || {}
 for (item in filters) {
