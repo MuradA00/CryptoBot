@@ -343,7 +343,7 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                 ${item.data.profit.toFixed(1)}$
               </div>
               <div class="table__inner-item">
-                ${item.data.monthProfit.toFixed(1)}$
+                ${item.data.monthProfit.toFixed(1)}%
               </div>
               <div class="table__inner-item">
                 ${item.data.expectationProfit.toFixed(1)}%
@@ -371,6 +371,10 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
               </button>
             `;
                 document.querySelector(".table").append(elem);
+                elem.querySelector('._table-active-btn').addEventListener('click', () => {
+                  document.querySelector('.custom-graph').style.display = 'flex'
+                  areaSeries.setData(item.graphData)
+                })
               });
             });
         })
