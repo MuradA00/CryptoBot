@@ -1,4 +1,4 @@
-const versionProduct = '0.52'
+const versionProduct = '0.58'
 if(localStorage.getItem('versionProduct') !== versionProduct) {
   localStorage.clear();
   console.log('clear st');
@@ -151,7 +151,7 @@ testingTrigger.addEventListener("click", () => {
 //   })
 // })
 
-const pathAPI = "/api";
+const pathAPI = "http://52.29.157.23:3000/api";
 // const
 let indicator = null;
 if(!localStorage.getItem("indicator")) {
@@ -283,6 +283,10 @@ fetch(`${pathAPI}/last`).then(async (response) => {
         </button>
       `;
     document.querySelector(".table").append(elem);
+    elem.querySelector('._table-active-btn').addEventListener('click', () => {
+      document.querySelector('.custom-graph').style.display = 'flex'
+      areaSeries.setData(item.graphData)
+    })
   });
 });
 
@@ -493,7 +497,7 @@ if(localStorage.getItem('stepModal')) {
   }
 } else {
   document.querySelectorAll('#stepsModal input').forEach(item => {
-    if(item.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+    if(item.name === 'optimizationFrom' || item.name === 'optimizationTo' || item.name === 'testFrom' || item.name === 'testTo') {
       stepModal[item.name] = item.value
     } else {
       stepModal[item.name] = +item.value
@@ -502,7 +506,7 @@ if(localStorage.getItem('stepModal')) {
   JSON.stringify(localStorage.setItem('stepModal', stepModal))
 }
 document.querySelectorAll('#stepsModal input').forEach(item => {
-  if(item.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+  if(item.name === 'optimizationFrom' || item.name === 'optimizationTo' || item.name === 'testFrom' || item.name === 'testTo') {
     stepModal[item.name] = item.value
   } else {
     stepModal[item.name] = +item.value
@@ -511,7 +515,7 @@ document.querySelectorAll('#stepsModal input').forEach(item => {
 })
 document.querySelectorAll('#stepsModal input').forEach(item => {
   item.addEventListener('change', e => {
-    if(e.target.name === 'timeFrom' || item.name === 'timeTo' || item.name === 'testFrom' || item.name === 'testTo') {
+    if(e.target.name === 'optimizationFrom' || item.name === 'optimizationTo' || item.name === 'testFrom' || item.name === 'testTo') {
       stepModal[e.target.name] = e.target.value
     } else {
       stepModal[e.target.name] = +e.target.value
@@ -538,12 +542,12 @@ document.querySelectorAll('#optimization input[type="text"]').forEach(item => {
 
 
 const helperItem = (elem) => {
-  // if(document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]').checked) {
-  //   console.log(1123);
-  //   return [
-  //     0, 0, 1
-  //   ];
-  // }
+  if(!document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]').checked) {
+    console.log(1123);
+    return [
+      0, 0, 1
+    ];
+  }
   // console.log(document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]').checked, document.querySelector(`input[name="${elem}Start"]`).closest('.expert__value-row').querySelector('input[type="checkbox"]'));
   return [
     +document.querySelector(`input[name="${elem}Start"]`).value,
@@ -583,9 +587,18 @@ document.querySelector(".progress__button").addEventListener("click", () => {
       breakevenLevel: helperItem('breakevenLevel'),
       indentBreakevenLevel: helperItem('indentBreakevenLevel'),
     },
-    filters: filters,
+    // filters: filters,
     config: config
   };
+  const customFilters = {}
+  for (const key in filters) {
+    if(document.querySelector(`#filter-modal input[name="${key}"]`).closest('.filter-row__item').querySelector('input[type="checkbox"]').checked) {
+      customFilters[key] = filters[key]
+    } else {
+      customFilters[key] = key !== 'maxlossDealSeries' ? -100000000 : 10000000
+    }
+  }
+  formData.filters = customFilters
   if (indicator === "stoch") {
     formData.indicators.stoch = {
       kPeriod: helperItem('kPeriod'),
@@ -617,10 +630,10 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   }
   if (panelTab === 'step') {
     formData.tbp = {
-      timeFrom: moment(wft.timeFrom).valueOf(),
-      timeTo: moment(wft.timeTo).valueOf(),
-      testFrom: moment(wft.testFrom).valueOf(),
-      testTo: moment(wft.testTo).valueOf()
+      optimizationFrom: moment(stepModal.optimizationFrom).valueOf(),
+      optimizationTo: moment(stepModal.optimizationTo).valueOf(),
+      testFrom: moment(stepModal.testFrom).valueOf(),
+      testTo: moment(stepModal.testTo).valueOf()
     }
   }
   if (panelTab === 'wft') {
@@ -636,7 +649,7 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   // console.log(JSON.stringify(formData));
   console.log(formData);
   if(panelTab === 'wft') {
-    document.querySelector('.progress__btn').textContent = 'Stop'
+    // document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/wft`, {
       headers: {
         'Content-Type': 'application/json'
@@ -648,19 +661,19 @@ document.querySelector(".progress__button").addEventListener("click", () => {
       .then(data => console.log(data))
       .catch(err => console.log(err))
   }
-  // if(panelTab === 'step') {
-  //   document.querySelector('.progress__btn').textContent = 'Stop'
-  //   fetch(`${pathAPI}/testbyperiod`, {
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     method: "POST",
-  //     body: JSON.stringify(formData)
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => console.log(data))
-  //     .catch(err => console.log(err))
-  // }
+  if(panelTab === 'step') {
+    // document.querySelector('.progress__btn').textContent = 'Stop'
+    fetch(`${pathAPI}/testbyperiod`, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(formData)
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.log(err))
+  }
 });
 
 setInterval(() => {
@@ -673,3 +686,201 @@ setInterval(() => {
     })
     .catch(err => console.log(err))
 }, 1000);
+
+
+function createSimpleSwitcher(items, activeItem, activeItemChangedCallback) {
+	var switcherElement = document.createElement('div');
+	switcherElement.classList.add('switcher');
+
+	var intervalElements = items.map(function(item) {
+		var itemEl = document.createElement('button');
+		itemEl.innerText = item;
+		itemEl.classList.add('switcher-item');
+		itemEl.classList.toggle('switcher-active-item', item === activeItem);
+		itemEl.addEventListener('click', function() {
+			onItemClicked(item);
+		});
+		switcherElement.appendChild(itemEl);
+		return itemEl;
+	});
+
+	function onItemClicked(item) {
+		if (item === activeItem) {
+			return;
+		}
+
+		intervalElements.forEach(function(element, index) {
+			element.classList.toggle('switcher-active-item', items[index] === item);
+		});
+
+		activeItem = item;
+
+		activeItemChangedCallback(item);
+	}
+
+	return switcherElement;
+}
+
+var switcherElement = createSimpleSwitcher(['Courier New', 'Arial', 'Times New Roman'], 'Trebuchet MS', function(fontFamily) {
+	chart.applyOptions({
+		layout: {
+			fontFamily: fontFamily,
+		},
+	});
+});
+
+const chartElement = document.createElement('div');
+chartElement.classList.add('custom-graph')
+const closeGraph = document.createElement('div')
+closeGraph.classList.add('custom-graph__close')
+chartElement.append(closeGraph)
+closeGraph.addEventListener('click', () => {
+  chartElement.style.display = ''
+})
+
+var chart = LightweightCharts.createChart(chartElement, {
+	width: 600,
+  height: 300,
+	layout: {
+		fontFamily: 'Comic Sans MS',
+	},
+	rightPriceScale: {
+		borderColor: 'rgba(197, 203, 206, 1)',
+	},
+	timeScale: {
+		borderColor: 'rgba(197, 203, 206, 1)',
+	},
+});
+
+document.body.appendChild(chartElement);
+document.body.appendChild(switcherElement);
+
+var areaSeries = chart.addAreaSeries({
+  topColor: 'rgba(33, 150, 243, 0.56)',
+  bottomColor: 'rgba(33, 150, 243, 0.04)',
+  lineColor: 'rgba(33, 150, 243, 1)',
+  lineWidth: 2,
+});
+
+areaSeries.setData([
+{
+    "time": "2021-02-07",
+    "value": 903252.305660776
+  },
+  {
+    "time": "2021-02-08",
+    "value": 824555.4617612461
+  },
+  {
+    "time": "2021-02-09",
+    "value": 822088.6458040659
+  },
+  {
+    "time": "2021-02-10",
+    "value": 993728.6420772834
+  },
+  {
+    "time": "2021-02-11",
+    "value": 1012611.6495196922
+  },
+  {
+    "time": "2021-02-12",
+    "value": 1011348.7299382992
+  },
+  {
+    "time": "2021-02-13",
+    "value": 676622.0512403984
+  },
+  {
+    "time": "2021-02-14",
+    "value": 1215981.6471389318
+  },
+  {
+    "time": "2021-02-15",
+    "value": 1190471.6115654416
+  },
+  {
+    "time": "2021-02-16",
+    "value": 1205548.9793737128
+  },
+  {
+    "time": "2021-02-17",
+    "value": 1187515.8836830312
+  },
+  {
+    "time": "2021-02-18",
+    "value": 802206.012761356
+  },
+  {
+    "time": "2021-02-19",
+    "value": 1131819.9950706863
+  },
+  {
+    "time": "2021-02-20",
+    "value": 1139871.3435704936
+  },
+  {
+    "time": "2021-02-21",
+    "value": 947395.1412238004
+  },
+  {
+    "time": "2021-02-22",
+    "value": 1447358.0619556052
+  },
+  {
+    "time": "2021-02-23",
+    "value": 1509853.410942378
+  },
+  {
+    "time": "2021-02-24",
+    "value": 1611618.2179830277
+  },
+  {
+    "time": "2021-02-25",
+    "value": 1345575.196351628
+  },
+  {
+    "time": "2021-02-26",
+    "value": 1337254.5485194686
+  },
+  {
+    "time": "2021-02-27",
+    "value": 727076.1894724783
+  },
+  {
+    "time": "2021-02-28",
+    "value": 1205021.402361486
+  },
+  {
+    "time": "2021-03-01",
+    "value": 1471661.3231036644
+  },
+  {
+    "time": "2021-03-02",
+    "value": 1035013.4829769675
+  },
+  {
+    "time": "2021-03-03",
+    "value": 1474423.881218233
+  },
+  {
+    "time": "2021-03-04",
+    "value": 1584659.0605415185
+  },
+  {
+    "time": "2021-03-05",
+    "value": 1159779.4589191857
+  },
+  {
+    "time": "2021-03-06",
+    "value": 1215205.9402876454
+  },
+  {
+    "time": "2021-03-07",
+    "value": 1266078.1552065795
+  },
+  {
+    "time": "2021-03-08",
+    "value": 1312550.4040613947
+  }
+]);
