@@ -422,9 +422,56 @@ document.querySelector('.steps-list__total input[name="timeTo"]').addEventListen
 })
 
 
-// const calcExpert = () => {
+const calcExpert = () => {
+  let totalSteps = 1
 
-// }
+  document.querySelectorAll('#expert .expert__value-row').forEach(item => {
+    let itemError = false
+
+    const itemStart = item.querySelector('input[type="number"][name$=Start]')
+    const itemStep = item.querySelector('input[type="number"][name$=Step]')
+    const itemStop = item.querySelector('input[type="number"][name$=Stop]')
+
+    document.querySelector('#expert-trigger').style.outlineColor = ''
+    item.querySelectorAll('input[type="number"]').forEach(i => i.closest('.expert__value-item').style.borderColor = '')
+
+    if(+itemStart.value < 0) {
+      itemStart.closest('.expert__value-item').style.borderColor = 'red'
+      document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      itemError = true
+    }
+    if(+itemStep.value <= 0) {
+      itemStep.closest('.expert__value-item').style.borderColor = 'red'
+      document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      itemError = true
+    }
+    if(+itemStop.value <= 0) {
+      itemStop.closest('.expert__value-item').style.borderColor = 'red'
+      document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      itemError = true
+    }
+    if(+itemStop.value < +itemStart.value) {
+      itemStop.closest('.expert__value-item').style.borderColor = 'red'
+      document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      itemError = true
+    }
+    if((+itemStop.value - +itemStart.value) < +itemStep.value && +itemStart.value !== +itemStop.value && +itemStep.value !== 1) {
+      itemStep.closest('.expert__value-item').style.borderColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
+      itemError = true
+    }
+
+    if(!itemError) {
+      if(+itemStop.value !== +itemStart.value) {
+        totalSteps *= (+itemStop.value - +itemStart.value) / +itemStep.value
+      }
+    }
+  })
+
+  return totalSteps
+}
 
 let expert = {}
 if(localStorage.getItem('expert')) {
@@ -443,38 +490,14 @@ document.querySelectorAll('#expert input[type="number"]').forEach(item => {
     expert[e.target.name] = e.target.value
     localStorage.setItem('expert', JSON.stringify(expert))
   })
-  item.addEventListener('input', e => {
-    item.closest('.expert__values').querySelectorAll('input[type="number"]').forEach(i => i.closest('.expert__value-item').style.borderColor = '')
-    if(+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value <= 0) {
-      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').closest('.expert__value-item').style.borderColor = 'red'
-    } else if(+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').value < +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value) {
-      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').closest('.expert__value-item').style.borderColor = 'red'
-    } else if((+e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Stop]').value - +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Start]').value < +e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').value)) {
-      e.target.closest('.expert__value-row').querySelector('input[type="number"][name$=Step]').closest('.expert__value-item').style.borderColor = 'red'
-    }
-    let summaVariant = 1
-    document.querySelectorAll('#expert .expert__value-row .expert__values').forEach(i => {
-      // console.log(ddd);
-      if(+i.querySelector('input[type="number"][name$=Stop]').value < +i.querySelector('input[type="number"][name$=Start]').value) {
-        return
-      }
-      if((+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) < +i.querySelector('input[type="number"][name$=Step]').value) {
-        return
-      }
-      if((+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) < +i.querySelector('input[type="number"][name$=Step]').value) {
-        return
-      }
-      const ddd = (+i.querySelector('input[type="number"][name$=Stop]').value - +i.querySelector('input[type="number"][name$=Start]').value) / +i.querySelector('input[type="number"][name$=Step]').value
-      console.log(typeof ddd);
-      if(typeof ddd === 'number') {
-        summaVariant = summaVariant * ddd
-      }
-    })
-    document.querySelector('.expert__button-total').textContent = summaVariant
+  item.addEventListener('input', () => {
+    document.querySelector('.expert__button-total').textContent = calcExpert()
   })
 })
+setTimeout(() => {
+  calcExpert()
+}, 0);
 
-console.log(typeof document.querySelectorAll('input'))
 
 const filters = JSON.parse(localStorage.getItem('filters')) || {}
 for (item in filters) {
