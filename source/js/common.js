@@ -1,4 +1,4 @@
-const versionProduct = '0.58'
+const versionProduct = '0.59'
 if(localStorage.getItem('versionProduct') !== versionProduct) {
   localStorage.clear();
   console.log('clear st');
@@ -143,13 +143,11 @@ testingTrigger.addEventListener("click", () => {
   }
 });
 
-// document.querySelectorAll('input[type="number"]').forEach(input => {
-//   input.addEventListener('input', e => {
-//     console.log(e.target.value);
-//     const value = e.target.value
-//     e.target.value = value.replace(/\d/, '')
-//   })
-// })
+document.querySelectorAll('input[type="number"]').forEach(input => {
+  input.addEventListener('input', e => {
+    console.log(e.target.value);
+  })
+})
 
 const pathAPI = "http://52.29.157.23:3000/api";
 // const
@@ -286,6 +284,80 @@ fetch(`${pathAPI}/last`).then(async (response) => {
     elem.querySelector('._table-active-btn').addEventListener('click', () => {
       document.querySelector('.custom-graph').style.display = 'flex'
       areaSeries.setData(item.graphData)
+      if(document.querySelector('.graph-info')) {
+        document.querySelector('.graph-info').remove()
+      }
+      const graphInfo = document.createElement('DIV')
+      graphInfo.classList.add('graph-info')
+      graphInfo.innerHTML = `
+        <div class="graph-info__item">
+          Params 1 - ${item.data.params[0].join(', ')}
+        </div>
+        <div class="graph-info__item">
+          Params 2 - ${item.data.params[1].join(', ')}
+        </div>
+        <div class="graph-info__item">
+          Params 3 - ${item.data.params[2].join(', ')}
+        </div>
+        <div class="graph-info__item">
+          Params deposit - ${item.data.params[3].deposit}
+        </div>
+        <div class="graph-info__item">
+          Params lotPersent - ${item.data.params[3].lotPersent}
+        </div>
+        <div class="graph-info__item">
+          Params leverage - ${item.data.params[3].leverage}
+        </div>
+        <div class="graph-info__item">
+          Params commission - ${item.data.params[3].commission}
+        </div>
+        <div class="graph-info__item">
+          Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
+        </div>
+        <div class="graph-info__item">
+          Конец - ${moment(item.data.endTime).format("MM-DD-YYYY hh:mm:ss")}
+        </div>
+        <div class="graph-info__item">
+          Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
+        </div>
+        <div class="graph-info__item">
+          Чистая прибыльность - ${item.data.profit.toFixed(1)}$
+        </div>
+        <div class="graph-info__item">
+          Прибыль за месяц - ${item.data.monthProfit.toFixed(1)}%
+        </div>
+        <div class="graph-info__item">
+          Матожидание - ${item.data.expectationProfit.toFixed(1)}%
+        </div>
+        <div class="graph-info__item">
+          Макс. Просадка - ${item.data.subsidence.toFixed()}%
+        </div>
+        <div class="graph-info__item">
+          Кол-во сделок - ${item.data.dealQty.toFixed()}
+        </div>
+        <div class="graph-info__item">
+          Кол-во Long сделок - ${item.data.longDealPercent.toFixed()}%
+        </div>
+        <div class="graph-info__item">
+          Кол-во Short сделок - ${item.data.shortDealPercent.toFixed()}%
+        </div>
+        <div class="graph-info__item">
+          Кол-во убыточных сделок - ${item.data.lossDealPercent.toFixed()}%
+        </div>
+        <div class="graph-info__item">
+          profitDealPercent - ${item.data.profitDealPercent.toFixed()}%
+        </div>
+        <div class="graph-info__item">
+          Фактор восстановления - ${item.data.recoveryFactor.toFixed(3)}
+        </div>
+        <div class="graph-info__item">
+          profitFactor - ${item.data.profitFactor.toFixed(3)}
+        </div>
+        <div class="graph-info__item">
+          maxlossDealSeries - ${item.data.maxlossDealSeries}
+        </div>
+      `
+      document.querySelector('.tv-lightweight-charts').append(graphInfo)
     })
   });
 });
@@ -374,6 +446,80 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                 elem.querySelector('._table-active-btn').addEventListener('click', () => {
                   document.querySelector('.custom-graph').style.display = 'flex'
                   areaSeries.setData(item.graphData)
+                  if(document.querySelector('.graph-info')) {
+                    document.querySelector('.graph-info').remove()
+                  }
+                  const graphInfo = document.createElement('DIV')
+                  graphInfo.classList.add('graph-info')
+                  graphInfo.innerHTML = `
+                    <div class="graph-info__item">
+                      Params 1 - ${item.data.params[0].join(', ')}
+                    </div>
+                    <div class="graph-info__item">
+                      Params 2 - ${item.data.params[1].join(', ')}
+                    </div>
+                    <div class="graph-info__item">
+                      Params 3 - ${item.data.params[2].join(', ')}
+                    </div>
+                    <div class="graph-info__item">
+                      Params deposit - ${item.data.params[3].deposit}
+                    </div>
+                    <div class="graph-info__item">
+                      Params lotPersent - ${item.data.params[3].lotPersent}
+                    </div>
+                    <div class="graph-info__item">
+                      Params leverage - ${item.data.params[3].leverage}
+                    </div>
+                    <div class="graph-info__item">
+                      Params commission - ${item.data.params[3].commission}
+                    </div>
+                    <div class="graph-info__item">
+                      Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
+                    </div>
+                    <div class="graph-info__item">
+                      Конец - ${moment(item.data.endTime).format("MM-DD-YYYY hh:mm:ss")}
+                    </div>
+                    <div class="graph-info__item">
+                      Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
+                    </div>
+                    <div class="graph-info__item">
+                      Чистая прибыльность - ${item.data.profit.toFixed(1)}$
+                    </div>
+                    <div class="graph-info__item">
+                      Прибыль за месяц - ${item.data.monthProfit.toFixed(1)}%
+                    </div>
+                    <div class="graph-info__item">
+                      Матожидание - ${item.data.expectationProfit.toFixed(1)}%
+                    </div>
+                    <div class="graph-info__item">
+                      Макс. Просадка - ${item.data.subsidence.toFixed()}%
+                    </div>
+                    <div class="graph-info__item">
+                      Кол-во сделок - ${item.data.dealQty.toFixed()}
+                    </div>
+                    <div class="graph-info__item">
+                      Кол-во Long сделок - ${item.data.longDealPercent.toFixed()}%
+                    </div>
+                    <div class="graph-info__item">
+                      Кол-во Short сделок - ${item.data.shortDealPercent.toFixed()}%
+                    </div>
+                    <div class="graph-info__item">
+                      Кол-во убыточных сделок - ${item.data.lossDealPercent.toFixed()}%
+                    </div>
+                    <div class="graph-info__item">
+                      profitDealPercent - ${item.data.profitDealPercent.toFixed()}%
+                    </div>
+                    <div class="graph-info__item">
+                      Фактор восстановления - ${item.data.recoveryFactor.toFixed(3)}
+                    </div>
+                    <div class="graph-info__item">
+                      profitFactor - ${item.data.profitFactor.toFixed(3)}
+                    </div>
+                    <div class="graph-info__item">
+                      maxlossDealSeries - ${item.data.maxlossDealSeries}
+                    </div>
+                  `
+                  document.querySelector('.tv-lightweight-charts').append(graphInfo)
                 })
               });
             });
@@ -421,11 +567,14 @@ document.querySelector('.steps-list__total input[name="timeTo"]').addEventListen
   localStorage.setItem('timeTo', timeTo)
 })
 
+let expertError = false
+
 
 const calcExpert = () => {
   let totalSteps = 1
+  expertError = false
 
-  document.querySelectorAll('#expert .expert__value-row').forEach(item => {
+  document.querySelectorAll('#expert .expert__value-row').forEach((item, index) => {
     let itemError = false
 
     const itemStart = item.querySelector('input[type="number"][name$=Start]')
@@ -435,32 +584,55 @@ const calcExpert = () => {
     document.querySelector('#expert-trigger').style.outlineColor = ''
     item.querySelectorAll('input[type="number"]').forEach(i => i.closest('.expert__value-item').style.borderColor = '')
 
-    if(+itemStart.value < 0) {
+    if(+itemStart.value < 0 || itemStart.value === '') {
       itemStart.closest('.expert__value-item').style.borderColor = 'red'
-      document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
       itemError = true
+      expertError = true
     }
     if(+itemStep.value <= 0) {
-      itemStep.closest('.expert__value-item').style.borderColor = 'red'
-      document.querySelector('#expert-trigger').style.outlineColor = 'red'
-      itemError = true
-    }
-    if(+itemStop.value <= 0) {
-      itemStop.closest('.expert__value-item').style.borderColor = 'red'
-      document.querySelector('#expert-trigger').style.outlineColor = 'red'
-      itemError = true
-    }
-    if(+itemStop.value < +itemStart.value) {
-      itemStop.closest('.expert__value-item').style.borderColor = 'red'
-      document.querySelector('#expert-trigger').style.outlineColor = 'red'
-      itemError = true
-    }
-    if((+itemStop.value - +itemStart.value) < +itemStep.value && +itemStart.value !== +itemStop.value && +itemStep.value !== 1) {
       itemStep.closest('.expert__value-item').style.borderColor = 'red'
       setTimeout(() => {
         document.querySelector('#expert-trigger').style.outlineColor = 'red'
       }, 10);
       itemError = true
+      expertError = true
+    }
+    if(+itemStop.value < 0 || itemStop.value === '') {
+      itemStop.closest('.expert__value-item').style.borderColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
+      itemError = true
+      expertError = true
+    }
+    if(+itemStop.value < +itemStart.value) {
+      itemStart.closest('.expert__value-item').style.borderColor = 'red'
+      itemStop.closest('.expert__value-item').style.borderColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
+      itemError = true
+      expertError = true
+      console.log(expertError)
+    }
+    if(+itemStart.value === +itemStop.value && +itemStep.value !== 1) {
+      itemStep.closest('.expert__value-item').style.borderColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
+      itemError = true
+      expertError = true
+    }
+    if(+itemStart.value < +itemStop.value && (+itemStop.value - +itemStart.value) < +itemStep.value) {
+      itemStep.closest('.expert__value-item').style.borderColor = 'red'
+      setTimeout(() => {
+        document.querySelector('#expert-trigger').style.outlineColor = 'red'
+      }, 10);
+      itemError = true
+      expertError = true
     }
 
     if(!itemError) {
@@ -709,6 +881,9 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   }
   // console.log(JSON.stringify(formData));
   console.log(formData);
+  if(expertError) {
+    return
+  }
   if(panelTab === 'wft') {
     // document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/wft`, {
@@ -794,7 +969,9 @@ const chartElement = document.createElement('div');
 chartElement.classList.add('custom-graph')
 const closeGraph = document.createElement('div')
 closeGraph.classList.add('custom-graph__close')
-chartElement.append(closeGraph)
+setTimeout(() => {
+  chartElement.querySelector('.tv-lightweight-charts').append(closeGraph)
+}, 100);
 closeGraph.addEventListener('click', () => {
   chartElement.style.display = ''
 })

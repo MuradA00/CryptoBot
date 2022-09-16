@@ -160,9 +160,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: rgba(0,0,0,.5);
 }
 .custom-graph .tv-lightweight-charts {
-  border: 60px solid var(--clr-dark);
+  background-color: var(--clr-dark);
   border-radius: 5px;
   box-sizing: content-box;
+  position: relative;
+  padding: 50px 70px;
+  min-height: 300px;
+  height: auto !important;
+}
+@media (max-width: 991px) {
+  .custom-graph .tv-lightweight-charts {
+    padding: 20px;
+  }
 }
 .custom-graph__close {
   position: absolute;
@@ -187,4 +196,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   &::before {
     transform: translate(-50%, -50%) rotate(45deg);
   }
+}
+.graph-info {
+  column-count: 2;
+  column-gap: 50px;
+  margin-top: 40px;
+  user-select: text;
+  font-size: 14px;
+}
+.graph-info__item {
+  &:not(:first-child) {
+    margin-top: 10px;
+  }
+  break-inside: avoid;
 }
