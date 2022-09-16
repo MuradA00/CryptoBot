@@ -828,7 +828,7 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     if(document.querySelector(`#filter-modal input[name="${key}"]`).closest('.filter-row__item').querySelector('input[type="checkbox"]').checked) {
       customFilters[key] = filters[key]
     } else {
-      customFilters[key] = key !== 'maxlossDealSeries' ? -100000000 : 10000000
+      customFilters[key] = key === 'maxlossDealSeries' || key === 'lossDealPercent' || key === 'subsidence' ? 100000000 : -10000000
     }
   }
   formData.filters = customFilters
