@@ -153,7 +153,7 @@ document.querySelectorAll('input[type="number"]').forEach((input) => {
   });
 });
 
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "http://52.58.115.17:3000/api";
 // const
 let indicator = null;
 if (!localStorage.getItem("indicator")) {
