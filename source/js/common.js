@@ -1,9 +1,35 @@
-const versionProduct = "0.61";
+// if(token)
+
+const errors = {
+  wft: false
+}
+
+console.log(moment().valueOf() - localStorage.getItem('token'));
+
+if((moment().valueOf() - localStorage.getItem('token')) < 86400000) {
+  document.body.classList.add('show')
+} else {
+  document.querySelector('.popup').style.display = 'flex'
+}
+document.querySelector('.enter-form').addEventListener('submit', e => {
+  e.preventDefault()
+  if(e.target.querySelector('.popup__input').value.trim() === 'v4d-Dg9-sAf-8gr') {
+    document.body.classList.add('show')
+    document.querySelector('.popup').remove()
+    localStorage.setItem('token', moment().valueOf())
+  }
+})
+
+const versionProduct = "0.64";
 if (localStorage.getItem("versionProduct") !== versionProduct) {
   localStorage.clear();
   console.log("clear st");
 }
 localStorage.setItem("versionProduct", versionProduct);
+
+// const iii = prompt('asd')
+
+// console.log(iii);
 
 const selectorBtns = document.querySelectorAll(".selector-row__item"),
   optimModal = document.getElementById("optimization"),
@@ -74,11 +100,6 @@ gsap.fromTo(
   { opacity: 0, y: 40 },
   { opacity: 1, y: 0, duration: 1, ease: Power4.ease }
 );
-gsap.fromTo(
-  ".header",
-  { opacity: 0, y: -75 },
-  { opacity: 1, y: 0, duration: 0.8, ease: Power4.ease, delay: 0.3 }
-);
 
 gsap.fromTo(
   ".panel",
@@ -147,13 +168,8 @@ testingTrigger.addEventListener("click", () => {
   }
 });
 
-document.querySelectorAll('input[type="number"]').forEach((input) => {
-  input.addEventListener("input", (e) => {
-    console.log(e.target.value);
-  });
-});
 
-const pathAPI = "http://52.58.115.17:3000/api";
+const pathAPI = "http://52.29.157.23:3000/api";
 // const
 let indicator = null;
 if (!localStorage.getItem("indicator")) {
@@ -178,7 +194,7 @@ document
   );
 document.querySelectorAll(".indicator__item").forEach((item) =>
   item.addEventListener("click", (e) => {
-    item.querySelector(".indicator__name").textContent.trim() === "Stochatic"
+    item.querySelector(".indicator__name").textContent.trim() === "Stochastic"
       ? (indicator = "stoch")
       : (indicator = "macd");
     localStorage.setItem("indicator", indicator);
@@ -302,33 +318,90 @@ fetch(`${pathAPI}/last`).then(async (response) => {
     document.querySelector(".table").append(elem);
     elem.querySelector("._table-active-btn").addEventListener("click", () => {
       document.querySelector(".custom-graph").style.display = "flex";
+      console.log(item);
       areaSeries.setData(item.graphData);
       if (document.querySelector(".graph-info")) {
         document.querySelector(".graph-info").remove();
       }
       const graphInfo = document.createElement("DIV");
       graphInfo.classList.add("graph-info");
-      graphInfo.innerHTML = `
+      graphInfo.innerHTML = ''
+      if(item.data.params[1].length === 3) {
+        graphInfo.innerHTML += `
+          <div class="graph-info__item">
+            Индикатор - MACD
+          </div>
+          <div class="graph-info__item">
+            Fast Period - ${item.data.params[0][0]}
+          </div>
+          <div class="graph-info__item">
+            Slow Period  - ${item.data.params[0][1]}
+          </div>
+          <div class="graph-info__item">
+            Signal Period - ${item.data.params[0][2]}
+          </div>
+          <div class="graph-info__item">
+            HMA Short - ${item.data.params[1][1]}
+          </div>
+          <div class="graph-info__item">
+            HMA Long- ${item.data.params[1][2]}
+          </div>
+          <div class="graph-info__item">
+            HMA Filter - ${item.data.params[1][0]}
+          </div>
+        `
+      } else if(item.data.params[1].length === 2) {
+        graphInfo.innerHTML += `
+          <div class="graph-info__item">
+            Индикатор - Stochastic
+          </div>
+          <div class="graph-info__item">
+            K Period - ${item.data.params[0][0]}
+          </div>
+          <div class="graph-info__item">
+            K Smoothing Period - ${item.data.params[0][1]}
+          </div>
+          <div class="graph-info__item">
+            D Period - ${item.data.params[0][2]}
+          </div>
+          <div class="graph-info__item">
+            HMA - ${item.data.params[1][1]}
+          </div>
+          <div class="graph-info__item">
+            HMA Filter - ${item.data.params[1][0]}
+          </div>
+        `
+      }
+      graphInfo.innerHTML += `
         <div class="graph-info__item">
-          Params 1 - ${item.data.params[0].join(", ")}
+          Stop Loss - ${item.data.params[2][0]}
         </div>
         <div class="graph-info__item">
-          Params 2 - ${item.data.params[1].join(", ")}
+          Take Profit - ${item.data.params[2][1]}
         </div>
         <div class="graph-info__item">
-          Params 3 - ${item.data.params[2].join(", ")}
+          Breakeven Level - ${item.data.params[2][2]}
         </div>
         <div class="graph-info__item">
-          Params deposit - ${item.data.params[3].deposit}
+          Indent Breakeven Level  - ${item.data.params[2][3]}
         </div>
         <div class="graph-info__item">
-          Params lotPersent - ${item.data.params[3].lotPersent}
+          Тайм фрейм - ${item.data.params[4]}
         </div>
         <div class="graph-info__item">
-          Params leverage - ${item.data.params[3].leverage}
+          Валюты - ${item.data.params[5]}
         </div>
         <div class="graph-info__item">
-          Params commission - ${item.data.params[3].commission}
+          Стартовый депозит - ${item.data.params[3].deposit}$
+        </div>
+        <div class="graph-info__item">
+          Объем лота - ${item.data.params[3].lotPersent}%
+        </div>
+        <div class="graph-info__item">
+          Размер плеча - ${item.data.params[3].leverage}
+        </div>
+        <div class="graph-info__item">
+          Комиссия - ${item.data.params[3].commission}
         </div>
         <div class="graph-info__item">
           Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
@@ -376,7 +449,32 @@ fetch(`${pathAPI}/last`).then(async (response) => {
           maxlossDealSeries - ${item.data.maxlossDealSeries}
         </div>
       `;
-      document.querySelector(".tv-lightweight-charts").append(graphInfo);
+      document.querySelector(".custom-graph__content").append(graphInfo);
+      if(document.querySelector(".custom-graph__content .graph-positions")) {
+        document.querySelector(".custom-graph__content .graph-positions").remove();
+      }
+      document.querySelector('.custom-graph__content').scrollTo(0, 0)
+      const graphPositions = document.createElement('DIV')
+      if(item.positions) {
+        graphPositions.classList.add('graph-positions')
+        document.querySelector(".custom-graph__content").append(graphPositions)
+        const graphPositionsButton = document.createElement('BUTTON')
+        graphPositionsButton.classList.add('graph-positions__more')
+        graphPositionsButton.textContent = 'Загрузить больше информации'
+        graphPositions.append(graphPositionsButton)
+        graphPositionsButton.addEventListener('click', e => {
+          graphPositionsButton.remove()
+          graphPositions.classList.add('active')
+          item.positions.forEach(i => {
+            const graphPositionsItem = document.createElement('PRE')
+            graphPositionsItem.innerHTML = ''
+            for (let key in i) {
+              graphPositionsItem.innerHTML += `<div>${key}: ${i[key]}</div>`
+            }
+            graphPositions.append(graphPositionsItem)
+          })
+        })
+      }
     });
   });
 });
@@ -473,83 +571,157 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                     }
                     const graphInfo = document.createElement("DIV");
                     graphInfo.classList.add("graph-info");
-                    graphInfo.innerHTML = `
-                    <div class="graph-info__item">
-                      Params 1 - ${item.data.params[0].join(", ")}
-                    </div>
-                    <div class="graph-info__item">
-                      Params 2 - ${item.data.params[1].join(", ")}
-                    </div>
-                    <div class="graph-info__item">
-                      Params 3 - ${item.data.params[2].join(", ")}
-                    </div>
-                    <div class="graph-info__item">
-                      Params deposit - ${item.data.params[3].deposit}
-                    </div>
-                    <div class="graph-info__item">
-                      Params lotPersent - ${item.data.params[3].lotPersent}
-                    </div>
-                    <div class="graph-info__item">
-                      Params leverage - ${item.data.params[3].leverage}
-                    </div>
-                    <div class="graph-info__item">
-                      Params commission - ${item.data.params[3].commission}
-                    </div>
-                    <div class="graph-info__item">
-                      Начало - ${moment(item.data.startTime).format(
-                        "MM-DD-YYYY hh:mm:ss"
-                      )}
-                    </div>
-                    <div class="graph-info__item">
-                      Конец - ${moment(item.data.endTime).format(
-                        "MM-DD-YYYY hh:mm:ss"
-                      )}
-                    </div>
-                    <div class="graph-info__item">
-                      Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
-                    </div>
-                    <div class="graph-info__item">
-                      Чистая прибыльность - ${item.data.profit.toFixed(1)}$
-                    </div>
-                    <div class="graph-info__item">
-                      Прибыль за месяц - ${item.data.monthProfit.toFixed(1)}%
-                    </div>
-                    <div class="graph-info__item">
-                      Матожидание - ${item.data.expectationProfit.toFixed(1)}%
-                    </div>
-                    <div class="graph-info__item">
-                      Макс. Просадка - ${item.data.subsidence.toFixed()}%
-                    </div>
-                    <div class="graph-info__item">
-                      Кол-во сделок - ${item.data.dealQty.toFixed()}
-                    </div>
-                    <div class="graph-info__item">
-                      Кол-во Long сделок - ${item.data.longDealPercent.toFixed()}%
-                    </div>
-                    <div class="graph-info__item">
-                      Кол-во Short сделок - ${item.data.shortDealPercent.toFixed()}%
-                    </div>
-                    <div class="graph-info__item">
-                      Кол-во убыточных сделок - ${item.data.lossDealPercent.toFixed()}%
-                    </div>
-                    <div class="graph-info__item">
-                      profitDealPercent - ${item.data.profitDealPercent.toFixed()}%
-                    </div>
-                    <div class="graph-info__item">
-                      Фактор восстановления - ${item.data.recoveryFactor.toFixed(
-                        3
-                      )}
-                    </div>
-                    <div class="graph-info__item">
-                      profitFactor - ${item.data.profitFactor.toFixed(3)}
-                    </div>
-                    <div class="graph-info__item">
-                      maxlossDealSeries - ${item.data.maxlossDealSeries}
-                    </div>
-                  `;
-                    document
-                      .querySelector(".tv-lightweight-charts")
-                      .append(graphInfo);
+                    console.log(item);
+                    graphInfo.innerHTML = ''
+                    if(item.data.params[1].length === 3) {
+                      graphInfo.innerHTML += `
+                        <div class="graph-info__item">
+                          Индикатор - MACD
+                        </div>
+                        <div class="graph-info__item">
+                          Fast Period - ${item.data.params[0][0]}
+                        </div>
+                        <div class="graph-info__item">
+                          Slow Period  - ${item.data.params[0][1]}
+                        </div>
+                        <div class="graph-info__item">
+                          Signal Period - ${item.data.params[0][2]}
+                        </div>
+                        <div class="graph-info__item">
+                          HMA Short - ${item.data.params[1][1]}
+                        </div>
+                        <div class="graph-info__item">
+                          HMA Long- ${item.data.params[1][2]}
+                        </div>
+                        <div class="graph-info__item">
+                          HMA Filter - ${item.data.params[1][0]}
+                        </div>
+                      `
+                    } else if(item.data.params[1].length === 2) {
+                      graphInfo.innerHTML += `
+                        <div class="graph-info__item">
+                          Индикатор - Stochastic
+                        </div>
+                        <div class="graph-info__item">
+                          K Period - ${item.data.params[0][0]}
+                        </div>
+                        <div class="graph-info__item">
+                          K Smoothing Period - ${item.data.params[0][1]}
+                        </div>
+                        <div class="graph-info__item">
+                          D Period - ${item.data.params[0][2]}
+                        </div>
+                        <div class="graph-info__item">
+                          HMA - ${item.data.params[1][1]}
+                        </div>
+                        <div class="graph-info__item">
+                          HMA Filter - ${item.data.params[1][0]}
+                        </div>
+                      `
+                    }
+                    graphInfo.innerHTML += `
+                      <div class="graph-info__item">
+                        Stop Loss - ${item.data.params[2][0]}
+                      </div>
+                      <div class="graph-info__item">
+                        Take Profit - ${item.data.params[2][1]}
+                      </div>
+                      <div class="graph-info__item">
+                        Breakeven Level - ${item.data.params[2][2]}
+                      </div>
+                      <div class="graph-info__item">
+                        Indent Breakeven Level  - ${item.data.params[2][3]}
+                      </div>
+                      <div class="graph-info__item">
+                        Тайм фрейм - ${item.data.params[4]}
+                      </div>
+                      <div class="graph-info__item">
+                        Валюты - ${item.data.params[5]}
+                      </div>
+                      <div class="graph-info__item">
+                        Стартовый депозит - ${item.data.params[3].deposit}$
+                      </div>
+                      <div class="graph-info__item">
+                        Объем лота - ${item.data.params[3].lotPersent}%
+                      </div>
+                      <div class="graph-info__item">
+                        Размер плеча - ${item.data.params[3].leverage}
+                      </div>
+                      <div class="graph-info__item">
+                        Комиссия - ${item.data.params[3].commission}
+                      </div>
+                      <div class="graph-info__item">
+                        Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
+                      </div>
+                      <div class="graph-info__item">
+                        Конец - ${moment(item.data.endTime).format("MM-DD-YYYY hh:mm:ss")}
+                      </div>
+                      <div class="graph-info__item">
+                        Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
+                      </div>
+                      <div class="graph-info__item">
+                        Чистая прибыльность - ${item.data.profit.toFixed(1)}$
+                      </div>
+                      <div class="graph-info__item">
+                        Прибыль за месяц - ${item.data.monthProfit.toFixed(1)}%
+                      </div>
+                      <div class="graph-info__item">
+                        Матожидание - ${item.data.expectationProfit.toFixed(1)}%
+                      </div>
+                      <div class="graph-info__item">
+                        Макс. Просадка - ${item.data.subsidence.toFixed()}%
+                      </div>
+                      <div class="graph-info__item">
+                        Кол-во сделок - ${item.data.dealQty.toFixed()}
+                      </div>
+                      <div class="graph-info__item">
+                        Кол-во Long сделок - ${item.data.longDealPercent.toFixed()}%
+                      </div>
+                      <div class="graph-info__item">
+                        Кол-во Short сделок - ${item.data.shortDealPercent.toFixed()}%
+                      </div>
+                      <div class="graph-info__item">
+                        Кол-во убыточных сделок - ${item.data.lossDealPercent.toFixed()}%
+                      </div>
+                      <div class="graph-info__item">
+                        profitDealPercent - ${item.data.profitDealPercent.toFixed()}%
+                      </div>
+                      <div class="graph-info__item">
+                        Фактор восстановления - ${item.data.recoveryFactor.toFixed(3)}
+                      </div>
+                      <div class="graph-info__item">
+                        profitFactor - ${item.data.profitFactor.toFixed(3)}
+                      </div>
+                      <div class="graph-info__item">
+                        maxlossDealSeries - ${item.data.maxlossDealSeries}
+                      </div>
+                    `;
+                    document.querySelector(".custom-graph__content").append(graphInfo);
+                    if(document.querySelector(".custom-graph__content .graph-positions")) {
+                      document.querySelector(".custom-graph__content .graph-positions").remove();
+                    }
+                    document.querySelector('.custom-graph__content').scrollTo(0, 0)
+                    const graphPositions = document.createElement('DIV')
+                    if(item.positions) {
+                      graphPositions.classList.add('graph-positions')
+                      document.querySelector(".custom-graph__content").append(graphPositions)
+                      const graphPositionsButton = document.createElement('BUTTON')
+                      graphPositionsButton.classList.add('graph-positions__more')
+                      graphPositionsButton.textContent = 'Загрузить больше информации'
+                      graphPositions.append(graphPositionsButton)
+                      graphPositionsButton.addEventListener('click', e => {
+                        graphPositionsButton.remove()
+                        graphPositions.classList.add('active')
+                        item.positions.forEach(i => {
+                          const graphPositionsItem = document.createElement('PRE')
+                          graphPositionsItem.innerHTML = ''
+                          for (let key in i) {
+                            graphPositionsItem.innerHTML += `<div>${key}: ${i[key]}</div>`
+                          }
+                          graphPositions.append(graphPositionsItem)
+                        })
+                      })
+                    }
                   });
               });
             });
@@ -695,14 +867,12 @@ const calcExpert = () => {
         }
       } else {
         if(typeof defaultExpert[itemStart.name] && typeof defaultExpert[itemStop.name] && typeof defaultExpert[itemStep.name]) {
-          console.log(itemStart.name, (defaultExpert[itemStop.name] - defaultExpert[itemStart.name]) / defaultExpert[itemStep.name] + 1)
           totalSteps *= ((defaultExpert[itemStop.name] - defaultExpert[itemStart.name]) / defaultExpert[itemStep.name] + 1)
           itemError = true
         }
       }
 
       if (!itemError) {
-        console.log(itemStart.name, (+itemStop.value - +itemStart.value) / +itemStep.value + 1);
         totalSteps *= ((+itemStop.value - +itemStart.value) / +itemStep.value + 1);
       }
     });
@@ -765,91 +935,152 @@ document
     });
   });
 
-let wft = {};
-if (localStorage.getItem("wft")) {
-  wft = JSON.parse(localStorage.getItem("wft"));
-  for (item in wft) {
-    document.querySelector(`#wtfModal input[name="${item}"]`).value = wft[item];
-  }
-} else {
-  document.querySelectorAll("#wtfModal input").forEach((item) => {
-    if (item.name === "timeFrom" || item.name === "timeTo") {
-      wft[item.name] = item.value;
-    } else {
-      wft[item.name] = +item.value;
-    }
-  });
-  JSON.stringify(localStorage.setItem("wft", wft));
-}
-document.querySelectorAll("#wtfModal input").forEach((item) => {
-  if (item.name === "timeFrom" || item.name === "timeTo") {
-    wft[item.name] = item.value;
-  } else {
-    wft[item.name] = +item.value;
-  }
-  localStorage.setItem("wft", JSON.stringify(wft));
-});
-document.querySelectorAll("#wtfModal input").forEach((item) => {
-  item.addEventListener("change", (e) => {
-    if (e.target.name === "timeFrom" || e.target.name === "timeTo") {
-      wft[e.target.name] = e.target.value;
-    } else {
-      wft[e.target.name] = +e.target.value;
-    }
-    localStorage.setItem("wft", JSON.stringify(wft));
-  });
-});
 
-let stepModal = {};
-if (localStorage.getItem("stepModal")) {
-  stepModal = JSON.parse(localStorage.getItem("stepModal"));
-  for (item in stepModal) {
-    document.querySelector(`#stepsModal input[name="${item}"]`).value =
-      stepModal[item];
+
+let wft = {}
+const validationWft = () => {
+  if(document.querySelector('#wtfModal input[name="optimizationContinuity"]') && document.querySelector('#wtfModal input[name="testContinuity"]')) {
+    const countMonthTest = +document.querySelector('#wtfModal input[name="optimizationContinuity"]').value + +document.querySelector('#wtfModal input[name="testContinuity"]').value
+    document.querySelector('#wtfModal input[name="timeFrom"]').setAttribute('max', moment(document.querySelector('#wtfModal input[name="timeTo"]').value).subtract(countMonthTest, 'months').subtract(1, 'days').format('YYYY-MM-DD'))
+    if(!moment(document.querySelector('#wtfModal input[name="timeFrom"]').value).isSameOrBefore(document.querySelector('#wtfModal input[name="timeFrom"]').getAttribute('max'))) {
+      document.querySelector('#wtfModal input[name=timeFrom]').parentNode.style.outlineColor = 'red'
+      document.querySelector('#testingTrigger').style.outlineColor = 'red'
+      console.log(44);
+    } else {
+      document.querySelector('#wtfModal input[name=timeFrom]').parentNode.style.outlineColor = ''
+      document.querySelector('#testingTrigger').style.outlineColor = ''
+    }
+  }
+}
+if (localStorage.getItem("wft")) {
+  wftLocal = JSON.parse(localStorage.getItem("wft"))
+  for (item in wftLocal) {
+    document.querySelector(`#wtfModal input[name="${item}"]`).value = wftLocal[item]
   }
 } else {
-  document.querySelectorAll("#stepsModal input").forEach((item) => {
-    if (
-      item.name === "optimizationFrom" ||
-      item.name === "optimizationTo" ||
-      item.name === "testFrom" ||
-      item.name === "testTo"
-    ) {
-      stepModal[item.name] = item.value;
-    } else {
-      stepModal[item.name] = +item.value;
-    }
-  });
-  JSON.stringify(localStorage.setItem("stepModal", stepModal));
-}
-document.querySelectorAll("#stepsModal input").forEach((item) => {
-  if (
-    item.name === "optimizationFrom" ||
-    item.name === "optimizationTo" ||
-    item.name === "testFrom" ||
-    item.name === "testTo"
-  ) {
-    stepModal[item.name] = item.value;
-  } else {
-    stepModal[item.name] = +item.value;
+  if(document.querySelector('#wtfModal input[type="date"][name$=From]')) {
+    document.querySelector('#wtfModal input[type="date"][name$=From]').value = moment().subtract(3, 'months').subtract(1, 'days').format('YYYY-MM-DD')
   }
-  localStorage.setItem("stepModal", JSON.stringify(stepModal));
-});
-document.querySelectorAll("#stepsModal input").forEach((item) => {
-  item.addEventListener("change", (e) => {
-    if (
-      e.target.name === "optimizationFrom" ||
-      item.name === "optimizationTo" ||
-      item.name === "testFrom" ||
-      item.name === "testTo"
-    ) {
-      stepModal[e.target.name] = e.target.value;
+  if(document.querySelector('#wtfModal input[type="date"][name$=To]')) {
+    document.querySelector('#wtfModal input[type="date"][name$=To]').value = moment().format('YYYY-MM-DD')
+  }
+}
+document.querySelectorAll("#wtfModal input").forEach((item) => {
+  if (item.type === "number") {
+    wft[item.name] = +item.value;
+  } else {
+    wft[item.name] = item.value;
+  }
+})
+localStorage.setItem("wft", JSON.stringify(wft))
+if(panelTab === 'wft') {
+  validationWft()
+}
+document.querySelectorAll('#wtfModal input[type="number"]').forEach(item => {
+  item.addEventListener("input", () => {
+    if(item.value > 1000 || item.value < 0 || item.value === '') {
+      item.parentNode.style.outlineColor = 'red'
     } else {
-      stepModal[e.target.name] = +e.target.value;
+      item.parentNode.style.outlineColor = ''
     }
-    localStorage.setItem("stepModal", JSON.stringify(stepModal));
-  });
-});
+    wft[item.name] = +item.value;
+    validationWft()
+    localStorage.setItem("wft", JSON.stringify(wft));
+  })
+})
+document.querySelectorAll('#wtfModal input[type="date"]').forEach(item => {
+  if(item.name.match(/To$/)) {
+    item.setAttribute('max', moment().format('YYYY-MM-DD'))
+  }
+  item.addEventListener("input", () => {
+    validationWft()
+    wft[item.name] = item.value;
+    localStorage.setItem("wft", JSON.stringify(wft));
+  })
+})
+
+const stepModal = {}
+const validationStepModal = element => {
+  if(element.name.match(/From$/)) {
+    if(document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/From$/, 'To')}"]`)) {
+      document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/From$/, 'To')}"]`).setAttribute('min', moment(element.value).add(1, 'days').format('YYYY-MM-DD'))
+    } else {
+      element.setAttribute('max', moment().subtract(1, 'days').format('YYYY-MM-DD'))
+    }
+  } else if(element.name.match(/To$/)) {
+    if(document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/To$/, 'From')}"]`)) {
+      document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/To$/, 'From')}"]`).setAttribute('max', moment(element.value).subtract(1, 'days').format('YYYY-MM-DD'))
+    }
+    element.setAttribute('max', moment().format('YYYY-MM-DD'))
+  }
+}
+const validationStepModalInputs = inputs => {
+  let validationStepModalInputsError = false
+  inputs.forEach(element => {
+    let error = false
+    if(element.getAttribute('min') && element.getAttribute('max')) {
+      error = !moment(element.value).isBetween(moment(element.getAttribute('min')).subtract(1, 'days').format('YYYY-MM-DD'), moment(element.getAttribute('max')).add(1, 'days').format('YYYY-MM-DD'))
+    } else if(element.getAttribute('max')) {
+      error = !moment(element.value).isSameOrBefore(moment(element.getAttribute('max')).format('YYYY-MM-DD'))
+    } else if(element.getAttribute('min')) {
+      error = !moment(element.value).isSameOrAfter(moment(element.getAttribute('min')).format('YYYY-MM-DD'))
+    } else {
+      error = !moment(element.value).isValid()
+    }
+    if(error) {
+      validationStepModalInputsError = true
+      element.parentNode.style.outlineColor = 'red'
+    } else {
+      element.parentNode.style.outlineColor = ''
+    }
+  })
+  if(validationStepModalInputsError) {
+    document.querySelector('#testingTrigger').style.outlineColor = 'red'
+  } else {
+    document.querySelector('#testingTrigger').style.outlineColor = ''
+  }
+  return validationStepModalInputsError
+}
+if (localStorage.getItem("stepModal")) {
+  stepModalLocal = JSON.parse(localStorage.getItem("stepModal"))
+  for (item in stepModalLocal) {
+    if(document.querySelector(`#stepsModal input[type="date"][name="${item}"]`)) {
+      document.querySelector(`#stepsModal input[type="date"][name="${item}"]`).value = stepModalLocal[item]
+    }
+  }
+}
+document.querySelectorAll('#stepsModal input[type="date"]').forEach(item => {
+  if(!item.value) {
+    if(item.name.match(/From$/)) {
+      item.value = moment().subtract(1, 'days').format('YYYY-MM-DD')
+    } else if(item.name.match(/To$/)) {
+      item.value = moment().format('YYYY-MM-DD')
+    } else {
+      item.value = moment().format('YYYY-MM-DD')
+    }
+  }
+  validationStepModal(item)
+  stepModal[item.name] = item.value
+})
+if(panelTab === 'step') {
+  validationStepModalInputs(document.querySelectorAll('#stepsModal input[type="date"]'))
+}
+localStorage.setItem("stepModal", JSON.stringify(stepModal))
+document.querySelectorAll("#stepsModal input").forEach(item => {
+  item.addEventListener("input", e => {
+    console.log(1);
+    const validationError = validationStepModal(item)
+    if(!validationError) {
+      item.parentNode.style.outlineColor = 'red'
+    } else {
+      item.parentNode.style.outlineColor = ''
+    }
+    stepModal[item.name] = e.target.value
+    validationStepModalInputs(document.querySelectorAll('#stepsModal input[type="date"]'))
+    localStorage.setItem("stepModal", JSON.stringify(stepModal))
+  })
+})
+
 
 const config = JSON.parse(localStorage.getItem("config")) || {};
 for (item in config) {
@@ -1082,17 +1313,23 @@ var switcherElement = createSimpleSwitcher(
 
 const chartElement = document.createElement("div");
 chartElement.classList.add("custom-graph");
+const chartElementWrap = document.createElement("div");
+chartElementWrap.classList.add("custom-graph__wrap");
+chartElement.append(chartElementWrap)
+const chartElementContent = document.createElement("div");
+chartElementContent.classList.add("custom-graph__content");
+chartElementWrap.append(chartElementContent)
 const closeGraph = document.createElement("div");
 closeGraph.classList.add("custom-graph__close");
 setTimeout(() => {
-  chartElement.querySelector(".tv-lightweight-charts").append(closeGraph);
+  chartElementContent.append(closeGraph);
 }, 100);
 closeGraph.addEventListener("click", () => {
   chartElement.style.display = "";
 });
 
-var chart = LightweightCharts.createChart(chartElement, {
-  width: 600,
+var chart = LightweightCharts.createChart(chartElementContent, {
+  width: 800,
   height: 300,
   layout: {
     fontFamily: "Comic Sans MS",

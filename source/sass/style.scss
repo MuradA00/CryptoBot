@@ -159,17 +159,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   background-color: rgba(0,0,0,.5);
 }
-.custom-graph .tv-lightweight-charts {
+.custom-graph .custom-graph__wrap {
   background-color: var(--clr-dark);
   border-radius: 5px;
   box-sizing: content-box;
   position: relative;
-  padding: 50px 70px;
   min-height: 300px;
   height: auto !important;
 }
+.custom-graph .custom-graph__content {
+  max-height: 90vh;
+  overflow: auto;
+  padding: 50px 70px;
+}
 @media (max-width: 991px) {
-  .custom-graph .tv-lightweight-charts {
+  .custom-graph .custom-graph__content {
     padding: 20px;
   }
 }
@@ -198,7 +202,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 .graph-info {
-  column-count: 2;
+  column-count: 3;
   column-gap: 50px;
   margin-top: 40px;
   user-select: text;
@@ -209,4 +213,94 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-top: 10px;
   }
   break-inside: avoid;
+}
+.graph-positions {
+  margin-top: 20px;
+}
+.graph-positions__more {
+  padding: 12px;
+  border-radius: 6px;
+  background-color: var(--clr-main);
+  color: var(--clr-black);
+  display: block;
+  width: max-content;
+  margin: 0 auto;
+}
+.graph-positions.active {
+  // column-count: 3;
+  position: relative;
+  margin-top: 40px;
+  max-width: 825px;
+
+  &::after {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #fff;
+    display: block;
+    content: '';
+  }
+}
+.graph-positions > pre {
+  column-count: 3;
+  column-gap: 50px;
+  font-size: 14px;
+  white-space: normal;
+  &:not(:first-child) {
+    margin-top: 25px;
+  }
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: 100000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__wrap {
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    min-height: 120px;
+    background-color: var(--clr-black);
+  }
+
+  &__title {
+    margin-bottom: 15px;
+  }
+
+  &__btn {
+    padding: 12px;
+    background-color: var(--clr-main);
+    font-size: var(--13-fsize);
+    color: var(--clr-black);
+    border-radius: 6px;
+  }
+
+  &__input {
+    background-color: transparent;
+    color: white;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--clr-main);
+    border-radius: 12px;
+  }
+}
+
+body .header,
+body main {
+  opacity: 0 !important;
+}
+
+body.show .header,
+body.show main {
+  opacity: 1 !important;
 }
