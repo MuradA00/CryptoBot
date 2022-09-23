@@ -1,7 +1,11 @@
 // if(token)
 
 const errors = {
-  wft: false
+  modelTesting: false,
+  export: false,
+  symbol: false,
+  indicator: false,
+  optimization: false
 }
 
 console.log(moment().valueOf() - localStorage.getItem('token'));
@@ -20,7 +24,7 @@ document.querySelector('.enter-form').addEventListener('submit', e => {
   }
 })
 
-const versionProduct = "0.64";
+const versionProduct = "0.66";
 if (localStorage.getItem("versionProduct") !== versionProduct) {
   localStorage.clear();
   console.log("clear st");
@@ -138,6 +142,11 @@ panel.addEventListener("click", function (e) {
   Array.from(selectorItems).forEach((item) => {
     item.classList.remove("_active-selector");
   });
+  if(target.getAttribute("data-value") === 'step') {
+    validationStepModalInputs()
+  } else if(target.getAttribute("data-value") === 'wft') {
+    validationWft()
+  }
   panelTab = target.getAttribute("data-value");
   target.classList.add("_active-selector");
 })
@@ -938,18 +947,26 @@ document
 
 
 let wft = {}
-const validationWft = () => {
+function validationWft () {
+  let error = false
   if(document.querySelector('#wtfModal input[name="optimizationContinuity"]') && document.querySelector('#wtfModal input[name="testContinuity"]')) {
     const countMonthTest = +document.querySelector('#wtfModal input[name="optimizationContinuity"]').value + +document.querySelector('#wtfModal input[name="testContinuity"]').value
     document.querySelector('#wtfModal input[name="timeFrom"]').setAttribute('max', moment(document.querySelector('#wtfModal input[name="timeTo"]').value).subtract(countMonthTest, 'months').subtract(1, 'days').format('YYYY-MM-DD'))
-    if(!moment(document.querySelector('#wtfModal input[name="timeFrom"]').value).isSameOrBefore(document.querySelector('#wtfModal input[name="timeFrom"]').getAttribute('max'))) {
-      document.querySelector('#wtfModal input[name=timeFrom]').parentNode.style.outlineColor = 'red'
-      document.querySelector('#testingTrigger').style.outlineColor = 'red'
-      console.log(44);
+  }
+  document.querySelectorAll('#wtfModal input[type=number], #wtfModal input[type=date]').forEach(item => {
+    if(item.validity.valid && item.value) {
+      item.parentNode.style.outlineColor = ''
     } else {
-      document.querySelector('#wtfModal input[name=timeFrom]').parentNode.style.outlineColor = ''
-      document.querySelector('#testingTrigger').style.outlineColor = ''
+      item.parentNode.style.outlineColor = 'red'
+      error = true
     }
+  })
+  if(error) {
+    document.querySelector('#testingTrigger').style.outlineColor = 'red'
+    errors.modelTesting = true
+  } else {
+    document.querySelector('#testingTrigger').style.outlineColor = ''
+    errors.modelTesting = false
   }
 }
 if (localStorage.getItem("wft")) {
@@ -965,7 +982,10 @@ if (localStorage.getItem("wft")) {
     document.querySelector('#wtfModal input[type="date"][name$=To]').value = moment().format('YYYY-MM-DD')
   }
 }
-document.querySelectorAll("#wtfModal input").forEach((item) => {
+document.querySelectorAll("#wtfModal input[type=number], #wtfModal input[type=date]").forEach(item => {
+  if(item.name.match(/To$/)) {
+    item.setAttribute('max', moment().format('YYYY-MM-DD'))
+  }
   if (item.type === "number") {
     wft[item.name] = +item.value;
   } else {
@@ -976,31 +996,20 @@ localStorage.setItem("wft", JSON.stringify(wft))
 if(panelTab === 'wft') {
   validationWft()
 }
-document.querySelectorAll('#wtfModal input[type="number"]').forEach(item => {
+document.querySelectorAll('#wtfModal input[type=number], #wtfModal input[type=date]').forEach(item => {
   item.addEventListener("input", () => {
-    if(item.value > 1000 || item.value < 0 || item.value === '') {
-      item.parentNode.style.outlineColor = 'red'
+    if(item.type === 'number') {
+      wft[item.name] = +item.value
     } else {
-      item.parentNode.style.outlineColor = ''
+      wft[item.name] = item.value
     }
-    wft[item.name] = +item.value;
+    localStorage.setItem("wft", JSON.stringify(wft))
     validationWft()
-    localStorage.setItem("wft", JSON.stringify(wft));
-  })
-})
-document.querySelectorAll('#wtfModal input[type="date"]').forEach(item => {
-  if(item.name.match(/To$/)) {
-    item.setAttribute('max', moment().format('YYYY-MM-DD'))
-  }
-  item.addEventListener("input", () => {
-    validationWft()
-    wft[item.name] = item.value;
-    localStorage.setItem("wft", JSON.stringify(wft));
   })
 })
 
 const stepModal = {}
-const validationStepModal = element => {
+function validationStepModal(element) {
   if(element.name.match(/From$/)) {
     if(document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/From$/, 'To')}"]`)) {
       document.querySelector(`#stepsModal input[type="date"][name="${element.name.replace(/From$/, 'To')}"]`).setAttribute('min', moment(element.value).add(1, 'days').format('YYYY-MM-DD'))
@@ -1014,9 +1023,9 @@ const validationStepModal = element => {
     element.setAttribute('max', moment().format('YYYY-MM-DD'))
   }
 }
-const validationStepModalInputs = inputs => {
+function validationStepModalInputs() {
   let validationStepModalInputsError = false
-  inputs.forEach(element => {
+  document.querySelectorAll('#stepsModal input[type="date"]').forEach(element => {
     let error = false
     if(element.getAttribute('min') && element.getAttribute('max')) {
       error = !moment(element.value).isBetween(moment(element.getAttribute('min')).subtract(1, 'days').format('YYYY-MM-DD'), moment(element.getAttribute('max')).add(1, 'days').format('YYYY-MM-DD'))
@@ -1036,8 +1045,10 @@ const validationStepModalInputs = inputs => {
   })
   if(validationStepModalInputsError) {
     document.querySelector('#testingTrigger').style.outlineColor = 'red'
+    errors.modelTesting = true
   } else {
     document.querySelector('#testingTrigger').style.outlineColor = ''
+    errors.modelTesting = false
   }
   return validationStepModalInputsError
 }
@@ -1063,7 +1074,7 @@ document.querySelectorAll('#stepsModal input[type="date"]').forEach(item => {
   stepModal[item.name] = item.value
 })
 if(panelTab === 'step') {
-  validationStepModalInputs(document.querySelectorAll('#stepsModal input[type="date"]'))
+  validationStepModalInputs()
 }
 localStorage.setItem("stepModal", JSON.stringify(stepModal))
 document.querySelectorAll("#stepsModal input").forEach(item => {
@@ -1076,7 +1087,7 @@ document.querySelectorAll("#stepsModal input").forEach(item => {
       item.parentNode.style.outlineColor = ''
     }
     stepModal[item.name] = e.target.value
-    validationStepModalInputs(document.querySelectorAll('#stepsModal input[type="date"]'))
+    validationStepModalInputs()
     localStorage.setItem("stepModal", JSON.stringify(stepModal))
   })
 })
@@ -1219,10 +1230,10 @@ document.querySelector(".progress__button").addEventListener("click", () => {
       timeTo: moment(wft.timeTo).valueOf(),
     };
   }
-  if (error) {
-    console.error(error);
+  if (error || errors.modelTesting) {
+    console.log(11);
+    return
   }
-  // console.log(JSON.stringify(formData));
   console.log(formData);
   if (expertError) {
     return;

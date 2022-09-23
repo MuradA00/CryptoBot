@@ -17,7 +17,7 @@
               <div class="wtf-list__item-inner steps-list__item-inner">
                 <div class="wtf-list__label steps-list__label">Начало WFT</div>
                 <div class="wtf-list__item__total steps-list__total modal__btn">
-                  <input type="date" name="timeFrom">
+                  <input type="date" name="timeFrom" min="1970-01-01">
                 </div>
               </div>
             </li>
@@ -25,7 +25,7 @@
               <div class="wtf-list__item-inner steps-list__item-inner">
                 <div class="wtf-list__label steps-list__label">Конец WFT</div>
                 <div class="wtf-list__item__total steps-list__total modal__btn">
-                  <input type="date" name="timeTo">
+                  <input type="date" name="timeTo" min="1970-01-01">
                 </div>
               </div>
             </li>
@@ -33,7 +33,7 @@
               <div class="wtf-list__item-inner steps-list__item-inner">
                 <div class="wtf-list__label steps-list__label">Шаг (мес.)</div>
                 <div class="wtf-list__item__total steps-list__total modal__btn">
-                  <input type="number" value="3" name="step">
+                  <input type="number" value="3" name="step" min="1" max="100">
                 </div>
               </div>
             </li>
@@ -41,7 +41,7 @@
               <div class="wtf-list__item-inner steps-list__item-inner">
                 <div class="wtf-list__label steps-list__label">Длина оптимизации (мес.)</div>
                 <div class="wtf-list__item__total steps-list__total modal__btn">
-                  <input type="number" value="1" name="optimizationContinuity">
+                  <input type="number" value="1" name="optimizationContinuity" min="1" max="100">
                 </div>
               </div>
             </li>
@@ -49,7 +49,7 @@
               <div class="wtf-list__item-inner steps-list__item-inner">
                 <div class="wtf-list__label steps-list__label">Длина тестирования (мес.)</div>
                 <div class="wtf-list__item__total steps-list__total modal__btn">
-                  <input type="number" value="3" name="testContinuity">
+                  <input type="number" value="2" name="testContinuity" min="1" max="100">
                 </div>
               </div>
             </li>
