@@ -1,0 +1,161 @@
+.popup {
+  padding: 20px;
+  opacity: 0;
+  transition: 0.3s opacity ease;
+
+  .bot & {
+    display: none !important;
+  }
+
+  &.active {
+    opacity: 1;
+  }
+
+  .bot &__wrap {
+    padding: 0;
+    width: 820px;
+    border-radius: 35px;
+    overflow: hidden;
+    position: relative;
+    transform: translateY(30px);
+    transition: 0.3s transform ease;
+  }
+
+  &__header {
+    display: grid;
+    place-items: center;
+    min-height: 74px;
+    background-color: #1B232A;
+    box-shadow: 0px 12px 16px rgba(15, 19, 23, 0.5);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  &__content {
+    padding: 32px 60px;
+    max-height: 70vh;
+    overflow: auto;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 23px;
+    min-height: 60px;
+  }
+  &__item ~ &__item {
+    position: relative;
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #1B232A;
+      content: '';
+      display: block;
+    }
+  }
+
+  &__text {
+    margin-right: auto;
+    font-size: 13px;
+  }
+
+  &__btn {
+  }
+
+  .bot &__input {
+    width: 80px;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .bot &__value {
+    width: 168px;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  &__some {
+    width: 80px;
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background-color: #1B232A;
+    border-radius: 7px;
+    min-height: 65px;
+    padding: 5px 23px;
+    margin: 5px;
+  }
+
+  &__empty {
+    width: 40px;
+    margin-right: 0;
+  }
+
+  &__last {
+    font-size: 13px;
+    line-height: 19px;
+    width: 80px;
+  }
+
+  &__token {
+    text-align: right;
+    overflow-wrap: break-word;
+    font-size: 13px;
+    width: 50%;
+
+    @media (max-width: 991px) {
+      max-width: 150px;
+    }
+  }
+
+  &__close {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    // background-color: red;
+    cursor: pointer;
+
+    &::after,
+    &::before {
+      display: block;
+      content: '';
+      width: 24px;
+      height: 3px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background-color: #777;
+      border-radius: 2px;
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+}
+
+.input-main {
+  font-size: 13px;
+  line-height: 19px;
+  padding: 7px 12px;
+  background-color: transparent;
+  border: 1px solid #5ED5A8;
+  color: white;
+  border-radius: 12px;
+  text-overflow: ellipsis;
+}

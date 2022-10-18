@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+@@include('_head.html',{})
+
+<body class="show bot">
+  <!-- <div class="popup" style="display: none;">
+    <div class="popup__wrap">
+      <form class="enter-form">
+        <h4 class="popup__title">Введите пароль</h4>
+        <input type="text" placeholder="Пароль" class="popup__input">
+        <button type="submit" class="popup__btn">Зайти</button>
+      </form>
+    </div>
+  </div> -->
+  @@include('_bot-header.html',{})
+
+  <main>
+    <div class="container">
+      <button class="btn-big start-stream">Запустить новый поток</button>
+
+      <div class="chart-block">
+        <div class="chart-block__price">
+          102356$
+        </div>
+        <!-- <div class="ct-chart ct-golden-section" id="chart1"></div> -->
+      </div>
+
+      <div class="stat">
+        <div class="stat__column">
+          <div class="stat__category">
+            <h4 class="stat__title">Депозит</h4>
+            <div class="stat__item">
+              <div class="stat__text">Внесение средств на счет, $</div>
+              <div class="stat__value">100000</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Текущий остаток на счете, $</div>
+              <div class="stat__value">116,917.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Внесение средств на счет, $</div>
+              <div class="stat__value">0.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Внесение средств на счет, $</div>
+              <div class="stat__value">100000</div>
+            </div>
+          </div>
+
+          <div class="stat__category">
+            <h4 class="stat__title">Общая статистика</h4>
+            <div class="stat__item">
+              <div class="stat__text">Результат без комиссии (Gross), $</div>
+              <div class="stat__value">16,317.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Результат общий (Net), $</div>
+              <div class="stat__value">16,917.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Комиссия, $</div>
+              <div class="stat__value">600.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Проторговано (объем), $</div>
+              <div class="stat__value">30,000.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль ежедневно, %</div>
+              <div class="stat__value">2.54</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль еженедельно, %</div>
+              <div class="stat__value">12.87</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль ежемесячно, %</div>
+              <div class="stat__value">29.55</div>
+            </div>
+          </div>
+
+          <div class="stat__category">
+            <h4 class="stat__title">Статистика по сделкам</h4>
+            <div class="stat__item">
+              <div class="stat__text">Всего сделок</div>
+              <div class="stat__value">57.00</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыльных сделок</div>
+              <div class="stat__value">(273) 47%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Убыточных сделок, %</div>
+              <div class="stat__value">(328) 53%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Сумма прибыльных сделок, $</div>
+              <div class="stat__value">2 589,63</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Сумма убыточных сделок, $</div>
+              <div class="stat__value">-2 589,63 </div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Выиграно Long позиций, %</div>
+              <div class="stat__value">(161 / 262) 61%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Выиграно Short позиций, %</div>
+              <div class="stat__value">(99/172) 57%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Максимальная просадка, %</div>
+              <div class="stat__value">5,90 </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat__column">
+          <div class="stat__category">
+            <h4 class="stat__title">Статистика по дням</h4>
+            <div class="stat__item">
+              <div class="stat__text">Прибыльных дней</div>
+              <div class="stat__value">28</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Убыточных дней</div>
+              <div class="stat__value">68</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Всего дней</div>
+              <div class="stat__value">96</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Макс кол-во прибыльных дней подряд</div>
+              <div class="stat__value">10</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Макс кол-во убыточных дней подряд</div>
+              <div class="stat__value">26</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Суммарное количество % по монетам за весь период</div>
+              <div class="stat__value">70</div>
+            </div>
+          </div>
+
+          <div class="stat__category">
+            <h4 class="stat__title">Статистика прибыли</h4>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за сегодня</div>
+              <div class="stat__value">1424.3$</div>
+              <div class="stat__value">124.3%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за вчера</div>
+              <div class="stat__value">1424.3$</div>
+              <div class="stat__value">124.3%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за неделю</div>
+              <div class="stat__value">1424.3$</div>
+              <div class="stat__value">124.3%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за прошлую неделю</div>
+              <div class="stat__value">1424.3$</div>
+              <div class="stat__value">124.3%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за прошлый месяц</div>
+              <div class="stat__value">1424.3$</div>
+              <div class="stat__value">124.3%</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Прибыль за текущий месяц</div>
+              <div class="stat__value">1424.3$</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Сумма комиссии сервису к оплате, $</div>
+              <div class="stat__value">1424.3$</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Ставка и распределение прибыли в процентах</div>
+              <div class="stat__value">144.3%</div>
+            </div>
+          </div>
+
+          <div class="stat__category">
+            <h4 class="stat__title">Комиссия сервиса</h4>
+            <div class="stat__item">
+              <div class="stat__text">Адрес USDT (BEP20)</div>
+              <div class="stat__token">SJDFwrgWG842rgKSDBnksUDBkSF68545</div>
+              <div class="stat__copy">
+                <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.8179 18H3.84107C1.99875 18 0.5 16.7384 0.5 15.1875V5.66016C0.5 4.1093 1.99875 2.84766 3.84107 2.84766H11.8179C13.6602 2.84766 15.1589 4.1093 15.1589 5.66016V15.1875C15.1589 16.7384 13.6602 18 11.8179 18ZM3.84107 4.25391C2.91999 4.25391 2.17053 4.8848 2.17053 5.66016V15.1875C2.17053 15.9629 2.91999 16.5938 3.84107 16.5938H11.8179C12.7389 16.5938 13.4884 15.9629 13.4884 15.1875V5.66016C13.4884 4.8848 12.7389 4.25391 11.8179 4.25391H3.84107ZM18.5 13.4297V2.8125C18.5 1.26164 17.0013 0 15.1589 0H5.88747C5.42612 0 5.0522 0.314758 5.0522 0.703125C5.0522 1.09149 5.42612 1.40625 5.88747 1.40625H15.1589C16.08 1.40625 16.8295 2.03714 16.8295 2.8125V13.4297C16.8295 13.8181 17.2034 14.1328 17.6647 14.1328C18.1261 14.1328 18.5 13.8181 18.5 13.4297Z" fill="#5ED5A8"/>
+                </svg>
+              </div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">Адрес USDT (TRC20)</div>
+              <div class="stat__token">SJDFKSDBnksUDBkSF68545</div>
+              <div class="stat__copy">
+                <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.8179 18H3.84107C1.99875 18 0.5 16.7384 0.5 15.1875V5.66016C0.5 4.1093 1.99875 2.84766 3.84107 2.84766H11.8179C13.6602 2.84766 15.1589 4.1093 15.1589 5.66016V15.1875C15.1589 16.7384 13.6602 18 11.8179 18ZM3.84107 4.25391C2.91999 4.25391 2.17053 4.8848 2.17053 5.66016V15.1875C2.17053 15.9629 2.91999 16.5938 3.84107 16.5938H11.8179C12.7389 16.5938 13.4884 15.9629 13.4884 15.1875V5.66016C13.4884 4.8848 12.7389 4.25391 11.8179 4.25391H3.84107ZM18.5 13.4297V2.8125C18.5 1.26164 17.0013 0 15.1589 0H5.88747C5.42612 0 5.0522 0.314758 5.0522 0.703125C5.0522 1.09149 5.42612 1.40625 5.88747 1.40625H15.1589C16.08 1.40625 16.8295 2.03714 16.8295 2.8125V13.4297C16.8295 13.8181 17.2034 14.1328 17.6647 14.1328C18.1261 14.1328 18.5 13.8181 18.5 13.4297Z" fill="#5ED5A8"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="popup" data-name="trade">
+    <div class="popup__wrap">
+      <div class="popup__header">
+        Торговля
+      </div>
+      <div class="popup__content">
+        <div class="popup__item">
+          <div class="popup__text">
+            BTCUSDT STOCH 21.01.2022 14:50
+          </div>
+
+          <button class="btn-main popup__btn">Link</button>
+          <button class="btn-red popup__btn">Stop</button>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            BTCUSDT STOCH 21.01.2022 14:50
+          </div>
+
+          <button class="btn-main popup__btn">Link</button>
+          <button class="btn-red popup__btn">Stop</button>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            BTCUSDT STOCH 21.01.2022 14:50
+          </div>
+
+          <button class="btn-main popup__btn">Link</button>
+          <button class="btn-red popup__btn">Stop</button>
+        </div>
+      </div>
+      <div class="popup__close">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup" data-name="generalSettings">
+    <div class="popup__wrap">
+      <div class="popup__header">
+        Общие настройки
+      </div>
+      <div class="popup__content">
+        <div class="popup__item">
+          <div class="popup__text">
+            API Key
+          </div>
+
+          <input type="text" class="input-main popup__value" value="86sdf4x8vx7dfvz9vdszvfd78gsfd9v0" name="api-key">
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            API Secret
+          </div>
+
+          <input type="text" class="input-main popup__value" value="76sdfdv6f87gfers02dfs6fds9gfdv" name="api-secret">
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Объем лота в %
+          </div>
+
+          <input type="text" class="input-main popup__value" value="50" name="lotPersent">
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Размер плеча в 1/X
+          </div>
+
+          <input type="text" class="input-main popup__value" value="125" name="leverage">
+        </div>
+      </div>
+      <div class="popup__close">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup" data-name="paymentOptions">
+    <div class="popup__wrap">
+      <div class="popup__header">
+        Параметры оплаты
+      </div>
+      <div class="popup__content">
+        <div class="popup__item">
+          <div class="popup__text">
+            Сумма
+          </div>
+
+          <div class="popup__some">
+            19234$
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Адрес USDT (BEP20)
+          </div>
+
+          <div class="popup__token">
+            SJDFwrgWG842rgKSDBnksUDBkSF68545
+          </div>
+          <div class="popup__copy">
+            <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.8179 18H3.84107C1.99875 18 0.5 16.7384 0.5 15.1875V5.66016C0.5 4.1093 1.99875 2.84766 3.84107 2.84766H11.8179C13.6602 2.84766 15.1589 4.1093 15.1589 5.66016V15.1875C15.1589 16.7384 13.6602 18 11.8179 18ZM3.84107 4.25391C2.91999 4.25391 2.17053 4.8848 2.17053 5.66016V15.1875C2.17053 15.9629 2.91999 16.5938 3.84107 16.5938H11.8179C12.7389 16.5938 13.4884 15.9629 13.4884 15.1875V5.66016C13.4884 4.8848 12.7389 4.25391 11.8179 4.25391H3.84107ZM18.5 13.4297V2.8125C18.5 1.26164 17.0013 0 15.1589 0H5.88747C5.42612 0 5.0522 0.314758 5.0522 0.703125C5.0522 1.09149 5.42612 1.40625 5.88747 1.40625H15.1589C16.08 1.40625 16.8295 2.03714 16.8295 2.8125V13.4297C16.8295 13.8181 17.2034 14.1328 17.6647 14.1328C18.1261 14.1328 18.5 13.8181 18.5 13.4297Z" fill="#5ED5A8"/>
+            </svg>
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Адрес USDT (TRC20)
+          </div>
+
+          <div class="popup__token">
+            SJDFwrgWG842rgKSDBnksUDBkSF68545
+          </div>
+          <div class="popup__copy">
+            <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.8179 18H3.84107C1.99875 18 0.5 16.7384 0.5 15.1875V5.66016C0.5 4.1093 1.99875 2.84766 3.84107 2.84766H11.8179C13.6602 2.84766 15.1589 4.1093 15.1589 5.66016V15.1875C15.1589 16.7384 13.6602 18 11.8179 18ZM3.84107 4.25391C2.91999 4.25391 2.17053 4.8848 2.17053 5.66016V15.1875C2.17053 15.9629 2.91999 16.5938 3.84107 16.5938H11.8179C12.7389 16.5938 13.4884 15.9629 13.4884 15.1875V5.66016C13.4884 4.8848 12.7389 4.25391 11.8179 4.25391H3.84107ZM18.5 13.4297V2.8125C18.5 1.26164 17.0013 0 15.1589 0H5.88747C5.42612 0 5.0522 0.314758 5.0522 0.703125C5.0522 1.09149 5.42612 1.40625 5.88747 1.40625H15.1589C16.08 1.40625 16.8295 2.03714 16.8295 2.8125V13.4297C16.8295 13.8181 17.2034 14.1328 17.6647 14.1328C18.1261 14.1328 18.5 13.8181 18.5 13.4297Z" fill="#5ED5A8"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="popup__close">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup" data-name="expertSettings">
+    <div class="popup__wrap">
+      <div class="popup__header">
+        Эксперт
+      </div>
+      <div class="popup__content">
+        <div class="popup__head">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Настройка
+          </div>
+          <div class="popup__last">
+            Значение
+          </div>
+        </div>
+        <div class="popup__item stoch macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Stop Loss
+          </div>
+
+          <input type="text" class="input-main popup__input" value="44" name="stopLoss">
+        </div>
+        <div class="popup__item stoch macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Take Profit
+          </div>
+
+          <input type="text" class="input-main popup__input" value="78" name="takeProfit">
+        </div>
+        <div class="popup__item stoch macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Breakeven Level
+          </div>
+
+          <input type="text" class="input-main popup__input" value="78" name="breakevenLevel">
+        </div>
+        <div class="popup__item stoch macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Indent Breakeven Level
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="indentBreakevenLevel">
+        </div>
+        <div class="popup__item stoch">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            K Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="kPeriod">
+        </div>
+        <div class="popup__item stoch">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            K Smoothing Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="kSmoothingPeriod">
+        </div>
+        <div class="popup__item stoch">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            D Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="dPeriod">
+        </div>
+        <div class="popup__item stoch">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            HMA
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="hma">
+        </div>
+        <div class="popup__item macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Fast Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="fastPeriod">
+        </div>
+        <div class="popup__item macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Slow Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="slowPeriod">
+        </div>
+        <div class="popup__item macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            Signal Period
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="signalPeriod">
+        </div>
+        <div class="popup__item macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            HMA Short
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="hmaShort">
+        </div>
+        <div class="popup__item macd">
+          <div class="popup__empty"></div>
+          <div class="popup__text">
+            HMA Long
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="hmaLong">
+        </div>
+        <div class="popup__item stoch macd">
+          <input type="checkbox" class="popup__checkbox">
+          <div class="popup__text">
+            HMA Filter
+          </div>
+
+          <input type="text" class="input-main popup__input" value="18" name="hmaFilter">
+        </div>
+      </div>
+      <div class="popup__close">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+
+
+  @@include('_footer.html',{})
+  <!-- <script src="js/moment.min.js"></script>
+  <script src="js/lightweight-charts.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/swiper.min.js"></script>
+  <script src="js/common.js"></script> -->
+  <script src="js/lightweight-charts.min.js"></script>
+  <script src="js/chartist.min.js"></script>
+  <script src="js/bot.js"></script>
+</body>
+
+</html>

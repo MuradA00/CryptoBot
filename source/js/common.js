@@ -8,12 +8,11 @@ const errors = {
   optimization: false
 }
 
-console.log(moment().valueOf() - localStorage.getItem('token'));
-
 if((moment().valueOf() - localStorage.getItem('token')) < 86400000) {
   document.body.classList.add('show')
 } else {
   document.querySelector('.popup').style.display = 'flex'
+  document.querySelector('.popup').style.opacity = 1
 }
 document.querySelector('.enter-form').addEventListener('submit', e => {
   e.preventDefault()
@@ -178,7 +177,7 @@ testingTrigger.addEventListener("click", () => {
 });
 
 
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "/api";
 // const
 let indicator = null;
 if (!localStorage.getItem("indicator")) {
@@ -335,82 +334,82 @@ fetch(`${pathAPI}/last`).then(async (response) => {
       const graphInfo = document.createElement("DIV");
       graphInfo.classList.add("graph-info");
       graphInfo.innerHTML = ''
-      if(item.data.params[1].length === 3) {
+      if(item.data.params.hasOwnProperty('macd')) {
         graphInfo.innerHTML += `
           <div class="graph-info__item">
             Индикатор - MACD
           </div>
           <div class="graph-info__item">
-            Fast Period - ${item.data.params[0][0]}
+            Fast Period - ${item.data.params.macd.fastPeriod}
           </div>
           <div class="graph-info__item">
-            Slow Period  - ${item.data.params[0][1]}
+            Slow Period  - ${item.data.params.macd.slowPeriod}
           </div>
           <div class="graph-info__item">
-            Signal Period - ${item.data.params[0][2]}
+            Signal Period - ${item.data.params.macd.signalPeriod}
           </div>
           <div class="graph-info__item">
-            HMA Short - ${item.data.params[1][1]}
+            HMA Short - ${item.data.params.hma.hmaShort}
           </div>
           <div class="graph-info__item">
-            HMA Long- ${item.data.params[1][2]}
+            HMA Long- ${item.data.params.hma.hmaLong}
           </div>
           <div class="graph-info__item">
-            HMA Filter - ${item.data.params[1][0]}
+            HMA Filter - ${item.data.params.hmaFilter}
           </div>
         `
-      } else if(item.data.params[1].length === 2) {
+      } else if(item.data.params.hasOwnProperty('stoch')) {
         graphInfo.innerHTML += `
           <div class="graph-info__item">
             Индикатор - Stochastic
           </div>
           <div class="graph-info__item">
-            K Period - ${item.data.params[0][0]}
+            K Period - ${item.data.params.stoch.kPeriod}
           </div>
           <div class="graph-info__item">
-            K Smoothing Period - ${item.data.params[0][1]}
+            K Smoothing Period - ${item.data.params.stoch.kSmoothingPeriod}
           </div>
           <div class="graph-info__item">
-            D Period - ${item.data.params[0][2]}
+            D Period - ${item.data.params.stoch.dPeriod}
           </div>
           <div class="graph-info__item">
-            HMA - ${item.data.params[1][1]}
+            HMA - ${item.data.params.hma.hma}
           </div>
           <div class="graph-info__item">
-            HMA Filter - ${item.data.params[1][0]}
+            HMA Filter - ${item.data.params.hma.hmaFilter}
           </div>
         `
       }
       graphInfo.innerHTML += `
         <div class="graph-info__item">
-          Stop Loss - ${item.data.params[2][0]}
+          Stop Loss - ${item.data.params.params.stopLoss}
         </div>
         <div class="graph-info__item">
-          Take Profit - ${item.data.params[2][1]}
+          Take Profit - ${item.data.params.params.takeProfit}
         </div>
         <div class="graph-info__item">
-          Breakeven Level - ${item.data.params[2][2]}
+          Breakeven Level - ${item.data.params.params.breakevenLevel}
         </div>
         <div class="graph-info__item">
-          Indent Breakeven Level  - ${item.data.params[2][3]}
+          Indent Breakeven Level  - ${item.data.params.params.indentBreakevenLevel}
         </div>
         <div class="graph-info__item">
-          Тайм фрейм - ${item.data.params[4]}
+          Тайм фрейм - ${item.data.params.timeFrame}
         </div>
         <div class="graph-info__item">
-          Валюты - ${item.data.params[5]}
+          Валюты - ${item.data.params.symbol}
         </div>
         <div class="graph-info__item">
-          Стартовый депозит - ${item.data.params[3].deposit}$
+          Стартовый депозит - ${item.data.params.config.deposit}$
         </div>
         <div class="graph-info__item">
-          Объем лота - ${item.data.params[3].lotPersent}%
+          Объем лота - ${item.data.params.config.lotPersent}%
         </div>
         <div class="graph-info__item">
-          Размер плеча - ${item.data.params[3].leverage}
+          Размер плеча - ${item.data.params.config.leverage}
         </div>
         <div class="graph-info__item">
-          Комиссия - ${item.data.params[3].commission}
+          Комиссия - ${item.data.params.config.commission}
         </div>
         <div class="graph-info__item">
           Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
@@ -580,84 +579,84 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                     }
                     const graphInfo = document.createElement("DIV");
                     graphInfo.classList.add("graph-info");
-                    console.log(item);
+                    console.log(item.data.params);
                     graphInfo.innerHTML = ''
-                    if(item.data.params[1].length === 3) {
+                    if(item.data.params.hasOwnProperty('macd')) {
                       graphInfo.innerHTML += `
                         <div class="graph-info__item">
                           Индикатор - MACD
                         </div>
                         <div class="graph-info__item">
-                          Fast Period - ${item.data.params[0][0]}
+                          Fast Period - ${item.data.params.macd.fastPeriod}
                         </div>
                         <div class="graph-info__item">
-                          Slow Period  - ${item.data.params[0][1]}
+                          Slow Period  - ${item.data.params.macd.slowPeriod}
                         </div>
                         <div class="graph-info__item">
-                          Signal Period - ${item.data.params[0][2]}
+                          Signal Period - ${item.data.params.macd.signalPeriod}
                         </div>
                         <div class="graph-info__item">
-                          HMA Short - ${item.data.params[1][1]}
+                          HMA Short - ${item.data.params.hma.hmaShort}
                         </div>
                         <div class="graph-info__item">
-                          HMA Long- ${item.data.params[1][2]}
+                          HMA Long- ${item.data.params.hma.hmaLong}
                         </div>
                         <div class="graph-info__item">
-                          HMA Filter - ${item.data.params[1][0]}
+                          HMA Filter - ${item.data.params.hmaFilter}
                         </div>
                       `
-                    } else if(item.data.params[1].length === 2) {
+                    } else if(item.data.params.hasOwnProperty('stoch')) {
                       graphInfo.innerHTML += `
                         <div class="graph-info__item">
                           Индикатор - Stochastic
                         </div>
                         <div class="graph-info__item">
-                          K Period - ${item.data.params[0][0]}
+                          K Period - ${item.data.params.stoch.kPeriod}
                         </div>
                         <div class="graph-info__item">
-                          K Smoothing Period - ${item.data.params[0][1]}
+                          K Smoothing Period - ${item.data.params.stoch.kSmoothingPeriod}
                         </div>
                         <div class="graph-info__item">
-                          D Period - ${item.data.params[0][2]}
+                          D Period - ${item.data.params.stoch.dPeriod}
                         </div>
                         <div class="graph-info__item">
-                          HMA - ${item.data.params[1][1]}
+                          HMA - ${item.data.params.hma.hma}
                         </div>
                         <div class="graph-info__item">
-                          HMA Filter - ${item.data.params[1][0]}
+                          HMA Filter - ${item.data.params.hma.hmaFilter}
                         </div>
                       `
                     }
                     graphInfo.innerHTML += `
                       <div class="graph-info__item">
-                        Stop Loss - ${item.data.params[2][0]}
+                        Stop Loss - ${item.data.params.params.stopLoss}
                       </div>
                       <div class="graph-info__item">
-                        Take Profit - ${item.data.params[2][1]}
+                        Take Profit - ${item.data.params.params.takeProfit}
                       </div>
                       <div class="graph-info__item">
-                        Breakeven Level - ${item.data.params[2][2]}
+                        Breakeven Level - ${item.data.params.params.breakevenLevel}
                       </div>
                       <div class="graph-info__item">
-                        Indent Breakeven Level  - ${item.data.params[2][3]}
+                        Indent Breakeven Level  - ${item.data.params.params.indentBreakevenLevel}
                       </div>
                       <div class="graph-info__item">
-                        Тайм фрейм - ${item.data.params[4]}
+                        Тайм фрейм - ${item.data.params.timeFrame}
                       </div>
                       <div class="graph-info__item">
-                        Валюты - ${item.data.params[5]}
+                        Валюты - ${item.data.params.symbol}
                       </div>
                       <div class="graph-info__item">
-                        Стартовый депозит - ${item.data.params[3].deposit}$
+                        Стартовый депозит - ${item.data.params.config.deposit}$
                       </div>
                       <div class="graph-info__item">
-                        Объем лота - ${item.data.params[3].lotPersent}%
+                        Объем лота - ${item.data.params.config.lotPersent}%
                       </div>
                       <div class="graph-info__item">
-                        Размер плеча - ${item.data.params[3].leverage}
+                        Размер плеча - ${item.data.params.config.leverage}
                       </div>
                       <div class="graph-info__item">
-                        Комиссия - ${item.data.params[3].commission}
+                        Комиссия - ${item.data.params.config.commission}
                       </div>
                       <div class="graph-info__item">
                         Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
@@ -1238,8 +1237,9 @@ document.querySelector(".progress__button").addEventListener("click", () => {
   if (expertError) {
     return;
   }
+  console.log(formData)
   if (panelTab === "wft") {
-    // document.querySelector('.progress__btn').textContent = 'Stop'
+    document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/wft`, {
       headers: {
         "Content-Type": "application/json",
@@ -1252,7 +1252,7 @@ document.querySelector(".progress__button").addEventListener("click", () => {
       .catch((err) => console.log(err));
   }
   if (panelTab === "step") {
-    // document.querySelector('.progress__btn').textContent = 'Stop'
+    document.querySelector('.progress__btn').textContent = 'Stop'
     fetch(`${pathAPI}/testbyperiod`, {
       headers: {
         "Content-Type": "application/json",
@@ -1277,50 +1277,50 @@ setInterval(() => {
     .catch((err) => console.log(err));
 }, 1000);
 
-function createSimpleSwitcher(items, activeItem, activeItemChangedCallback) {
-  var switcherElement = document.createElement("div");
-  switcherElement.classList.add("switcher");
+// function createSimpleSwitcher(items, activeItem, activeItemChangedCallback) {
+//   var switcherElement = document.createElement("div");
+//   switcherElement.classList.add("switcher");
 
-  var intervalElements = items.map(function (item) {
-    var itemEl = document.createElement("button");
-    itemEl.innerText = item;
-    itemEl.classList.add("switcher-item");
-    itemEl.classList.toggle("switcher-active-item", item === activeItem);
-    itemEl.addEventListener("click", function () {
-      onItemClicked(item);
-    });
-    switcherElement.appendChild(itemEl);
-    return itemEl;
-  });
+//   var intervalElements = items.map(function (item) {
+//     var itemEl = document.createElement("button");
+//     itemEl.innerText = item;
+//     itemEl.classList.add("switcher-item");
+//     itemEl.classList.toggle("switcher-active-item", item === activeItem);
+//     itemEl.addEventListener("click", function () {
+//       onItemClicked(item);
+//     });
+//     switcherElement.appendChild(itemEl);
+//     return itemEl;
+//   });
 
-  function onItemClicked(item) {
-    if (item === activeItem) {
-      return;
-    }
+//   function onItemClicked(item) {
+//     if (item === activeItem) {
+//       return;
+//     }
 
-    intervalElements.forEach(function (element, index) {
-      element.classList.toggle("switcher-active-item", items[index] === item);
-    });
+//     intervalElements.forEach(function (element, index) {
+//       element.classList.toggle("switcher-active-item", items[index] === item);
+//     });
 
-    activeItem = item;
+//     activeItem = item;
 
-    activeItemChangedCallback(item);
-  }
+//     activeItemChangedCallback(item);
+//   }
 
-  return switcherElement;
-}
+//   return switcherElement;
+// }
 
-var switcherElement = createSimpleSwitcher(
-  ["Courier New", "Arial", "Times New Roman"],
-  "Trebuchet MS",
-  function (fontFamily) {
-    chart.applyOptions({
-      layout: {
-        fontFamily: fontFamily,
-      },
-    });
-  }
-);
+// var switcherElement = createSimpleSwitcher(
+//   ["Courier New", "Arial", "Times New Roman"],
+//   "Trebuchet MS",
+//   function (fontFamily) {
+//     chart.applyOptions({
+//       layout: {
+//         fontFamily: fontFamily,
+//       },
+//     });
+//   }
+// );
 
 const chartElement = document.createElement("div");
 chartElement.classList.add("custom-graph");
@@ -1354,7 +1354,7 @@ var chart = LightweightCharts.createChart(chartElementContent, {
 });
 
 document.body.appendChild(chartElement);
-document.body.appendChild(switcherElement);
+// document.body.appendChild(switcherElement);
 
 var areaSeries = chart.addAreaSeries({
   topColor: "rgba(33, 150, 243, 0.56)",

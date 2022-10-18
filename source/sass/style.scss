@@ -1,5 +1,10 @@
 // ------------------------------- first level
 @import "general/normalize";
+@font-face {
+  font-family: 'Inter';
+  src: url("../font/Inter-Medium.woff2") format("woff2"), url("../font/Inter-Medium.woff") format("woff");
+  font-weight: bold;
+}
 // ------------------------------- second level
 @import "general/fonts";
 @import "general/mixins";
@@ -16,6 +21,10 @@
 @import "general/global";
 @import "general/typography";
 @import "general/blocks";
+
+// -----------------------------
+@import "_stat";
+@import "_popup";
 
 
 .expert__button {
