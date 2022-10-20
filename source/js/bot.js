@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const pathAPI = "/api";
+// const pathAPI = "http://52.29.157.23:3000/api";
 
 // Indicator
 let indicator = "stoch";
@@ -34,9 +35,6 @@ document.querySelectorAll(".indicator__item").forEach((item) => {
     document
       .querySelectorAll(".popup[data-name=expertSettings] .popup__item")
       .forEach((i) => {
-        console.log(
-          item.querySelector(".indicator__name").getAttribute("data-value")
-        );
         if (
           i.classList.contains(
             item.querySelector(".indicator__name").getAttribute("data-value")
@@ -136,10 +134,11 @@ document
 //   };
 // }
 
-const headers = {
-  api_key: "782b8e0676d762070ba6414cf1c37d3c15824ea08e56eb15862d64c50ff82530",
-  api_secret:
-    "50fe98167536f1a5aa4147d2d4f33246630e1fdbcd394c6847f31196413dee05",
+const headers = () => {
+  return {
+    api_key: document.querySelector('input[name="api-key"]').value,
+    api_secret: document.querySelector('input[name="api-secret"]').value
+  };
 };
 
 document.querySelector(".start-stream").addEventListener("click", () => {
@@ -147,9 +146,7 @@ document.querySelector(".start-stream").addEventListener("click", () => {
     config: {
       params: {
         hma: {
-          hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
-          hmaShort: +document.querySelector("input[name=hmaShort]").value,
-          hmaLong: +document.querySelector("input[name=hmaLong]").value,
+          hmaFilter: +document.querySelector("input[name=hmaFilter]").value
         },
         params: {
           stopLoss: +document.querySelector("input[name=stopLoss]").value,
@@ -175,10 +172,11 @@ document.querySelector(".start-stream").addEventListener("click", () => {
   };
   if (indicator === "stoch") {
     formData.config.params.stoch = {
-      fastPeriod: +document.querySelector("input[name=fastPeriod]").value,
-      slowPeriod: +document.querySelector("input[name=slowPeriod]").value,
-      signalPeriod: +document.querySelector("input[name=signalPeriod]").value,
-    };
+      kPeriod: +document.querySelector("input[name=kPeriod]").value,
+      kSmoothingPeriod: +document.querySelector("input[name=kSmoothingPeriod]").value,
+      dPeriod: +document.querySelector("input[name=dPeriod]").value,
+    }
+    formData.config.params.hma.hma = +document.querySelector("input[name=kPeriod]").value
   }
   if (indicator === "macd") {
     formData.config.params.macd = {
@@ -186,30 +184,12 @@ document.querySelector(".start-stream").addEventListener("click", () => {
       slowPeriod: +document.querySelector("input[name=slowPeriod]").value,
       signalPeriod: +document.querySelector("input[name=signalPeriod]").value,
     };
+    formData.config.params.hma.hmaShort = +document.querySelector("input[name=hmaShort]").value
+    formData.config.params.hma.hmaLong = +document.querySelector("input[name=hmaLong]").value
   }
-  console.log(formData);
-  // fetch('http://52.29.157.23:3000/api/bot/trader', {
-  //   method: "POST",
-  //   // body: JSON.stringify(formData),
-  //   headers: {
-  //     "api_key":
-  //       "782b8e0676d762070ba6414cf1c37d3c15824ea08e56eb15862d64c50ff82530",
-  //     "api_secret":
-  //       "50fe98167536f1a5aa4147d2d4f33246630e1fdbcd394c6847f31196413dee05",
-  //     "Access-Control-Allow-Origin": "*"
-  //   },
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data))
-  //   .catch((err) => console.log(err));
   axios
     .post(`${pathAPI}/bot/trader`, formData, {
-      headers: {
-        api_key:
-          "782b8e0676d762070ba6414cf1c37d3c15824ea08e56eb15862d64c50ff82530",
-        api_secret:
-          "50fe98167536f1a5aa4147d2d4f33246630e1fdbcd394c6847f31196413dee05",
-      },
+      headers: headers(),
     })
     .then(function (response) {
       console.log(response);
@@ -219,19 +199,57 @@ document.querySelector(".start-stream").addEventListener("click", () => {
     });
 });
 
+const loadTraders = () => {
+  axios
+    .get(`${pathAPI}/bot/traders`, {
+      headers: headers(),
+    })
+    .then((data) => {
+      document
+        .querySelectorAll('.popup[data-name="trade"] .popup__item')
+        .forEach((item) => item.remove());
+      data.data.forEach((item) => {
+        const elem = document.createElement("div");
+        elem.classList.add("popup__item");
+        elem.innerHTML = `
+        <div class="popup__text">
+          ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY hh:mm")}
+        </div>
+        <button class="btn-main popup__btn">Link</button>
+        <button class="btn-red popup__btn">Stop</button>
+      `;
+        elem.querySelector(".btn-red").addEventListener("click", () => {
+          deleteTrader(item.symbol);
+        });
+        document
+          .querySelector('.popup[data-name="trade"] .popup__content')
+          .append(elem);
+      });
+    });
+};
+
+const deleteTrader = (symbol) => {
+  console.log(symbol);
+  axios
+    .delete(`${pathAPI}/bot/trader`, {
+      headers: headers(),
+      data: { symbol },
+    })
+    .then(function (response) {
+      loadTraders();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+};
+
 document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
+  loadTraders();
   document
     .querySelectorAll('.popup[data-name="trade"] .popup__item')
     .forEach((item) => item.remove());
   e.preventDefault();
-  fetch(`${pathAPI}/bot/traders`, {
-    headers: {
-      api_key:
-        "782b8e0676d762070ba6414cf1c37d3c15824ea08e56eb15862d64c50ff82530",
-      api_secret:
-        "50fe98167536f1a5aa4147d2d4f33246630e1fdbcd394c6847f31196413dee05",
-    },
-  })
+  fetch(`${pathAPI}/bot/traders`, {})
     .then(async (response) => {
       const res = await response.json();
       res.forEach((item) => {
@@ -245,14 +263,13 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
           <button class="btn-red popup__btn">Stop</button>
         `;
         elem.querySelector(".btn-red").addEventListener("click", () => {
-          console.log({ symbol: item.symbol });
           axios
             .delete(`${pathAPI}/bot/trader`, {
               headers: headers,
               data: { symbol: item.symbol },
             })
             .then(function (response) {
-              elem.remove()
+              elem.remove();
             })
             .catch(function (error) {
               console.log(error);
