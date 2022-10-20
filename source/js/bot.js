@@ -215,7 +215,6 @@ const loadTraders = () => {
         <div class="popup__text">
           ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY hh:mm")}
         </div>
-        <button class="btn-main popup__btn">Link</button>
         <button class="btn-red popup__btn">Stop</button>
       `;
         elem.querySelector(".btn-red").addEventListener("click", () => {
@@ -259,7 +258,6 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
           <div class="popup__text">
             ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY hh:mm")}
           </div>
-          <button class="btn-main popup__btn">Link</button>
           <button class="btn-red popup__btn">Stop</button>
         `;
         elem.querySelector(".btn-red").addEventListener("click", () => {
