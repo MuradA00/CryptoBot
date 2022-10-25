@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const pathAPI = "/api";
-// const pathAPI = "http://52.29.157.23:3000/api";
+// const pathAPI = "/api";
+const pathAPI = "http://52.29.157.23:3000/api";
 
 // Indicator
 let indicator = "stoch";
@@ -137,16 +137,29 @@ document
 const headers = () => {
   return {
     api_key: document.querySelector('input[name="api-key"]').value,
-    api_secret: document.querySelector('input[name="api-secret"]').value
+    api_secret: document.querySelector('input[name="api-secret"]').value,
   };
 };
+
+const loadBalance = () => {
+  axios
+  .get(`${pathAPI}/bot/balance`, {
+    headers: headers(),
+  })
+  .then((data) => {
+    document.querySelector('.chart-block__price').textContent = data.data.balance.toFixed() + '$';
+  });
+}
+
+loadBalance()
+document.querySelector('.popup[data-name=generalSettings] .popup__close').addEventListener('click', loadBalance)
 
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
     config: {
       params: {
         hma: {
-          hmaFilter: +document.querySelector("input[name=hmaFilter]").value
+          hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
         },
         params: {
           stopLoss: +document.querySelector("input[name=stopLoss]").value,
@@ -173,10 +186,13 @@ document.querySelector(".start-stream").addEventListener("click", () => {
   if (indicator === "stoch") {
     formData.config.params.stoch = {
       kPeriod: +document.querySelector("input[name=kPeriod]").value,
-      kSmoothingPeriod: +document.querySelector("input[name=kSmoothingPeriod]").value,
+      kSmoothingPeriod: +document.querySelector("input[name=kSmoothingPeriod]")
+        .value,
       dPeriod: +document.querySelector("input[name=dPeriod]").value,
-    }
-    formData.config.params.hma.hma = +document.querySelector("input[name=kPeriod]").value
+    };
+    formData.config.params.hma.hma = +document.querySelector(
+      "input[name=kPeriod]"
+    ).value;
   }
   if (indicator === "macd") {
     formData.config.params.macd = {
@@ -184,8 +200,12 @@ document.querySelector(".start-stream").addEventListener("click", () => {
       slowPeriod: +document.querySelector("input[name=slowPeriod]").value,
       signalPeriod: +document.querySelector("input[name=signalPeriod]").value,
     };
-    formData.config.params.hma.hmaShort = +document.querySelector("input[name=hmaShort]").value
-    formData.config.params.hma.hmaLong = +document.querySelector("input[name=hmaLong]").value
+    formData.config.params.hma.hmaShort = +document.querySelector(
+      "input[name=hmaShort]"
+    ).value;
+    formData.config.params.hma.hmaLong = +document.querySelector(
+      "input[name=hmaLong]"
+    ).value;
   }
   axios
     .post(`${pathAPI}/bot/trader`, formData, {
