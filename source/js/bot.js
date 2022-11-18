@@ -84,10 +84,12 @@ const expertFields = document.querySelectorAll(
   ".popup[data-name=expertSettings] input.popup__input"
 );
 
-if(localStorage.getItem('bot-expert')) {
-  const botExpertObject = JSON.parse(localStorage.getItem('bot-expert'))
-  for(key in botExpertObject) {
-    document.querySelector(`.popup[data-name=expertSettings] input.popup__input[name=${key}]`).value = botExpertObject[key]
+if (localStorage.getItem("bot-expert")) {
+  const botExpertObject = JSON.parse(localStorage.getItem("bot-expert"));
+  for (key in botExpertObject) {
+    document.querySelector(
+      `.popup[data-name=expertSettings] input.popup__input[name=${key}]`
+    ).value = botExpertObject[key];
   }
 }
 const saveExpert = () => {
@@ -95,7 +97,7 @@ const saveExpert = () => {
   expertFields.forEach((item) => {
     newValues[item.name] = item.value;
   });
-  localStorage.setItem('bot-expert', JSON.stringify(newValues))
+  localStorage.setItem("bot-expert", JSON.stringify(newValues));
 };
 expertFields.forEach((item) =>
   item.addEventListener("input", () => {
@@ -108,10 +110,12 @@ const generalFields = document.querySelectorAll(
   ".popup[data-name=generalSettings] input"
 );
 
-if(localStorage.getItem('bot-general')) {
-  const botGeneralObject = JSON.parse(localStorage.getItem('bot-general'))
-  for(key in botGeneralObject) {
-    document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`).value = botGeneralObject[key]
+if (localStorage.getItem("bot-general")) {
+  const botGeneralObject = JSON.parse(localStorage.getItem("bot-general"));
+  for (key in botGeneralObject) {
+    document.querySelector(
+      `.popup[data-name=generalSettings] input[name=${key}]`
+    ).value = botGeneralObject[key];
   }
 }
 const saveGeneral = () => {
@@ -119,7 +123,7 @@ const saveGeneral = () => {
   generalFields.forEach((item) => {
     newValues[item.name] = item.value;
   });
-  localStorage.setItem('bot-general', JSON.stringify(newValues))
+  localStorage.setItem("bot-general", JSON.stringify(newValues));
 };
 generalFields.forEach((item) =>
   item.addEventListener("input", () => {
@@ -127,12 +131,24 @@ generalFields.forEach((item) =>
   })
 );
 
+// Period
+if (localStorage.getItem("bot-period")) {
+  document
+    .querySelectorAll(".selector-row__item")
+    .forEach((i) => i.classList.remove("_selector-active"));
+  document
+    .querySelector(
+      `.selector-row__item[data-value='${localStorage.getItem("bot-period")}']`
+    )
+    .classList.add("_selector-active");
+}
 document.querySelectorAll(".selector-row__item").forEach((item) => {
   item.addEventListener("click", () => {
     document
       .querySelectorAll(".selector-row__item")
       .forEach((i) => i.classList.remove("_selector-active"));
     item.classList.toggle("_selector-active");
+    localStorage.setItem("bot-period", item.getAttribute("data-value"));
   });
 });
 
