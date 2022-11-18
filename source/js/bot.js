@@ -151,6 +151,19 @@ document.querySelectorAll(".selector-row__item").forEach((item) => {
     localStorage.setItem("bot-period", item.getAttribute("data-value"));
   });
 });
+document
+  .querySelector("input[name=leverage]")
+  .addEventListener("input", (e) => {
+    const value = e.target.value.replace(/\D/g, "");
+    console.log(value);
+    if (+value > 25) {
+      e.target.value = 25;
+    } else if (+value < 0) {
+      e.target.value = 0;
+    } else {
+      e.target.value = value;
+    }
+  });
 
 document
   .querySelector("._hiddenTrigger button")
