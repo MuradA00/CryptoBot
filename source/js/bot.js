@@ -14,11 +14,21 @@ const pathAPI = "http://52.29.157.23:3000/api";
 
 // Indicator
 let indicator = "stoch";
+if (!localStorage.getItem("bot-indicator")) {
+  localStorage.setItem("bot-indicator", "stoch");
+}
+indicator = localStorage.getItem("bot-indicator") || "stoch";
+document.querySelector(".indicator button span").textContent =
+  document.querySelector(
+    `.indicator__name[data-value='${indicator}']`
+  ).textContent;
 document
   .querySelectorAll(".popup[data-name=expertSettings] .popup__item")
-  .forEach((item) => {
-    if (!item.classList.contains("stoch")) {
-      item.style.display = "none";
+  .forEach((i) => {
+    if (i.classList.contains(indicator)) {
+      i.style.display = "flex";
+    } else {
+      i.style.display = "none";
     }
   });
 document.querySelector(".indicator button").addEventListener("click", (e) => {
@@ -28,6 +38,10 @@ document.querySelectorAll(".indicator__item").forEach((item) => {
   item.addEventListener("click", () => {
     document.querySelector(".indicator .header__btn span").textContent =
       item.querySelector(".indicator__name").textContent;
+    localStorage.setItem(
+      "bot-indicator",
+      item.querySelector(".indicator__name").getAttribute("data-value")
+    );
     indicator = item
       .querySelector(".indicator__name")
       .getAttribute("data-value");
@@ -52,6 +66,66 @@ window.addEventListener("click", (e) => {
     document.querySelector(".indicator").classList.remove("active");
   }
 });
+
+// Symbol
+if (localStorage.getItem("bot-symbol")) {
+  document.querySelector(
+    `input[name=symbol][id=${localStorage.getItem("bot-symbol")}]`
+  ).checked = true;
+}
+document.querySelectorAll("input[name=symbol]").forEach((item) =>
+  item.addEventListener("input", (e) => {
+    localStorage.setItem("bot-symbol", e.target.id);
+  })
+);
+
+// Expert
+const expertFields = document.querySelectorAll(
+  ".popup[data-name=expertSettings] input.popup__input"
+);
+
+if(localStorage.getItem('bot-expert')) {
+  const botExpertObject = JSON.parse(localStorage.getItem('bot-expert'))
+  for(key in botExpertObject) {
+    document.querySelector(`.popup[data-name=expertSettings] input.popup__input[name=${key}]`).value = botExpertObject[key]
+  }
+}
+const saveExpert = () => {
+  const newValues = {};
+  expertFields.forEach((item) => {
+    newValues[item.name] = item.value;
+  });
+  localStorage.setItem('bot-expert', JSON.stringify(newValues))
+};
+expertFields.forEach((item) =>
+  item.addEventListener("input", () => {
+    saveExpert();
+  })
+);
+
+// General
+const generalFields = document.querySelectorAll(
+  ".popup[data-name=generalSettings] input"
+);
+
+if(localStorage.getItem('bot-general')) {
+  const botGeneralObject = JSON.parse(localStorage.getItem('bot-general'))
+  for(key in botGeneralObject) {
+    document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`).value = botGeneralObject[key]
+  }
+}
+const saveGeneral = () => {
+  const newValues = {};
+  generalFields.forEach((item) => {
+    newValues[item.name] = item.value;
+  });
+  localStorage.setItem('bot-general', JSON.stringify(newValues))
+};
+generalFields.forEach((item) =>
+  item.addEventListener("input", () => {
+    saveGeneral();
+  })
+);
 
 document.querySelectorAll(".selector-row__item").forEach((item) => {
   item.addEventListener("click", () => {
@@ -143,16 +217,19 @@ const headers = () => {
 
 const loadBalance = () => {
   axios
-  .get(`${pathAPI}/bot/balance`, {
-    headers: headers(),
-  })
-  .then((data) => {
-    document.querySelector('.chart-block__price').textContent = data.data.balance.toFixed() + '$';
-  });
-}
+    .get(`${pathAPI}/bot/balance`, {
+      headers: headers(),
+    })
+    .then((data) => {
+      document.querySelector(".chart-block__price").textContent =
+        data.data.balance.toFixed() + "$";
+    });
+};
 
-loadBalance()
-document.querySelector('.popup[data-name=generalSettings] .popup__close').addEventListener('click', loadBalance)
+loadBalance();
+document
+  .querySelector(".popup[data-name=generalSettings] .popup__close")
+  .addEventListener("click", loadBalance);
 
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
