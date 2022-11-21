@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// const pathAPI = "/api";
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "/api";
+// const pathAPI = "http://52.29.157.23:3000/api";
 
 // Indicator
 let indicator = "stoch";
