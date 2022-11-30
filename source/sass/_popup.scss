@@ -74,6 +74,8 @@
   }
 
   .bot &__value {
+    font-size: 13px;
+    line-height: 19px;
     width: 168px;
     margin-bottom: 0;
     text-align: center;
@@ -81,6 +83,8 @@
 
   &__some {
     width: 80px;
+    font-size: 13px;
+    line-height: 19px;
   }
 
   &__head {

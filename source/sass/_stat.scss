@@ -202,9 +202,21 @@ body.bot {
     }
   }
 
+  &__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    min-width: 120px;
+    background-color: #5ED5A8;
+    color: #171D22;
+    border-radius: 6px;
+  }
+
   &__text,
   &__value,
-  &__token {
+  &__token,
+  &__btn {
     font-size: 13px;
     line-height: 19px;
   }

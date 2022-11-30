@@ -186,8 +186,32 @@
             </div>
           </div>
 
+          <div class="stat__category" id="openPositionList">
+            <h4 class="stat__title">Открытые позиции</h4>
+            <!-- <div class="stat__item">
+              <div class="stat__text">ALGOUSDT 22:30 13.12.2022 - Short</div>
+              <button data-popup="statPos" class="stat__btn">Link</button>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">ETCUSDT 02:56 02.01.2023 - Long</div>
+              <button data-popup="statPos" class="stat__btn">Link</button>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">ALICEUSDT 12:10 30.12.2022 - Short</div>
+              <button data-popup="statPos" class="stat__btn">Link</button>
+            </div>
+            <div class="stat__item">
+              <div class="stat__text">BTCUSDT 22:30 13.12.2022 - Long</div>
+              <button data-popup="statPos" class="stat__btn">Link</button>
+            </div> -->
+          </div>
+
           <div class="stat__category">
             <h4 class="stat__title">Комиссия сервиса</h4>
+            <div class="stat__item">
+              <div class="stat__text">Сумма</div>
+              <div class="stat__value">19234$</div>
+            </div>
             <div class="stat__item">
               <div class="stat__text">Адрес USDT (BEP20)</div>
               <div class="stat__token">SJDFwrgWG842rgKSDBnksUDBkSF68545</div>
@@ -476,6 +500,92 @@
           </div>
 
           <input type="text" class="input-main popup__input" value="18" name="hmaFilter">
+        </div>
+      </div>
+      <div class="popup__close">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup" data-name="statPos">
+    <div class="popup__wrap">
+      <div class="popup__header">
+        Статистика позиции
+      </div>
+      <div class="popup__content">
+        <div class="popup__item">
+          <div class="popup__text">
+            Валютная пара
+          </div>
+
+          <div class="popup__some">
+            ALGOUSDT
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Дата и время открытия сделки
+          </div>
+
+          <div class="popup__some">
+            12:30<br>22.12.2022
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Цена Стоп-Лосс
+          </div>
+
+          <div class="popup__some">
+            15465$
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Цена Тейк-Профит
+          </div>
+
+          <div class="popup__some">
+            19234$
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Текущий P&L в $ (%)
+          </div>
+
+          <div class="popup__some">
+            105%
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Расчетный  P&L в $ (%) если сработает Стоп-Лосс
+          </div>
+
+          <div class="popup__some">
+            -30%
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Расчетный  P&L в $ (%) если сработает Тейк-Профит
+          </div>
+
+          <div class="popup__some">
+            312%
+          </div>
+        </div>
+        <div class="popup__item">
+          <div class="popup__text">
+            Риск на депозит в $ (%)
+          </div>
+
+          <div class="popup__some">
+            67%
+          </div>
         </div>
       </div>
       <div class="popup__close">

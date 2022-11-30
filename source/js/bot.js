@@ -12,6 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
 const pathAPI = "/api";
 // const pathAPI = "http://52.29.157.23:3000/api";
 
+
+const headers = () => {
+  return {
+    api_key: document.querySelector('input[name="api-key"]').value,
+    api_secret: document.querySelector('input[name="api-secret"]').value,
+  };
+};
+
 // Indicator
 let indicator = "stoch";
 if (!localStorage.getItem("bot-indicator")) {
@@ -66,6 +74,93 @@ window.addEventListener("click", (e) => {
     document.querySelector(".indicator").classList.remove("active");
   }
 });
+
+const statPositionLables = {
+  symbol: {
+    title: 'Валютная пара'
+  },
+  data: {
+    title: 'Дата и время открытия сделки'
+  },
+  entryPrice: {
+    title: 'Цена открытия',
+    endSymbol: '$'
+  },
+  stopLoss: {
+    title: 'Цена Стоп-Лосс',
+    endSymbol: '$'
+  },
+  takeProfit: {
+    title: 'Цена Тейк-Профит',
+    endSymbol: '$'
+  },
+  curentPNL: {
+    title: 'Текущий P&L в $ (%)',
+    endSymbol: '%'
+  },
+  stopLossPNL: {
+    title: 'Расчетный  P&L в $ (%) если сработает Стоп-Лосс',
+  },
+  takeProfitPNL: {
+    title: 'Расчетный  P&L в $ (%) если сработает Тейк-Профит',
+    endSymbol: '%'
+  },
+  // symbol: {
+  //   title: 'Риск на депозит в $ (%)',
+  //   endSymbol: '%'
+  // },
+}
+
+const formatStatPositionLabel = (key, value) => {
+  if(key === 'data') {
+    return moment(value).format('hh:mm DD.MM.YYYY')
+  }
+
+  if(!isNaN(+value)) {
+    if(key.endSymbol) {
+      return value.toFixed(2) + key.endSymbol
+    }
+    return value.toFixed(2)
+  } else {
+    return value
+  }
+}
+
+axios.get(`${pathAPI}/bot/positions`)
+  .then(({data}) => {
+    data.forEach(item => {
+      const div = document.createElement('div')
+      div.classList.add('stat__item')
+      div.innerHTML = `
+        <div class="stat__text">${item.symbol} ${moment(item.data).format('hh:mm DD.MM.YYYY')} - ${item.side}</div>
+        <button data-popup="statPos" class="stat__btn">Link</button>
+      `
+      document.querySelector('#openPositionList').append(div)
+      div.querySelector('.stat__btn').addEventListener('click', e => {
+        const statPopup = document.querySelector(`.popup[data-name=${div.querySelector('.stat__btn').getAttribute('data-popup')}]`)
+        statPopup.style = 'display: flex !important'
+        statPopup.classList.add('active')
+
+        statPopup.querySelectorAll('.popup__item').forEach(i => i.remove())
+        for(key in statPositionLables) {
+          if(item[key]) {
+            const div = document.createElement('div')
+            div.classList.add('popup__item')
+            div.innerHTML = `
+              <div class="popup__text">
+                ${statPositionLables[key].title}
+              </div>
+
+              <div class="popup__some">
+                ${formatStatPositionLabel(key, item[key])}
+              </div>
+            `
+            statPopup.querySelector('.popup__content').append(div)
+          }
+        }
+      })
+    })
+  })
 
 // Symbol
 if (localStorage.getItem("bot-symbol")) {
@@ -236,13 +331,6 @@ document
 //     },
 //   };
 // }
-
-const headers = () => {
-  return {
-    api_key: document.querySelector('input[name="api-key"]').value,
-    api_secret: document.querySelector('input[name="api-secret"]').value,
-  };
-};
 
 const loadBalance = () => {
   axios
