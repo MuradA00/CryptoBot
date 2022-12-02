@@ -126,42 +126,6 @@ const formatStatPositionLabel = (key, value) => {
   }
 }
 
-axios.get(`${pathAPI}/bot/positions`)
-  .then(({data}) => {
-    data.forEach(item => {
-      const div = document.createElement('div')
-      div.classList.add('stat__item')
-      div.innerHTML = `
-        <div class="stat__text">${item.symbol} ${moment(item.data).format('hh:mm DD.MM.YYYY')} - ${item.side}</div>
-        <button data-popup="statPos" class="stat__btn">Link</button>
-      `
-      document.querySelector('#openPositionList').append(div)
-      div.querySelector('.stat__btn').addEventListener('click', e => {
-        const statPopup = document.querySelector(`.popup[data-name=${div.querySelector('.stat__btn').getAttribute('data-popup')}]`)
-        statPopup.style = 'display: flex !important'
-        statPopup.classList.add('active')
-
-        statPopup.querySelectorAll('.popup__item').forEach(i => i.remove())
-        for(key in statPositionLables) {
-          if(item[key]) {
-            const div = document.createElement('div')
-            div.classList.add('popup__item')
-            div.innerHTML = `
-              <div class="popup__text">
-                ${statPositionLables[key].title}
-              </div>
-
-              <div class="popup__some">
-                ${formatStatPositionLabel(key, item[key])}
-              </div>
-            `
-            statPopup.querySelector('.popup__content').append(div)
-          }
-        }
-      })
-    })
-  })
-
 // Symbol
 if (localStorage.getItem("bot-symbol")) {
   document.querySelector(
@@ -342,6 +306,44 @@ const loadBalance = () => {
         data.data.balance.toFixed() + "$";
     });
 };
+
+
+
+axios.get(`${pathAPI}/bot/positions`, { headers: headers()})
+  .then(({data}) => {
+    data.forEach(item => {
+      const div = document.createElement('div')
+      div.classList.add('stat__item')
+      div.innerHTML = `
+        <div class="stat__text">${item.symbol} ${moment(item.data).format('hh:mm DD.MM.YYYY')} - ${item.side}</div>
+        <button data-popup="statPos" class="stat__btn">Link</button>
+      `
+      document.querySelector('#openPositionList').append(div)
+      div.querySelector('.stat__btn').addEventListener('click', e => {
+        const statPopup = document.querySelector(`.popup[data-name=${div.querySelector('.stat__btn').getAttribute('data-popup')}]`)
+        statPopup.style = 'display: flex !important'
+        statPopup.classList.add('active')
+
+        statPopup.querySelectorAll('.popup__item').forEach(i => i.remove())
+        for(key in statPositionLables) {
+          if(item[key]) {
+            const div = document.createElement('div')
+            div.classList.add('popup__item')
+            div.innerHTML = `
+              <div class="popup__text">
+                ${statPositionLables[key].title}
+              </div>
+
+              <div class="popup__some">
+                ${formatStatPositionLabel(key, item[key])}
+              </div>
+            `
+            statPopup.querySelector('.popup__content').append(div)
+          }
+        }
+      })
+    })
+  })
 
 loadBalance();
 document
