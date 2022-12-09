@@ -178,6 +178,27 @@ testingTrigger.addEventListener("click", () => {
 
 
 const pathAPI = "/api";
+// const pathAPI = "http://localhost:5000"
+
+fetch(`${pathAPI}/last`, {
+  headers: {
+    'api-key': 'asd'
+  }
+})
+  .then(res => res.json())
+  .then(data => {
+    const newData = []
+    data.forEach(item => {
+      const {testingGAGR, optimizationGAGR} = item.data.GAGR
+      newData.push([testingGAGR, optimizationGAGR, 0.2])
+    })
+    myChart.setOption({
+      series: {
+        data: newData
+      }
+    })
+  })
+
 // const
 let indicator = null;
 if (!localStorage.getItem("indicator")) {
@@ -1510,7 +1531,8 @@ option = {
   // },
   tooltip: {},
   xAxis: {
-    // min: 1
+    min: -120,
+    max: 120
     // type: 'value',
     // min: 'dataMin',
     // max: 'dataMax',
@@ -1519,7 +1541,8 @@ option = {
       // }
   },
   yAxis: {
-    // min: 1
+    min: -120,
+    max: 120
     // type: 'value',
     // min: 'dataMin',
     // max: 'dataMax',
@@ -1609,5 +1632,5 @@ option = {
 myChart.setOption(option);
 
 myChart.on('click', function(params) {
-  alert(`Елемент под номером - ${params.dataIndex}`)
+  document.querySelectorAll('.main .table .table__inner button')[params.dataIndex].click()
 });
