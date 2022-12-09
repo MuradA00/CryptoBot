@@ -177,7 +177,8 @@ testingTrigger.addEventListener("click", () => {
 });
 
 
-const pathAPI = "/api";
+// const pathAPI = "/api";
+const pathAPI = "http://52.29.157.23:3000/api";
 // const pathAPI = "http://localhost:5000"
 
 fetch(`${pathAPI}/last`, {
@@ -1510,26 +1511,33 @@ areaSeries.setData([
 
 var myChart = echarts.init(document.getElementById('main'));
 
-var data1 = [];
-// var data2 = [];
-// var data3 = [];
-var random = function (max) {
-  return (Math.random() * max).toFixed(3);
-};
-var randomM = function (max) {
-  return (Math.random() * max - max / 2).toFixed(3);
-};
-for (var i = 0; i < 50; i++) {
-  data1.push([random(15), randomM(10), 0.2]);
-  // data2.push([random(10), randomM(10), 0.2]);
-  // data3.push([random(15), randomM(10), 0.2]);
-}
+// var data1 = [];
+// // var data2 = [];
+// // var data3 = [];
+// var random = function (max) {
+//   return (Math.random() * max).toFixed(3);
+// };
+// var randomM = function (max) {
+//   return (Math.random() * max - max / 2).toFixed(3);
+// };
+// for (var i = 0; i < 50; i++) {
+//   data1.push([random(15), randomM(10), 0.2]);
+//   // data2.push([random(10), randomM(10), 0.2]);
+//   // data3.push([random(15), randomM(10), 0.2]);
+// }
 option = {
+  // width: document.querySelector('.main__table .table').clientWidth,
   animation: false,
   // legend: {
   //   data: ['scatter', 'scatter2', 'scatter3']
   // },
-  tooltip: {},
+  tooltip: {
+    show: true,
+    formatter: function (param) {
+      console.log(param);
+      return '<div class="sss">testingGAGR: ' + param.value[0] + '<br>optimizationGAGR: ' + param.value[1] + '</div>';
+    },
+  },
   xAxis: {
     min: -120,
     max: 120
@@ -1598,7 +1606,7 @@ option = {
       symbolSize: function (val) {
         return val[2] * 40;
       },
-      data: data1
+      // data: data1
     },
     // {
     //   name: 'scatter2',
@@ -1630,6 +1638,12 @@ option = {
 };
 
 myChart.setOption(option);
+
+window.addEventListener('resize', () => {
+  myChart.resize({
+    // width: document.querySelector('.main__table .table').clientWidth
+  })
+})
 
 myChart.on('click', function(params) {
   document.querySelectorAll('.main .table .table__inner button')[params.dataIndex].click()
