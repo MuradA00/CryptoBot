@@ -177,8 +177,8 @@ testingTrigger.addEventListener("click", () => {
 });
 
 
-// const pathAPI = "/api";
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "/api";
+// const pathAPI = "http://52.29.157.23:3000/api";
 // const pathAPI = "http://localhost:5000"
 
 fetch(`${pathAPI}/last`, {
@@ -545,6 +545,19 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
           fetch(`${pathAPI}/result/${e.target.getAttribute("data-path")}`)
             .then((res) => res.json())
             .then((data) => {
+              const newData = []
+              data.forEach(item => {
+                if(item.data.GAGR)
+                {
+                  const {testingGAGR, optimizationGAGR} = item.data.GAGR
+                  newData.push([testingGAGR, optimizationGAGR, 0.2])
+                }
+              })
+              myChart.setOption({
+                series: {
+                  data: newData
+                }
+              })
               document
                 .querySelectorAll(".table__inner")
                 .forEach((item) => item.remove());
