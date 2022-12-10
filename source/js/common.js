@@ -177,28 +177,9 @@ testingTrigger.addEventListener("click", () => {
 });
 
 
-const pathAPI = "/api";
-// const pathAPI = "http://52.29.157.23:3000/api";
-// const pathAPI = "http://localhost:5000"
-
-fetch(`${pathAPI}/last`, {
-  headers: {
-    'api-key': 'asd'
-  }
-})
-  .then(res => res.json())
-  .then(data => {
-    const newData = []
-    data.forEach(item => {
-      const {testingGAGR, optimizationGAGR} = item.data.GAGR
-      newData.push([testingGAGR, optimizationGAGR, 0.2])
-    })
-    myChart.setOption({
-      series: {
-        data: newData
-      }
-    })
-  })
+let pathAPI = "/api";
+// let pathAPI = "http://52.29.157.23:3000/api";
+// let pathAPI = "http://localhost:5000"
 
 // const
 let indicator = null;
@@ -299,12 +280,26 @@ document.querySelectorAll(".hidden-cells__item input").forEach((item) =>
   })
 );
 
-fetch(`${pathAPI}/last`).then(async (response) => {
-  const res = await response.json();
+fetch(`${pathAPI}/last`)
+.then(res => res.json())
+.then(data => {
+  console.log(data)
+
+  const newData = []
+  data.forEach(item => {
+    const {testingGAGR, optimizationGAGR} = item.data.GAGR
+    newData.push([testingGAGR, optimizationGAGR, 0.2])
+  })
+  myChart.hideLoading()
+  myChart.setOption({
+    series: {
+      data: newData
+    }
+  })
 
   // document.querySelectorAll('.table__inner').forEach(item => item.remove())
 
-  res.forEach((item, index) => {
+  data.forEach((item, index) => {
     const elem = document.createElement("div");
     elem.classList.add("table__inner");
     elem.innerHTML = `
@@ -507,7 +502,8 @@ fetch(`${pathAPI}/last`).then(async (response) => {
       }
     });
   });
-});
+})
+.catch(err => console.log(err))
 
 document.querySelector("#journalTrigger").addEventListener("click", (e) => {
   fetch(`${pathAPI}/results`)
@@ -933,18 +929,34 @@ if (localStorage.getItem("expert")) {
   localStorage.setItem("expert", JSON.stringify(expert));
 }
 for (item in expert) {
-  document.querySelector(`#expert input[name="${item}"][type="number"]`).value =
-    expert[item];
+  if(expert[item] === false || expert[item] === true) {
+    document.querySelector(`#expert input[name="${item}"]`).checked =
+        expert[item];
+    } else {
+    document.querySelector(`#expert input[name="${item}"]`).value =
+      expert[item];
+  }
 }
+document.querySelectorAll('#expert .expert__value-row:last-child').forEach(item => {
+  if(!item.querySelector('#toggle-btn').checked) {
+    item.querySelectorAll('input[type=number]').forEach(i => i.disabled = true)
+  }
+})
 document.querySelectorAll('#expert input[type="number"]').forEach((item) => {
   item.addEventListener("change", (e) => {
     expert[e.target.name] = e.target.value;
     localStorage.setItem("expert", JSON.stringify(expert));
   });
   item.addEventListener("input", () => {
+    console.log(expert)
     document.querySelector(".expert__button-total").textContent =
       calcExpert().toFixed() + ' проходов';
   });
+});
+document.querySelector('#expert input[name=hmaFilterEnableb]').addEventListener("change", (e) => {
+  expert[e.target.name] = e.target.checked;
+  console.log(expert.hmaFilterEnableb, e.target.checked);
+  localStorage.setItem("expert", JSON.stringify(expert));
 });
 document.querySelectorAll('#expert .expert__button input[type="checkbox"]').forEach((item) => {
   item.addEventListener("change", (e) => {
@@ -1309,7 +1321,7 @@ setInterval(() => {
       document.querySelector(".progress__percent").classList.add("--startBar");
       document.querySelector(".progress__percent").style.width = data + "%";
     })
-    .catch((err) => console.log(err));
+    // .catch((err) => console.log(err));
 }, 1000);
 
 // function createSimpleSwitcher(items, activeItem, activeItemChangedCallback) {
@@ -1544,6 +1556,12 @@ option = {
   // legend: {
   //   data: ['scatter', 'scatter2', 'scatter3']
   // },
+  grid: {
+    top: '2%',
+    left: '5%',
+    right: '3%',
+    bottom: '8%',
+  },
   tooltip: {
     show: true,
     formatter: function (param) {
@@ -1552,8 +1570,8 @@ option = {
     },
   },
   xAxis: {
-    min: -120,
-    max: 120
+    // min: -120,
+    // max: 120
     // type: 'value',
     // min: 'dataMin',
     // max: 'dataMax',
@@ -1562,8 +1580,8 @@ option = {
       // }
   },
   yAxis: {
-    min: -120,
-    max: 120
+    // min: -120,
+    // max: 120
     // type: 'value',
     // min: 'dataMin',
     // max: 'dataMax',
@@ -1656,6 +1674,10 @@ window.addEventListener('resize', () => {
   myChart.resize({
     // width: document.querySelector('.main__table .table').clientWidth
   })
+})
+
+myChart.showLoading({
+  maskColor: 'rgba(255, 255, 255, 0.4)'
 })
 
 myChart.on('click', function(params) {
