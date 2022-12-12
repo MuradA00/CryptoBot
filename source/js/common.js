@@ -1570,24 +1570,40 @@ option = {
     },
   },
   xAxis: {
-    // min: -120,
-    // max: 120
-    // type: 'value',
-    // min: 'dataMin',
-    // max: 'dataMax',
-    // splitLine: {
-      //   show: true
-      // }
+    splitLine: {
+      lineStyle: {
+        color: '#595959',
+        width: 1
+      }
+    },
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: '#b3b3b3',
+        width: 1
+      }
+    },
+    axisTick: {
+      show: false
+    }
   },
   yAxis: {
-    // min: -120,
-    // max: 120
-    // type: 'value',
-    // min: 'dataMin',
-    // max: 'dataMax',
-    // splitLine: {
-    //   show: true
-    // }
+    splitLine: {
+      lineStyle: {
+        color: '#595959',
+        width: 1
+      }
+    },
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: '#b3b3b3',
+        width: 1
+      }
+    },
+    axisTick: {
+      show: false
+    }
   },
   dataZoom: [
     // {
