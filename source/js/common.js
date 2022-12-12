@@ -280,6 +280,39 @@ document.querySelectorAll(".hidden-cells__item input").forEach((item) =>
   })
 );
 
+(function() {
+  function decimalAdjust(type, value, exp) {
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+  if (!Math.round10) {
+    Math.round10 = function(value, exp) {
+      return decimalAdjust('round', value, exp);
+    };
+  }
+  if (!Math.floor10) {
+    Math.floor10 = function(value, exp) {
+      return decimalAdjust('floor', value, exp);
+    };
+  }
+  if (!Math.ceil10) {
+    Math.ceil10 = function(value, exp) {
+      return decimalAdjust('ceil', value, exp);
+    };
+  }
+})();
+
 fetch(`${pathAPI}/last`)
 .then(res => res.json())
 .then(data => {
@@ -294,8 +327,52 @@ fetch(`${pathAPI}/last`)
   myChart.setOption({
     series: {
       data: newData
+    },
+    xAxis: {
+      min: function(value) {
+        const newValue = value.min
+        return Math.floor10(value.min * 1.2, newValue.toFixed().toString().length - 2)
+      },
+      max: function(value) {
+        const newValue = value.max
+        return Math.ceil10(value.max * 1.2, newValue.toFixed().toString().length - 2)
+      }
+    },
+    yAxis: {
+      min: function(value) {
+        const newValue = value.min
+        return Math.floor10(value.min * 1.2, newValue.toFixed().toString().length - 2)
+      },
+      max: function(value) {
+        const newValue = value.max
+        return Math.ceil10(value.max * 1.2, newValue.toFixed().toString().length - 2)
+      }
     }
   })
+  // myChart.setOption({
+  //   xAxis: {
+  //     min: function (value) {
+  //       const newValue = value.min + value.min * 0.2
+  //       return Math.ceil10(newValue, newValue.toString().length - 1);
+  //     },
+  //     max: function (value) {
+  //       const newValue = value.max + value.max * 0.2
+  //       return Math.floor10(newValue, newValue.toString().length - 1);
+  //     }
+  //   },
+  //   yAxis: {
+  //     min: function (value) {
+  //       const newValue = value.min + value.min * 0.2
+  //       return Math.ceil10(newValue, newValue.toString().length - 1);
+  //     },
+  //     max: function (value) {
+  //       const newValue = value.max + value.max * 0.2
+  //       console.log(value);
+  //       console.log(Math.floor10(newValue, newValue.toString().length - 1), newValue, newValue.toString().length - 1);
+  //       return Math.floor10(newValue, newValue.toString().length - 1);
+  //     }
+  //   }
+  // })
 
   // document.querySelectorAll('.table__inner').forEach(item => item.remove())
 
@@ -1576,6 +1653,8 @@ option = {
         width: 1
       }
     },
+    min: -120,
+    max: 120,
     type: 'value',
     axisLine: {
       lineStyle: {
@@ -1595,6 +1674,8 @@ option = {
       }
     },
     type: 'value',
+    min: -120,
+    max: 120,
     axisLine: {
       lineStyle: {
         color: '#b3b3b3',
@@ -1692,9 +1773,9 @@ window.addEventListener('resize', () => {
   })
 })
 
-myChart.showLoading({
-  maskColor: 'rgba(255, 255, 255, 0.4)'
-})
+// myChart.showLoading({
+//   maskColor: 'rgba(255, 255, 255, 0.4)'
+// })
 
 myChart.on('click', function(params) {
   document.querySelectorAll('.main .table .table__inner button')[params.dataIndex].click()
