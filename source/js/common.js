@@ -331,21 +331,21 @@ fetch(`${pathAPI}/last`)
     xAxis: {
       min: function(value) {
         const newValue = value.min
-        return Math.floor10(value.min * 1.2, newValue.toFixed().toString().length - 2)
+        return Math.floor10(value.min * 1.2 - 200, newValue.toFixed().toString().length - 1)
       },
       max: function(value) {
         const newValue = value.max
-        return Math.ceil10(value.max * 1.2, newValue.toFixed().toString().length - 2)
+        return Math.ceil10(value.max * 1.2 + 200, newValue.toFixed().toString().length - 1)
       }
     },
     yAxis: {
       min: function(value) {
         const newValue = value.min
-        return Math.floor10(value.min * 1.2, newValue.toFixed().toString().length - 2)
+        return Math.floor10(value.min * 1.2, newValue.toFixed().toString().length - 1)
       },
       max: function(value) {
         const newValue = value.max
-        return Math.ceil10(value.max * 1.2, newValue.toFixed().toString().length - 2)
+        return Math.ceil10(value.max * 1.2, newValue.toFixed().toString().length - 1)
       }
     }
   })
@@ -506,10 +506,10 @@ fetch(`${pathAPI}/last`)
           Комиссия - ${item.data.params.config.commission}
         </div>
         <div class="graph-info__item">
-          Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
+          Начало - ${moment(item.data.startTime).format("MM-DD-YYYY kk:mm:ss")}
         </div>
         <div class="graph-info__item">
-          Конец - ${moment(item.data.endTime).format("MM-DD-YYYY hh:mm:ss")}
+          Конец - ${moment(item.data.endTime).format("MM-DD-YYYY kk:mm:ss")}
         </div>
         <div class="graph-info__item">
           Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
@@ -599,7 +599,7 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
         elem.innerHTML = `
         <div class="journal-list__item-inner steps-list__item-inner">
           <div class="journal-list__info">
-            ${moment(dateSec).format("MM-DD-YYYY hh:mm:ss")}
+            ${moment(dateSec).format("MM-DD-YYYY kk:mm:ss")}
           </div>
           <a href="#" data-path="${dateSec}" class="journal-list__link _active-optim-btn modal-btn _optim-btn">
             Link
@@ -767,10 +767,10 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                         Комиссия - ${item.data.params.config.commission}
                       </div>
                       <div class="graph-info__item">
-                        Начало - ${moment(item.data.startTime).format("MM-DD-YYYY hh:mm:ss")}
+                        Начало - ${moment(item.data.startTime).format("MM-DD-YYYY kk:mm:ss")}
                       </div>
                       <div class="graph-info__item">
-                        Конец - ${moment(item.data.endTime).format("MM-DD-YYYY hh:mm:ss")}
+                        Конец - ${moment(item.data.endTime).format("MM-DD-YYYY kk:mm:ss")}
                       </div>
                       <div class="graph-info__item">
                         Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$

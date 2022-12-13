@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-const pathAPI = "/api";
-// const pathAPI = "http://52.29.157.23:3000/api";
+// const pathAPI = "/api";
+const pathAPI = "http://52.29.157.23:3000/api";
 
 
 const headers = () => {
@@ -113,7 +113,7 @@ const statPositionLables = {
 
 const formatStatPositionLabel = (key, value) => {
   if(key === 'data') {
-    return moment(value).format('hh:mm DD.MM.YYYY')
+    return moment(value).format('kk:mm DD.MM.YYYY')
   }
 
   if(!isNaN(+value)) {
@@ -301,9 +301,11 @@ const loadBalance = () => {
     .get(`${pathAPI}/bot/balance`, {
       headers: headers(),
     })
-    .then((data) => {
-      document.querySelector(".chart-block__price").textContent =
-        data.data.balance.toFixed() + "$";
+    .then(({data}) => {
+      if(data.balance) {
+        document.querySelector(".chart-block__price").textContent =
+        data.balance.toFixed() + "$";
+      }
     });
 };
 
@@ -315,7 +317,7 @@ axios.get(`${pathAPI}/bot/positions`, { headers: headers()})
       const div = document.createElement('div')
       div.classList.add('stat__item')
       div.innerHTML = `
-        <div class="stat__text">${item.symbol} ${moment(item.data).format('hh:mm DD.MM.YYYY')} - ${item.side}</div>
+        <div class="stat__text">${item.symbol} ${moment(item.data).format('kk:mm DD.MM.YYYY')} - ${item.side}</div>
         <button data-popup="statPos" class="stat__btn">Link</button>
       `
       document.querySelector('#openPositionList').append(div)
@@ -429,7 +431,7 @@ const loadTraders = () => {
         elem.classList.add("popup__item");
         elem.innerHTML = `
         <div class="popup__text">
-          ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY hh:mm")}
+          ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY kk:mm")}
         </div>
         <button class="btn-red popup__btn">Stop</button>
       `;
@@ -472,7 +474,7 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
         elem.classList.add("popup__item");
         elem.innerHTML = `
           <div class="popup__text">
-            ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY hh:mm")}
+            ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY kk:mm")}
           </div>
           <button class="btn-red popup__btn">Stop</button>
         `;
