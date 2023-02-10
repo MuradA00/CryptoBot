@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 const pathAPI = "/api";
 // const pathAPI = "http://52.29.157.23:3000/api";
 
-
 const headers = () => {
   return {
     api_key: document.querySelector('input[name="api-key"]').value,
@@ -77,54 +76,54 @@ window.addEventListener("click", (e) => {
 
 const statPositionLables = {
   symbol: {
-    title: 'Валютная пара'
+    title: "Валютная пара",
   },
   data: {
-    title: 'Дата и время открытия сделки'
+    title: "Дата и время открытия сделки",
   },
   entryPrice: {
-    title: 'Цена открытия',
-    endSymbol: '$'
+    title: "Цена открытия",
+    endSymbol: "$",
   },
   stopLoss: {
-    title: 'Цена Стоп-Лосс',
-    endSymbol: '$'
+    title: "Цена Стоп-Лосс",
+    endSymbol: "$",
   },
   takeProfit: {
-    title: 'Цена Тейк-Профит',
-    endSymbol: '$'
+    title: "Цена Тейк-Профит",
+    endSymbol: "$",
   },
   curentPNL: {
-    title: 'Текущий P&L в $ (%)',
-    endSymbol: '%'
+    title: "Текущий P&L в $ (%)",
+    endSymbol: "%",
   },
   stopLossPNL: {
-    title: 'Расчетный  P&L в $ (%) если сработает Стоп-Лосс',
+    title: "Расчетный  P&L в $ (%) если сработает Стоп-Лосс",
   },
   takeProfitPNL: {
-    title: 'Расчетный  P&L в $ (%) если сработает Тейк-Профит',
-    endSymbol: '%'
+    title: "Расчетный  P&L в $ (%) если сработает Тейк-Профит",
+    endSymbol: "%",
   },
   // symbol: {
   //   title: 'Риск на депозит в $ (%)',
   //   endSymbol: '%'
   // },
-}
+};
 
 const formatStatPositionLabel = (key, value) => {
-  if(key === 'data') {
-    return moment(value).format('HH:mm DD.MM.YYYY')
+  if (key === "data") {
+    return moment(value).format("HH:mm DD.MM.YYYY");
   }
 
-  if(!isNaN(+value)) {
-    if(key.endSymbol) {
-      return value.toFixed(2) + key.endSymbol
+  if (!isNaN(+value)) {
+    if (key.endSymbol) {
+      return value.toFixed(2) + key.endSymbol;
     }
-    return value.toFixed(2)
+    return value.toFixed(2);
   } else {
-    return value
+    return value;
   }
-}
+};
 
 // Symbol
 if (localStorage.getItem("bot-symbol")) {
@@ -301,36 +300,41 @@ const loadBalance = () => {
     .get(`${pathAPI}/bot/balance`, {
       headers: headers(),
     })
-    .then(({data}) => {
-      if(data.balance) {
+    .then(({ data }) => {
+      if (data.balance) {
         document.querySelector(".chart-block__price").textContent =
-        data.balance.toFixed() + "$";
+          data.balance.toFixed() + "$";
       }
     });
 };
 
-
-
-axios.get(`${pathAPI}/bot/positions`, { headers: headers()})
-  .then(({data}) => {
-    data.forEach(item => {
-      const div = document.createElement('div')
-      div.classList.add('stat__item')
+axios
+  .get(`${pathAPI}/bot/positions`, { headers: headers() })
+  .then(({ data }) => {
+    data.forEach((item) => {
+      const div = document.createElement("div");
+      div.classList.add("stat__item");
       div.innerHTML = `
-        <div class="stat__text">${item.symbol} ${moment(item.data).format('HH:mm DD.MM.YYYY')} - ${item.side}</div>
+        <div class="stat__text">${item.symbol} ${moment(item.data).format(
+        "HH:mm DD.MM.YYYY"
+      )} - ${item.side}</div>
         <button data-popup="statPos" class="stat__btn">Link</button>
-      `
-      document.querySelector('#openPositionList').append(div)
-      div.querySelector('.stat__btn').addEventListener('click', e => {
-        const statPopup = document.querySelector(`.popup[data-name=${div.querySelector('.stat__btn').getAttribute('data-popup')}]`)
-        statPopup.style = 'display: flex !important'
-        statPopup.classList.add('active')
+      `;
+      document.querySelector("#openPositionList").append(div);
+      div.querySelector(".stat__btn").addEventListener("click", (e) => {
+        const statPopup = document.querySelector(
+          `.popup[data-name=${div
+            .querySelector(".stat__btn")
+            .getAttribute("data-popup")}]`
+        );
+        statPopup.style = "display: flex !important";
+        statPopup.classList.add("active");
 
-        statPopup.querySelectorAll('.popup__item').forEach(i => i.remove())
-        for(key in statPositionLables) {
-          if(item[key]) {
-            const div = document.createElement('div')
-            div.classList.add('popup__item')
+        statPopup.querySelectorAll(".popup__item").forEach((i) => i.remove());
+        for (key in statPositionLables) {
+          if (item[key]) {
+            const div = document.createElement("div");
+            div.classList.add("popup__item");
             div.innerHTML = `
               <div class="popup__text">
                 ${statPositionLables[key].title}
@@ -339,79 +343,63 @@ axios.get(`${pathAPI}/bot/positions`, { headers: headers()})
               <div class="popup__some">
                 ${formatStatPositionLabel(key, item[key])}
               </div>
-            `
-            statPopup.querySelector('.popup__content').append(div)
+            `;
+            statPopup.querySelector(".popup__content").append(div);
           }
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
 loadBalance();
 document
   .querySelector(".popup[data-name=generalSettings] .popup__close")
   .addEventListener("click", loadBalance);
 
-document.querySelectorAll('input[name=takeProfit], input[name=stopLoss]').forEach(item => {
-  item.addEventListener('input', e => {
-    item.value = item.value.replace(/\,/g, '.')
-  })
-})
+document
+  .querySelectorAll("input[name=takeProfit], input[name=stopLoss]")
+  .forEach((item) => {
+    item.addEventListener("input", (e) => {
+      item.value = item.value.replace(/\,/g, ".");
+    });
+  });
 
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
-    config: {
-      params: {
-        hma: {
-          hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
-        },
-        params: {
-          stopLoss: +document.querySelector("input[name=stopLoss]").value,
-          takeProfit: +document.querySelector("input[name=takeProfit]").value,
-          breakevenLevel: +document.querySelector("input[name=breakevenLevel]")
-            .value,
-          indentBreakevenLevel: +document.querySelector(
-            "input[name=indentBreakevenLevel]"
-          ).value,
-        },
-        config: {
-          deposit: 1000000,
-          lotPersent: +document.querySelector("input[name=lotPersent]").value,
-          leverage: +document.querySelector("input[name=leverage]").value,
-          commission: 0,
-          maxPosition: +document.querySelector("input[name=maxPosition]").value
-        },
-        timeFrame: document
-          .querySelector(".selector-row__item._selector-active")
-          .getAttribute("data-value"),
-        symbol: document.querySelector("input[name=symbol]:checked").id,
-      },
-    },
+    hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
+    stopLoss: +document.querySelector("input[name=stopLoss]").value,
+    takeProfit: +document.querySelector("input[name=takeProfit]").value,
+    breakevenLevel: +document.querySelector("input[name=breakevenLevel]").value,
+    indentBreakevenLevel: +document.querySelector(
+      "input[name=indentBreakevenLevel]"
+    ).value,
+    lotPersent: +document.querySelector("input[name=lotPersent]").value,
+    leverage: +document.querySelector("input[name=leverage]").value,
+    maxPositions: +document.querySelector("input[name=maxPositions]").value,
+    timeFrame: document
+      .querySelector(".selector-row__item._selector-active")
+      .getAttribute("data-value"),
+    symbol: document.querySelector("input[name=symbol]:checked").id,
   };
   if (indicator === "stoch") {
-    formData.config.params.stoch = {
-      kPeriod: +document.querySelector("input[name=kPeriod]").value,
-      kSmoothingPeriod: +document.querySelector("input[name=kSmoothingPeriod]")
-        .value,
-      dPeriod: +document.querySelector("input[name=dPeriod]").value,
-    };
-    formData.config.params.hma.hma = +document.querySelector(
-      "input[name=kPeriod]"
+    formData.kPeriod = +document.querySelector("input[name=kPeriod]").value;
+    formData.kSmoothingPeriod = +document.querySelector(
+      "input[name=kSmoothingPeriod]"
     ).value;
+    formData.dPeriod = +document.querySelector("input[name=dPeriod]").value;
+    formData.hmaShort = +document.querySelector("input[name=hma]").value;
   }
   if (indicator === "macd") {
-    formData.config.params.macd = {
-      fastPeriod: +document.querySelector("input[name=fastPeriod]").value,
-      slowPeriod: +document.querySelector("input[name=slowPeriod]").value,
-      signalPeriod: +document.querySelector("input[name=signalPeriod]").value,
-    };
-    formData.config.params.hma.hmaShort = +document.querySelector(
-      "input[name=hmaShort]"
-    ).value;
-    formData.config.params.hma.hmaLong = +document.querySelector(
-      "input[name=hmaLong]"
-    ).value;
+    formData.fastPeriod = +document.querySelector("input[name=fastPeriod]")
+      .value;
+    formData.slowPeriod = +document.querySelector("input[name=slowPeriod]")
+      .value;
+    formData.signalPeriod = +document.querySelector("input[name=signalPeriod]")
+      .value;
+    formData.hmaShort = +document.querySelector("input[name=hmaShort]").value;
+    formData.hmaLong = +document.querySelector("input[name=hmaLong]").value;
   }
+
   axios
     .post(`${pathAPI}/bot/trader`, formData, {
       headers: headers(),
