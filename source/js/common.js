@@ -320,8 +320,10 @@ fetch(`${pathAPI}/last`)
 
   const newData = []
   data.forEach(item => {
-    const {testingGAGR, optimizationGAGR} = item.data.GAGR
-    newData.push([testingGAGR, optimizationGAGR, 0.2])
+    if(item.data.GAGR) {
+      const {testingGAGR, optimizationGAGR} = item.data.GAGR
+      newData.push([testingGAGR, optimizationGAGR, 0.2])
+    }
   })
   myChart.hideLoading()
   myChart.setOption({
@@ -506,10 +508,10 @@ fetch(`${pathAPI}/last`)
           Комиссия - ${item.data.params.config.commission}
         </div>
         <div class="graph-info__item">
-          Начало - ${moment(item.data.startTime).format("MM-DD-YYYY kk:mm:ss")}
+          Начало - ${moment(item.data.startTime).format("MM-DD-YYYY HH:mm:ss")}
         </div>
         <div class="graph-info__item">
-          Конец - ${moment(item.data.endTime).format("MM-DD-YYYY kk:mm:ss")}
+          Конец - ${moment(item.data.endTime).format("MM-DD-YYYY HH:mm:ss")}
         </div>
         <div class="graph-info__item">
           Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
@@ -599,7 +601,7 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
         elem.innerHTML = `
         <div class="journal-list__item-inner steps-list__item-inner">
           <div class="journal-list__info">
-            ${moment(dateSec).format("MM-DD-YYYY kk:mm:ss")}
+            ${moment(dateSec).format("MM-DD-YYYY HH:mm:ss")}
           </div>
           <a href="#" data-path="${dateSec}" class="journal-list__link _active-optim-btn modal-btn _optim-btn">
             Link
@@ -767,10 +769,10 @@ document.querySelector("#journalTrigger").addEventListener("click", (e) => {
                         Комиссия - ${item.data.params.config.commission}
                       </div>
                       <div class="graph-info__item">
-                        Начало - ${moment(item.data.startTime).format("MM-DD-YYYY kk:mm:ss")}
+                        Начало - ${moment(item.data.startTime).format("MM-DD-YYYY HH:mm:ss")}
                       </div>
                       <div class="graph-info__item">
-                        Конец - ${moment(item.data.endTime).format("MM-DD-YYYY kk:mm:ss")}
+                        Конец - ${moment(item.data.endTime).format("MM-DD-YYYY HH:mm:ss")}
                       </div>
                       <div class="graph-info__item">
                         Итоговый баланс - ${item.data.totalBalance.toFixed(1)}$
@@ -1642,7 +1644,6 @@ option = {
   tooltip: {
     show: true,
     formatter: function (param) {
-      console.log(param);
       return '<div class="sss">testingGAGR: ' + param.value[0] + '<br>optimizationGAGR: ' + param.value[1] + '</div>';
     },
   },

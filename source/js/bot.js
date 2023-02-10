@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// const pathAPI = "/api";
-const pathAPI = "http://52.29.157.23:3000/api";
+const pathAPI = "/api";
+// const pathAPI = "http://52.29.157.23:3000/api";
 
 
 const headers = () => {
@@ -113,7 +113,7 @@ const statPositionLables = {
 
 const formatStatPositionLabel = (key, value) => {
   if(key === 'data') {
-    return moment(value).format('kk:mm DD.MM.YYYY')
+    return moment(value).format('HH:mm DD.MM.YYYY')
   }
 
   if(!isNaN(+value)) {
@@ -317,7 +317,7 @@ axios.get(`${pathAPI}/bot/positions`, { headers: headers()})
       const div = document.createElement('div')
       div.classList.add('stat__item')
       div.innerHTML = `
-        <div class="stat__text">${item.symbol} ${moment(item.data).format('kk:mm DD.MM.YYYY')} - ${item.side}</div>
+        <div class="stat__text">${item.symbol} ${moment(item.data).format('HH:mm DD.MM.YYYY')} - ${item.side}</div>
         <button data-popup="statPos" class="stat__btn">Link</button>
       `
       document.querySelector('#openPositionList').append(div)
@@ -352,6 +352,12 @@ document
   .querySelector(".popup[data-name=generalSettings] .popup__close")
   .addEventListener("click", loadBalance);
 
+document.querySelectorAll('input[name=takeProfit], input[name=stopLoss]').forEach(item => {
+  item.addEventListener('input', e => {
+    item.value = item.value.replace(/\,/g, '.')
+  })
+})
+
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
     config: {
@@ -373,6 +379,7 @@ document.querySelector(".start-stream").addEventListener("click", () => {
           lotPersent: +document.querySelector("input[name=lotPersent]").value,
           leverage: +document.querySelector("input[name=leverage]").value,
           commission: 0,
+          maxPosition: +document.querySelector("input[name=maxPosition]").value
         },
         timeFrame: document
           .querySelector(".selector-row__item._selector-active")
@@ -431,7 +438,7 @@ const loadTraders = () => {
         elem.classList.add("popup__item");
         elem.innerHTML = `
         <div class="popup__text">
-          ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY kk:mm")}
+          ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY HH:mm")}
         </div>
         <button class="btn-red popup__btn">Stop</button>
       `;
@@ -474,7 +481,7 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
         elem.classList.add("popup__item");
         elem.innerHTML = `
           <div class="popup__text">
-            ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY kk:mm")}
+            ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY HH:mm")}
           </div>
           <button class="btn-red popup__btn">Stop</button>
         `;
