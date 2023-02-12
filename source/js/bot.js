@@ -372,58 +372,40 @@ document
 
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
-    config: {
-      params: {
-        hma: {
-          hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
-        },
-        params: {
-          stopLoss: +document.querySelector("input[name=stopLoss]").value,
-          takeProfit: +document.querySelector("input[name=takeProfit]").value,
-          breakevenLevel: +document.querySelector("input[name=breakevenLevel]")
-            .value,
-          indentBreakevenLevel: +document.querySelector(
-            "input[name=indentBreakevenLevel]"
-          ).value,
-        },
-        config: {
-          deposit: 1000000,
-          lotPersent: +document.querySelector("input[name=lotPersent]").value,
-          leverage: +document.querySelector("input[name=leverage]").value,
-          commission: 0,
-          maxPosition: +document.querySelector("input[name=maxPosition]").value,
-        },
-        timeFrame: document
-          .querySelector(".selector-row__item._selector-active")
-          .getAttribute("data-value"),
-        symbol: document.querySelector("input[name=symbol]:checked").id,
-      },
-    },
+    hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
+    stopLoss: +document.querySelector("input[name=stopLoss]").value,
+    takeProfit: +document.querySelector("input[name=takeProfit]").value,
+    breakevenLevel: +document.querySelector("input[name=breakevenLevel]").value,
+    indentBreakevenLevel: +document.querySelector(
+      "input[name=indentBreakevenLevel]"
+    ).value,
+    lotPersent: +document.querySelector("input[name=lotPersent]").value,
+    leverage: +document.querySelector("input[name=leverage]").value,
+    maxPositions: +document.querySelector("input[name=maxPositions]").value,
+    timeFrame: document
+      .querySelector(".selector-row__item._selector-active")
+      .getAttribute("data-value"),
+    symbol: document.querySelector("input[name=symbol]:checked").id,
   };
   if (indicator === "stoch") {
-    formData.config.params.stoch = {
-      kPeriod: +document.querySelector("input[name=kPeriod]").value,
-      kSmoothingPeriod: +document.querySelector("input[name=kSmoothingPeriod]")
-        .value,
-      dPeriod: +document.querySelector("input[name=dPeriod]").value,
-    };
-    formData.config.params.hma.hma = +document.querySelector(
-      "input[name=kPeriod]"
+    formData.kPeriod = +document.querySelector("input[name=kPeriod]").value;
+    formData.kSmoothingPeriod = +document.querySelector(
+      "input[name=kSmoothingPeriod]"
     ).value;
+    formData.dPeriod = +document.querySelector("input[name=dPeriod]").value;
+    formData.hmaShort = +document.querySelector("input[name=hma]").value;
   }
   if (indicator === "macd") {
-    formData.config.params.macd = {
-      fastPeriod: +document.querySelector("input[name=fastPeriod]").value,
-      slowPeriod: +document.querySelector("input[name=slowPeriod]").value,
-      signalPeriod: +document.querySelector("input[name=signalPeriod]").value,
-    };
-    formData.config.params.hma.hmaShort = +document.querySelector(
-      "input[name=hmaShort]"
-    ).value;
-    formData.config.params.hma.hmaLong = +document.querySelector(
-      "input[name=hmaLong]"
-    ).value;
+    formData.fastPeriod = +document.querySelector("input[name=fastPeriod]")
+      .value;
+    formData.slowPeriod = +document.querySelector("input[name=slowPeriod]")
+      .value;
+    formData.signalPeriod = +document.querySelector("input[name=signalPeriod]")
+      .value;
+    formData.hmaShort = +document.querySelector("input[name=hmaShort]").value;
+    formData.hmaLong = +document.querySelector("input[name=hmaLong]").value;
   }
+
   axios
     .post(`${pathAPI}/bot/trader`, formData, {
       headers: headers(),
