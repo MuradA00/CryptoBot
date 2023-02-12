@@ -1034,7 +1034,6 @@ document.querySelectorAll('#expert input[type="number"]').forEach((item) => {
 });
 document.querySelector('#expert input[name=hmaFilterEnableb]').addEventListener("change", (e) => {
   expert[e.target.name] = e.target.checked;
-  console.log(expert.hmaFilterEnableb, e.target.checked);
   localStorage.setItem("expert", JSON.stringify(expert));
 });
 document.querySelectorAll('#expert .expert__button input[type="checkbox"]').forEach((item) => {

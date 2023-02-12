@@ -139,26 +139,39 @@ document.querySelectorAll("input[name=symbol]").forEach((item) =>
 
 // Expert
 const expertFields = document.querySelectorAll(
-  ".popup[data-name=expertSettings] input.popup__input"
+  ".popup[data-name=expertSettings] input.popup__input, input[name=disabledHmaFilter]"
 );
 
 if (localStorage.getItem("bot-expert")) {
   const botExpertObject = JSON.parse(localStorage.getItem("bot-expert"));
   for (key in botExpertObject) {
-    document.querySelector(
-      `.popup[data-name=expertSettings] input.popup__input[name=${key}]`
-    ).value = botExpertObject[key];
+    if(key === 'disabledHmaFilter') {
+      document.querySelector(
+        `.popup[data-name=expertSettings] input[name=${key}]`
+      ).checked = botExpertObject[key];
+      if(!botExpertObject[key]) {
+        document.querySelector('input[name=hmaFilter]').disabled = true
+      }
+    } else {
+      document.querySelector(
+        `.popup[data-name=expertSettings] input.popup__input[name=${key}]`
+      ).value = botExpertObject[key];
+    }
   }
 }
 const saveExpert = () => {
   const newValues = {};
   expertFields.forEach((item) => {
-    newValues[item.name] = item.value;
+    if(item.type === 'checkbox') {
+      newValues[item.name] = item.checked;
+    } else {
+      newValues[item.name] = item.value;
+    }
   });
   localStorage.setItem("bot-expert", JSON.stringify(newValues));
 };
 expertFields.forEach((item) =>
-  item.addEventListener("input", () => {
+  item.addEventListener("change", () => {
     saveExpert();
   })
 );
@@ -219,7 +232,6 @@ document
   .querySelector("input[name=leverage]")
   .addEventListener("input", (e) => {
     const value = e.target.value.replace(/\D/g, "");
-    console.log(value);
     if (+value > 25) {
       e.target.value = 25;
     } else if (+value < 0) {
@@ -267,39 +279,6 @@ document
       }
     });
   });
-
-// {
-//   api_key: 'balabalalba',
-//   api_secret 'lewjrojweoirj',
-//   config: {
-//     params: {
-//       macd: {
-//         fastPeriod: 10,
-//         slowPeriod: 16,
-//         signalPeriod: 11,
-//       },
-//       hma: {
-//         hmaFilter: 0,
-//         hmaShort: 6,
-//         hmaLong: 10,
-//       },
-//       params: {
-//         stopLoss: 2,
-//         takeProfit: 3,
-//         breakevenLevel: 1,
-//         indentBreakevenLevel: 1,
-//       },
-//       config: {
-//         deposit: 1000000,
-//         lotPersent: 10,
-//         leverage: 10,
-//         commission: 0.01,
-//       },
-//       timeFrame: "1m",
-//       symbol: "BTCUSDT",
-//     },
-//   };
-// }
 
 const loadBalance = () => {
   axios
@@ -370,9 +349,18 @@ document
     });
   });
 
+document.querySelector('input[name=disabledHmaFilter]').addEventListener('change', e => {
+  if(e.target.checked) {
+    document.querySelector('input[name=hmaFilter]').disabled = false
+  } else {
+    document.querySelector('input[name=hmaFilter]').disabled = true
+  }
+})
+
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
-    hmaFilter: +document.querySelector("input[name=hmaFilter]").value,
+    strategy: indicator,
+    hmaFilter: document.querySelector('input[name=disabledHmaFilter]').checked ? +document.querySelector("input[name=hmaFilter]").value : 0,
     stopLoss: +document.querySelector("input[name=stopLoss]").value,
     takeProfit: +document.querySelector("input[name=takeProfit]").value,
     breakevenLevel: +document.querySelector("input[name=breakevenLevel]").value,

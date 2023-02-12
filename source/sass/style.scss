@@ -313,3 +313,7 @@ body.show .header,
 body.show main {
   opacity: 1 !important;
 }
+
+input[type="text"]:disabled {
+  opacity: 0.5;
+}
