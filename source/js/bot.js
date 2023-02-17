@@ -1,3 +1,21 @@
+const instance = axios.create({
+  baseURL: "http://52.29.157.23:3000/api",
+  headers: {
+    password: localStorage.getItem("password-test"),
+    api_key: document.querySelector('input[name="api-key"]').value,
+    api_secret: document.querySelector('input[name="api-secret"]').value,
+  },
+});
+
+instance.interceptors.response.use(
+  function (config) {
+    return config
+  },
+  function () {
+    window.location.replace('http://52.29.157.23:3000');
+  }
+)
+
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".popup__close").forEach((i) => {
     i.addEventListener("click", (e) => {
@@ -8,16 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
-
-const pathAPI = "/api";
-// const pathAPI = "http://52.29.157.23:3000/api";
-
-const headers = () => {
-  return {
-    api_key: document.querySelector('input[name="api-key"]').value,
-    api_secret: document.querySelector('input[name="api-secret"]').value,
-  };
-};
 
 // Indicator
 let indicator = "stoch";
@@ -104,10 +112,6 @@ const statPositionLables = {
     title: "Расчетный  P&L в $ (%) если сработает Тейк-Профит",
     endSymbol: "%",
   },
-  // symbol: {
-  //   title: 'Риск на депозит в $ (%)',
-  //   endSymbol: '%'
-  // },
 };
 
 const formatStatPositionLabel = (key, value) => {
@@ -145,12 +149,12 @@ const expertFields = document.querySelectorAll(
 if (localStorage.getItem("bot-expert")) {
   const botExpertObject = JSON.parse(localStorage.getItem("bot-expert"));
   for (key in botExpertObject) {
-    if(key === 'disabledHmaFilter') {
+    if (key === "disabledHmaFilter") {
       document.querySelector(
         `.popup[data-name=expertSettings] input[name=${key}]`
       ).checked = botExpertObject[key];
-      if(!botExpertObject[key]) {
-        document.querySelector('input[name=hmaFilter]').disabled = true
+      if (!botExpertObject[key]) {
+        document.querySelector("input[name=hmaFilter]").disabled = true;
       }
     } else {
       document.querySelector(
@@ -162,7 +166,7 @@ if (localStorage.getItem("bot-expert")) {
 const saveExpert = () => {
   const newValues = {};
   expertFields.forEach((item) => {
-    if(item.type === 'checkbox') {
+    if (item.type === "checkbox") {
       newValues[item.name] = item.checked;
     } else {
       newValues[item.name] = item.value;
@@ -281,46 +285,42 @@ document
   });
 
 const loadBalance = () => {
-  axios
-    .get(`${pathAPI}/bot/balance`, {
-      headers: headers(),
-    })
-    .then(({ data }) => {
-      if (data.balance) {
-        document.querySelector(".chart-block__price").textContent =
-          data.balance.toFixed() + "$";
-      }
-    });
+  instance.get("/bot/balance").then(({ data }) => {
+    console.log(data);
+    if (data.balance) {
+      document.querySelector(".chart-block__price").textContent =
+        data.balance.toFixed() + "$";
+    }
+  });
 };
 
-axios
-  .get(`${pathAPI}/bot/positions`, { headers: headers() })
-  .then(({ data }) => {
-    data.forEach((item) => {
-      const div = document.createElement("div");
-      div.classList.add("stat__item");
-      div.innerHTML = `
+instance.get("/bot/positions").then(({ data }) => {
+  console.log(data);
+  data.forEach((item) => {
+    const div = document.createElement("div");
+    div.classList.add("stat__item");
+    div.innerHTML = `
         <div class="stat__text">${item.symbol} ${moment(item.data).format(
-        "HH:mm DD.MM.YYYY"
-      )} - ${item.side}</div>
+      "HH:mm DD.MM.YYYY"
+    )} - ${item.side}</div>
         <button data-popup="statPos" class="stat__btn">Link</button>
       `;
-      document.querySelector("#openPositionList").append(div);
-      div.querySelector(".stat__btn").addEventListener("click", (e) => {
-        const statPopup = document.querySelector(
-          `.popup[data-name=${div
-            .querySelector(".stat__btn")
-            .getAttribute("data-popup")}]`
-        );
-        statPopup.style = "display: flex !important";
-        statPopup.classList.add("active");
+    document.querySelector("#openPositionList").append(div);
+    div.querySelector(".stat__btn").addEventListener("click", (e) => {
+      const statPopup = document.querySelector(
+        `.popup[data-name=${div
+          .querySelector(".stat__btn")
+          .getAttribute("data-popup")}]`
+      );
+      statPopup.style = "display: flex !important";
+      statPopup.classList.add("active");
 
-        statPopup.querySelectorAll(".popup__item").forEach((i) => i.remove());
-        for (key in statPositionLables) {
-          if (item[key]) {
-            const div = document.createElement("div");
-            div.classList.add("popup__item");
-            div.innerHTML = `
+      statPopup.querySelectorAll(".popup__item").forEach((i) => i.remove());
+      for (key in statPositionLables) {
+        if (item[key]) {
+          const div = document.createElement("div");
+          div.classList.add("popup__item");
+          div.innerHTML = `
               <div class="popup__text">
                 ${statPositionLables[key].title}
               </div>
@@ -329,12 +329,12 @@ axios
                 ${formatStatPositionLabel(key, item[key])}
               </div>
             `;
-            statPopup.querySelector(".popup__content").append(div);
-          }
+          statPopup.querySelector(".popup__content").append(div);
         }
-      });
+      }
     });
-  });
+  })
+});
 
 loadBalance();
 document
@@ -349,18 +349,22 @@ document
     });
   });
 
-document.querySelector('input[name=disabledHmaFilter]').addEventListener('change', e => {
-  if(e.target.checked) {
-    document.querySelector('input[name=hmaFilter]').disabled = false
-  } else {
-    document.querySelector('input[name=hmaFilter]').disabled = true
-  }
-})
+document
+  .querySelector("input[name=disabledHmaFilter]")
+  .addEventListener("change", (e) => {
+    if (e.target.checked) {
+      document.querySelector("input[name=hmaFilter]").disabled = false;
+    } else {
+      document.querySelector("input[name=hmaFilter]").disabled = true;
+    }
+  });
 
 document.querySelector(".start-stream").addEventListener("click", () => {
   const formData = {
     strategy: indicator,
-    hmaFilter: document.querySelector('input[name=disabledHmaFilter]').checked ? +document.querySelector("input[name=hmaFilter]").value : 0,
+    hmaFilter: document.querySelector("input[name=disabledHmaFilter]").checked
+      ? +document.querySelector("input[name=hmaFilter]").value
+      : 0,
     stopLoss: +document.querySelector("input[name=stopLoss]").value,
     takeProfit: +document.querySelector("input[name=takeProfit]").value,
     breakevenLevel: +document.querySelector("input[name=breakevenLevel]").value,
@@ -394,10 +398,8 @@ document.querySelector(".start-stream").addEventListener("click", () => {
     formData.hmaLong = +document.querySelector("input[name=hmaLong]").value;
   }
 
-  axios
-    .post(`${pathAPI}/bot/trader`, formData, {
-      headers: headers(),
-    })
+  instance
+    .post("/bot/trader", formData)
     .then(function (response) {
       console.log(response);
     })
@@ -407,38 +409,34 @@ document.querySelector(".start-stream").addEventListener("click", () => {
 });
 
 const loadTraders = () => {
-  axios
-    .get(`${pathAPI}/bot/traders`, {
-      headers: headers(),
-    })
-    .then((data) => {
-      document
-        .querySelectorAll('.popup[data-name="trade"] .popup__item')
-        .forEach((item) => item.remove());
-      data.data.forEach((item) => {
-        const elem = document.createElement("div");
-        elem.classList.add("popup__item");
-        elem.innerHTML = `
+  instance.get("/bot/traders").then(({ data }) => {
+    console.log(data);
+    document
+      .querySelectorAll('.popup[data-name="trade"] .popup__item')
+      .forEach((item) => item.remove());
+    data.forEach((item) => {
+      const elem = document.createElement("div");
+      elem.classList.add("popup__item");
+      elem.innerHTML = `
         <div class="popup__text">
           ${item.symbol} ${moment(item.startDate).format("DD.MM.YYYY HH:mm")}
         </div>
         <button class="btn-red popup__btn">Stop</button>
       `;
-        elem.querySelector(".btn-red").addEventListener("click", () => {
-          deleteTrader(item.symbol);
-        });
-        document
-          .querySelector('.popup[data-name="trade"] .popup__content')
-          .append(elem);
+      elem.querySelector(".btn-red").addEventListener("click", () => {
+        deleteTrader(item.symbol);
       });
+      document
+        .querySelector('.popup[data-name="trade"] .popup__content')
+        .append(elem);
     });
+  });
 };
 
 const deleteTrader = (symbol) => {
   console.log(symbol);
-  axios
-    .delete(`${pathAPI}/bot/trader`, {
-      headers: headers(),
+  instance
+    .delete("/bot/trader", {
       data: { symbol },
     })
     .then(function (response) {
@@ -455,9 +453,10 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
     .querySelectorAll('.popup[data-name="trade"] .popup__item')
     .forEach((item) => item.remove());
   e.preventDefault();
-  fetch(`${pathAPI}/bot/traders`, {})
-    .then(async (response) => {
-      const res = await response.json();
+  instance
+    .get("/bot/traders")
+    .then(async (data) => {
+      const res = data.data;
       res.forEach((item) => {
         const elem = document.createElement("div");
         elem.classList.add("popup__item");
@@ -468,11 +467,8 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
           <button class="btn-red popup__btn">Stop</button>
         `;
         elem.querySelector(".btn-red").addEventListener("click", () => {
-          axios
-            .delete(`${pathAPI}/bot/trader`, {
-              headers: headers,
-              data: { symbol: item.symbol },
-            })
+          instance
+            .delete("/bot/trader", { symbol: item.symbol })
             .then(function (response) {
               elem.remove();
             })
@@ -680,7 +676,3 @@ areaSeries.setData([
 //   low: 0,
 //   divisor: 1
 // });
-
-fetch(`${pathAPI}/last`).then(async (response) => {
-  const res = await response.json();
-});
