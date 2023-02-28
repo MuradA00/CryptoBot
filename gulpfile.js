@@ -45,15 +45,15 @@ gulp.task("js", () => {
     gulp
       .src("source/js/**/*.js")
       // .pipe(plumber())
-      .pipe(sourcemap.init())
+      // .pipe(sourcemap.init())
       // .pipe(uglify())
       .pipe(gulp.dest("build/public/js"))
-      .pipe(
-        rename(function (path) {
-          path.extname = ".min.js";
-        })
-      )
-      .pipe(sourcemap.write("."))
+      // .pipe(
+      //   rename(function (path) {
+      //     path.extname = ".min.js";
+      //   })
+      // )
+      // .pipe(sourcemap.write("."))
       .pipe(gulp.dest("build/public/js"))
   );
 });
@@ -142,23 +142,13 @@ gulp.task("sprite", () => {
 // });
 
 gulp.task("html", () => {
-  gulp
-    .src(["source/*.html", "!source/bot.html", "!source/tester.html"])
-    .pipe(fileinclude())
-    .pipe(posthtml([include()]))
-    // .pipe(htmlmin({
-    //   collapseWhitespace: false
-    // }))
-    .pipe(gulp.dest("build/public"));
-
   return gulp
-    .src(["source/bot.html", "source/tester.html"])
+    .src(["source/index.html", "source/bot.html", "source/tester.html"])
     .pipe(fileinclude())
     .pipe(posthtml([include()]))
     // .pipe(htmlmin({
     //   collapseWhitespace: false
     // }))
-    // .pipe(gulp.dest("build/private"));
     .pipe(gulp.dest("build/public"));
 });
 
