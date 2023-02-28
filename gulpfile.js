@@ -63,20 +63,20 @@ gulp.task("server", () => {
     server: "build/public/",
     notify: false,
     open: true,
-    cors: true,
+    cors: false,
     ui: false,
-    callbacks: {
-      ready: function(err, bs) {
-        console.log(bs);
+    // callbacks: {
+    //   ready: function(err, bs) {
+    //     console.log(bs);
 
-        bs.addMiddleware("*", function (req, res) {
-          res.writeHead(302, {
-              location: "/404.html"
-          });
-          res.end("Redirecting!");
-      });
-      }
-    }
+    //     bs.addMiddleware("*", function (req, res) {
+    //       res.writeHead(302, {
+    //           location: "/404.html"
+    //       });
+    //       res.end("Redirecting!");
+    //   });
+    //   }
+    // }
   });
 
   gulp.watch("source/sass/**/*.{scss,sass}", gulp.series("css"));
@@ -90,9 +90,9 @@ gulp.task("refresh", (done) => {
   done();
 });
 
-gulp.task("favicon", () => {
-  return gulp.src("source/favicon.svg").pipe(gulp.dest("build/public"));
-});
+// gulp.task("favicon", () => {
+//   return gulp.src("source/favicon.svg").pipe(gulp.dest("build/public"));
+// });
 
 gulp.task("raster images", () => {
   return gulp
@@ -191,7 +191,7 @@ gulp.task(
     "webp",
     "html",
     "raster images",
-    "favicon"
+    // "favicon"
   )
 );
 

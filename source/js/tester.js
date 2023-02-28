@@ -1,18 +1,22 @@
 const instance = axios.create({
-  baseURL: "http://52.29.157.23:3000/api",
+  baseURL: "/api",
   headers: {
-    password: 'localStorage.getItem("password-test")',
-    // api_key: document.querySelector('input[name="api-key"]').value,
-    // api_secret: document.querySelector('input[name="api-secret"]').value,
+    password: localStorage.getItem("password-test")
   },
 });
+
+// instance.interceptors.request.use(config => {
+//   config.headers['api_key'] = document.querySelector('input[name="api-key"]').value;
+//   config.headers['api_secret'] = document.querySelector('input[name="api-secret"]').value;
+//   return config;
+// })
 
 instance.interceptors.response.use(
   function (config) {
     return config
   },
   function () {
-    window.location.replace('http://52.29.157.23:3000');
+    window.location.replace('/');
   }
 )
 
@@ -24,22 +28,22 @@ const errors = {
   optimization: false,
 };
 
-if (moment().valueOf() - localStorage.getItem("token") < 86400000) {
-  document.body.classList.add("show");
-} else {
-  document.querySelector(".popup").style.display = "flex";
-  document.querySelector(".popup").style.opacity = 1;
-}
-document.querySelector(".enter-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  if (
-    e.target.querySelector(".popup__input").value.trim() === "v4d-Dg9-sAf-8gr"
-  ) {
-    document.body.classList.add("show");
-    document.querySelector(".popup").remove();
-    localStorage.setItem("token", moment().valueOf());
-  }
-});
+// if (moment().valueOf() - localStorage.getItem("token") < 86400000) {
+//   document.body.classList.add("show");
+// } else {
+//   document.querySelector(".popup").style.display = "flex";
+//   document.querySelector(".popup").style.opacity = 1;
+// }
+// document.querySelector(".enter-form").addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   if (
+//     e.target.querySelector(".popup__input").value.trim() === "v4d-Dg9-sAf-8gr"
+//   ) {
+//     document.body.classList.add("show");
+//     document.querySelector(".popup").remove();
+//     localStorage.setItem("token", moment().valueOf());
+//   }
+// });
 
 const versionProduct = "0.66";
 if (localStorage.getItem("versionProduct") !== versionProduct) {

@@ -1,20 +1,24 @@
 const instance = axios.create({
-  baseURL: "http://52.29.157.23:3000/api",
+  baseURL: "/api",
   headers: {
-    password: localStorage.getItem("password-test"),
-    api_key: document.querySelector('input[name="api-key"]').value,
-    api_secret: document.querySelector('input[name="api-secret"]').value,
+    password: localStorage.getItem("password-test")
   },
 });
 
-instance.interceptors.response.use(
-  function (config) {
-    return config
-  },
-  function () {
-    window.location.replace('http://52.29.157.23:3000');
-  }
-)
+instance.interceptors.request.use(config => {
+  config.headers['api_key'] = document.querySelector('input[name="api-key"]').value;
+  config.headers['api_secret'] = document.querySelector('input[name="api-secret"]').value;
+  return config;
+})
+
+// instance.interceptors.response.use(
+//   function (config) {
+//     return config;
+//   },
+//   function () {
+//     window.location.replace('/');
+//   }
+// );
 
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".popup__close").forEach((i) => {
@@ -286,7 +290,6 @@ document
 
 const loadBalance = () => {
   instance.get("/bot/balance").then(({ data }) => {
-    console.log(data);
     if (data.balance) {
       document.querySelector(".chart-block__price").textContent =
         data.balance.toFixed() + "$";
@@ -295,7 +298,6 @@ const loadBalance = () => {
 };
 
 instance.get("/bot/positions").then(({ data }) => {
-  console.log(data);
   data.forEach((item) => {
     const div = document.createElement("div");
     div.classList.add("stat__item");
@@ -333,7 +335,7 @@ instance.get("/bot/positions").then(({ data }) => {
         }
       }
     });
-  })
+  });
 });
 
 loadBalance();
@@ -436,9 +438,7 @@ const loadTraders = () => {
 const deleteTrader = (symbol) => {
   console.log(symbol);
   instance
-    .delete("/bot/trader", {
-      data: { symbol },
-    })
+    .delete("/bot/trader", { symbol })
     .then(function (response) {
       loadTraders();
     })
@@ -448,7 +448,7 @@ const deleteTrader = (symbol) => {
 };
 
 document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
-  loadTraders();
+  // loadTraders();
   document
     .querySelectorAll('.popup[data-name="trade"] .popup__item')
     .forEach((item) => item.remove());
@@ -467,8 +467,11 @@ document.querySelector("#trade.header__btn").addEventListener("click", (e) => {
           <button class="btn-red popup__btn">Stop</button>
         `;
         elem.querySelector(".btn-red").addEventListener("click", () => {
+          // console.log(item.symbol);
           instance
-            .delete("/bot/trader", { symbol: item.symbol })
+            .delete("/bot/trader", {
+              data: { symbol: item.symbol }
+            })
             .then(function (response) {
               elem.remove();
             })
