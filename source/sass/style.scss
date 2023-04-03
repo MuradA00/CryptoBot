@@ -317,3 +317,8 @@ body.show main {
 input[type="text"]:disabled {
   opacity: 0.5;
 }
+
+#optimization .modal__item:last-child .modal__btn {
+  outline: none;
+  justify-content: flex-end;
+}

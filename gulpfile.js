@@ -26,13 +26,13 @@ gulp.task("css", () => {
     gulp
       .src("source/sass/style.scss")
       // .pipe(plumber())
-      .pipe(sourcemap.init())
+      // .pipe(sourcemap.init())
       .pipe(sass())
       .pipe(postcss([autoprefixer()]))
       .pipe(csso())
-      .pipe(gulp.dest("build/public/css"))
+      // .pipe(gulp.dest("build/public/css"))
       .pipe(rename("style.min.css"))
-      .pipe(sourcemap.write("."))
+      // .pipe(sourcemap.write("."))
 
       // .pipe(px2rem({accuracy:0}))
       .pipe(gulp.dest("build/public/css"))

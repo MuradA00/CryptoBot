@@ -192,29 +192,37 @@ const generalFields = document.querySelectorAll(
 if (localStorage.getItem("bot-general")) {
   const botGeneralObject = JSON.parse(localStorage.getItem("bot-general"));
   for (key in botGeneralObject) {
-    if (
-      document.querySelector(
-        `.popup[data-name=generalSettings] input[name=${key}]`
-      )
-    ) {
-      document.querySelector(
-        `.popup[data-name=generalSettings] input[name=${key}]`
-      ).value = botGeneralObject[key];
+    if (document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`)) {
+      if(document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`).type === 'checkbox') {
+        document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`).checked = botGeneralObject[key]
+      } else {
+        document.querySelector(`.popup[data-name=generalSettings] input[name=${key}]`).value = botGeneralObject[key]
+      }
     }
   }
 }
 const saveGeneral = () => {
   const newValues = {};
   generalFields.forEach((item) => {
-    newValues[item.name] = item.value;
+    if(item.type === 'checkbox') {
+      newValues[item.name] = item.checked;
+    } else {
+      newValues[item.name] = item.value;
+    }
   });
   localStorage.setItem("bot-general", JSON.stringify(newValues));
 };
-generalFields.forEach((item) =>
-  item.addEventListener("input", () => {
-    saveGeneral();
-  })
-);
+generalFields.forEach((item) => {
+  if(item.type === 'checkbox') {
+    item.addEventListener("change", () => {
+      saveGeneral();
+    })
+  } else {
+    item.addEventListener("input", () => {
+      saveGeneral();
+    })
+  }
+});
 
 // Period
 if (localStorage.getItem("bot-period")) {
@@ -380,6 +388,7 @@ document.querySelector(".start-stream").addEventListener("click", () => {
       .querySelector(".selector-row__item._selector-active")
       .getAttribute("data-value"),
     symbol: document.querySelector("input[name=symbol]:checked").id,
+    mode: document.querySelector("input[name=mode]").checked ? 'hedge' : 'oneWay'
   };
   if (indicator === "stoch") {
     formData.kPeriod = +document.querySelector("input[name=kPeriod]").value;

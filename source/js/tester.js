@@ -1377,21 +1377,36 @@ document.querySelectorAll("#stepsModal input").forEach((item) => {
 
 const config = JSON.parse(localStorage.getItem("config")) || {};
 for (item in config) {
-  document.querySelector(
-    `#optimization input[type="text"][name="${item}"]`
-  ).value = config[item];
+  if(typeof config[item] === 'boolean') {
+    document.querySelector(
+      `#optimization input[type="checkbox"][name="${item}"]`
+    ).checked = config[item];
+  } else {
+    document.querySelector(
+      `#optimization input[type="text"][name="${item}"]`
+    ).value = config[item];
+  }
 }
 document
-  .querySelectorAll('#optimization input[type="text"]')
+  .querySelectorAll('#optimization input')
   .forEach((item) => {
-    config[item.name] = +item.value;
-    localStorage.setItem("config", JSON.stringify(config));
+    if(item.type === 'checkbox') {
+      config[item.name] = item.checked;
+      localStorage.setItem("config", JSON.stringify(config));
+    } else {
+      config[item.name] = +item.value;
+      localStorage.setItem("config", JSON.stringify(config));
+    }
   });
 document
-  .querySelectorAll('#optimization input[type="text"]')
+  .querySelectorAll('#optimization input')
   .forEach((item) => {
     item.addEventListener("change", (e) => {
-      config[e.target.name] = +e.target.value;
+      if(item.type === 'checkbox') {
+        config[e.target.name] = e.target.checked;
+      } else {
+        config[e.target.name] = +e.target.value;
+      }
       localStorage.setItem("config", JSON.stringify(config));
     });
   });
@@ -1448,6 +1463,7 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     },
     // filters: filters,
     config: config,
+    mode: document.querySelector('input[name=mode]').checked ? 'hedge' : 'oneWay'
   };
   const customFilters = {};
   for (const key in filters) {
@@ -1513,7 +1529,6 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     };
   }
   if (error || errors.modelTesting) {
-    console.log(11);
     return;
   }
   if (expertError) {
