@@ -1463,7 +1463,10 @@ document.querySelector(".progress__button").addEventListener("click", () => {
     },
     // filters: filters,
     config: config,
-    mode: document.querySelector('input[name=mode]').checked ? 'hedge' : 'oneWay'
+    mode: document.querySelector('input[name=mode]').checked,
+    lossPrevention: document.querySelector("input[name=lossPrevention]").checked,
+    stopLossRow: +document.querySelector("input[name=stopLossRow]").value,
+    delayHour: +document.querySelector("input[name=delayHour]").value,
   };
   const customFilters = {};
   for (const key in filters) {

@@ -388,7 +388,10 @@ document.querySelector(".start-stream").addEventListener("click", () => {
       .querySelector(".selector-row__item._selector-active")
       .getAttribute("data-value"),
     symbol: document.querySelector("input[name=symbol]:checked").id,
-    mode: document.querySelector("input[name=mode]").checked ? 'hedge' : 'oneWay'
+    mode: document.querySelector("input[name=mode]").checked,
+    lossPrevention: document.querySelector("input[name=lossPrevention]").checked,
+    stopLossRow: +document.querySelector("input[name=stopLossRow]").value,
+    delayHour: +document.querySelector("input[name=delayHour]").value,
   };
   if (indicator === "stoch") {
     formData.kPeriod = +document.querySelector("input[name=kPeriod]").value;
