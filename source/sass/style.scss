@@ -322,3 +322,7 @@ input[type="text"]:disabled {
   outline: none;
   justify-content: flex-end;
 }
+
+.error-input {
+  outline: 1px solid red !important;
+}

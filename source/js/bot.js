@@ -6,9 +6,9 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(config => {
-  config.headers['api_key'] = document.querySelector('input[name="api-key"]').value;
-  config.headers['api_secret'] = document.querySelector('input[name="api-secret"]').value;
-  return config;
+  config.headers['api_key'] = document.querySelector('input[name="api-key"]').value
+  config.headers['api_secret'] = document.querySelector('input[name="api-secret"]').value
+  return config
 })
 
 // instance.interceptors.response.use(
@@ -388,7 +388,7 @@ document.querySelector(".start-stream").addEventListener("click", () => {
       .querySelector(".selector-row__item._selector-active")
       .getAttribute("data-value"),
     symbol: document.querySelector("input[name=symbol]:checked").id,
-    mode: document.querySelector("input[name=mode]").checked,
+    hedgeMode: document.querySelector("input[name=hedgeMode]").checked,
     lossPrevention: document.querySelector("input[name=lossPrevention]").checked,
     stopLossRow: +document.querySelector("input[name=stopLossRow]").value,
     delayHour: +document.querySelector("input[name=delayHour]").value,
@@ -691,3 +691,41 @@ areaSeries.setData([
 //   low: 0,
 //   divisor: 1
 // });
+
+
+// hedgeMode
+// const instance2 = axios.create({
+//   baseURL: "http://52.29.157.23:3000/api",
+//   headers: {
+//     password: localStorage.getItem("password-test")
+//   },
+// });
+
+// instance2.interceptors.request.use(config => {
+//   config.headers['api_key'] = document.querySelector('input[name="api-key"]').value
+//   config.headers['api_secret'] = document.querySelector('input[name="api-secret"]').value
+//   return config
+// })
+// const hedgeModeInput = document.querySelector('input[name=hedgeMode]')
+if(hedgeModeInput) {
+  instance.get('/bot/hedge')
+    .then(({ data }) => {
+      if(hedgeModeInput) {
+        hedgeModeInput.checked = data.hedgeMode
+      }
+    })
+  
+  hedgeModeInput.addEventListener('click', e => {
+    e.preventDefault()
+    instance.post('/bot/hedge', { hedgeMode: hedgeModeInput.checked })
+      .then(res => {
+        hedgeModeInput.checked = !hedgeModeInput.checked
+      })
+      .catch(err => {
+        hedgeModeInput.classList.add('error-input')
+        setTimeout(() => {
+          hedgeModeInput.classList.remove('error-input')
+        }, 3000)
+      })
+  })
+}
